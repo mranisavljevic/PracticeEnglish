@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { Outlet, Link, useLocation } from 'react-router-dom'
 import { Credit } from './Credit'
+import { OfflineNotice } from './OfflineNotice'
 import { LanguageSwitcher } from './LanguageSwitcher'
 import { useLocale } from '../i18n/LocaleProvider'
 
@@ -26,6 +27,7 @@ export function Layout() {
         </Link>
         <LanguageSwitcher />
       </header>
+      <OfflineNotice />
       <main className="layout__main">
         <Outlet />
       </main>

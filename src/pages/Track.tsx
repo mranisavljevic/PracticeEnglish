@@ -11,7 +11,7 @@ import { NotFound } from './NotFound'
 export function Track() {
   const { bookId = '', unitId = '', trackId = '' } = useParams()
   const { t } = useLocale()
-  const { getBook, getUnit, getTrack } = useCatalog()
+  const { getBook, getUnit, getTrack, getSiblings } = useCatalog()
   const book = getBook(bookId)
   const unit = getUnit(bookId, unitId)
   const track = getTrack(bookId, unitId, trackId)
@@ -24,6 +24,8 @@ export function Track() {
 
   if (!book || !unit || !track) return <NotFound />
   const unitPath = `/b/${book.id}/u/${unit.id}`
+  const { prev, next } = getSiblings(bookId, unitId, trackId)
+  const trackPath = (id: string) => `${unitPath}/t/${id}`
   return (
     <>
       <Breadcrumb backTo={unitPath} trail={[book.title, unit.title || unit.number]} />
@@ -32,6 +34,8 @@ export function Track() {
         key={track.id}
         src={audioUrl(track)}
         chooseAnotherTo={unitPath}
+        prevTo={prev && trackPath(prev.id)}
+        nextTo={next && trackPath(next.id)}
         onPlay={() => saveProgress({ bookId, unitId, trackId })}
       />
     </>

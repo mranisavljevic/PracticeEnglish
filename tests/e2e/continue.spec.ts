@@ -5,7 +5,7 @@ test('play a track, reload home, Continue opens the same track', async ({ page }
   await expect(page.getByRole('link', { name: /continue/i })).toHaveCount(0)
 
   await page.goto('/b/sample-textbook/u/unit-1/t/track-2')
-  await page.getByRole('button', { name: 'Play' }).click()
+  await page.getByRole('button', { name: 'Play', exact: true }).click()
   await page.goto('/')
   const card = page.getByRole('link', { name: /continue/i })
   await expect(card).toBeVisible()

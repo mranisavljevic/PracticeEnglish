@@ -27,5 +27,11 @@
   "credit.source": "El audio y los libros son de English in Action y de su editorial.",
   "credit.noEndorsement": "Este sitio no está afiliado a la editorial ni cuenta con su respaldo.",
   "continue.title": "Continuar: {track}",
-  "continue.where": "{book} · {unit}"
+  "continue.where": "{book} · {unit}",
+  "player.replay": "Repetir",
+  "player.next": "Siguiente",
+  "player.previous": "Anterior",
+  "player.speed": "Velocidad",
+  "player.speedNormal": "1×",
+  "player.speedSlow": "0.75×"
 }

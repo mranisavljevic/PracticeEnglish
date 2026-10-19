@@ -140,17 +140,17 @@ description: "Task list for PracticeEnglish Audio Site"
 
 ### Tests for User Story 3 (write first; confirm FAIL)
 
-- [ ] T044 [P] [US3] Unit tests in `tests/unit/progress.test.ts` (save then load round-trips `{v:1,bookId,unitId,trackId}`; later save overwrites; invalid JSON, wrong `v`, unknown ids, or storage throwing ⇒ `null` with no throw; no playback position is ever written)
-- [ ] T045 [P] [US3] Component test in `tests/component/continue-card.test.tsx` (card hidden when no/stale progress; shown with book, unit, track label when valid; links to the saved track path; opening a track page records progress; pressing play in the Player writes `pe.progress`)
-- [ ] T046 [P] [US3] Playwright test in `tests/e2e/continue.spec.ts` (play a track, reload `/`, Continue card → tap → same track at 0:00; first visit shows no Continue; stale progress in localStorage shows no card and no error; storage blocked → app still works)
+- [X] T044 [P] [US3] Unit tests in `tests/unit/progress.test.ts` (save then load round-trips `{v:1,bookId,unitId,trackId}`; later save overwrites; invalid JSON, wrong `v`, unknown ids, or storage throwing ⇒ `null` with no throw; no playback position is ever written)
+- [X] T045 [P] [US3] Component test in `tests/component/continue-card.test.tsx` (card hidden when no/stale progress; shown with book, unit, track label when valid; links to the saved track path; opening a track page records progress; pressing play in the Player writes `pe.progress`)
+- [X] T046 [P] [US3] Playwright test in `tests/e2e/continue.spec.ts` (play a track, reload `/`, Continue card → tap → same track at 0:00; first visit shows no Continue; stale progress in localStorage shows no card and no error; storage blocked → app still works)
 
 ### Implementation for User Story 3
 
-- [ ] T047 [US3] Implement `src/storage/progress.ts` (`saveProgress`, `loadProgress(catalog)` validating version and ids against the catalogue, key `pe.progress`, via `safeStorage`) per `contracts/local-storage.md`
-- [ ] T048 [P] [US3] Add `continue.*` key group (title with `{track}` placeholder, book/unit/track descriptors) to `src/locales/en.json` and `src/locales/es.json`
-- [ ] T049 [US3] Implement `src/components/ContinueCard.tsx` (prominent card showing book title, unit, track label; links to the saved track path)
-- [ ] T050 [US3] Show `ContinueCard` at the top of `src/pages/Home.tsx` when `loadProgress` returns a value
-- [ ] T051 [US3] Record progress in `src/pages/Track.tsx` when the track page opens (covers direct links) and when play is pressed in `src/components/Player.tsx`
+- [X] T047 [US3] Implement `src/storage/progress.ts` (`saveProgress`, `loadProgress(catalog)` validating version and ids against the catalogue, key `pe.progress`, via `safeStorage`) per `contracts/local-storage.md`
+- [X] T048 [P] [US3] Add `continue.*` key group (title with `{track}` placeholder, book/unit/track descriptors) to `src/locales/en.json` and `src/locales/es.json`
+- [X] T049 [US3] Implement `src/components/ContinueCard.tsx` (prominent card showing book title, unit, track label; links to the saved track path)
+- [X] T050 [US3] Show `ContinueCard` at the top of `src/pages/Home.tsx` when `loadProgress` returns a value
+- [X] T051 [US3] Record progress in `src/pages/Track.tsx` when the track page opens (covers direct links) and when play is pressed in `src/components/Player.tsx`
 
 **Checkpoint**: US1–US3 independently functional.
 
@@ -164,18 +164,18 @@ description: "Task list for PracticeEnglish Audio Site"
 
 ### Tests for User Story 4 (write first; confirm FAIL)
 
-- [ ] T052 [P] [US4] Component tests in `tests/component/player-controls.test.tsx` (Replay restarts at 0:00; Previous/Next link to sibling tracks and are disabled/hidden at unit edges; on `ended` playback stops, no navigation occurs, Replay and Next visible; speed toggle sets `playbackRate` 0.75/1 and resets to 1 when the track changes; speed not persisted)
-- [ ] T053 [P] [US4] Component test in `tests/component/offline.test.tsx` (`offline` event shows translated `error.offline` notice; `online` event hides it; audio error while offline shows offline message)
-- [ ] T054 [P] [US4] Playwright responsive/keyboard test in `tests/e2e/responsive.spec.ts` (no horizontal scroll via `scrollWidth <= clientWidth` at 360×740 and 1280×800 on every route; full journey operable using only keyboard, and after each navigation step (Home → Book → Unit → Track, and Back) `document.activeElement` is the page `<h1>`; touch targets ≥ 44px for player buttons)
+- [X] T052 [P] [US4] Component tests in `tests/component/player-controls.test.tsx` (Replay restarts at 0:00; Previous/Next link to sibling tracks and are disabled/hidden at unit edges; on `ended` playback stops, no navigation occurs, Replay and Next visible; speed toggle sets `playbackRate` 0.75/1 and resets to 1 when the track changes; speed not persisted)
+- [X] T053 [P] [US4] Component test in `tests/component/offline.test.tsx` (`offline` event shows translated `error.offline` notice; `online` event hides it; audio error while offline shows offline message)
+- [X] T054 [P] [US4] Playwright responsive/keyboard test in `tests/e2e/responsive.spec.ts` (no horizontal scroll via `scrollWidth <= clientWidth` at 360×740 and 1280×800 on every route; full journey operable using only keyboard, and after each navigation step (Home → Book → Unit → Track, and Back) `document.activeElement` is the page `<h1>`; touch targets ≥ 44px for player buttons)
 
 ### Implementation for User Story 4
 
-- [ ] T055 [P] [US4] Add remaining `player.*` keys (replay, next, previous, speed, speedNormal, speedSlow) to `src/locales/en.json` and `src/locales/es.json`
-- [ ] T056 [US4] Extend `src/components/Player.tsx`: Replay button, `ended` → stop (no auto-advance) with Replay and Next prominent, speed toggle (0.75×/1×, resets to 1× on track change, not persisted), accessible labels (depends on T030)
-- [ ] T057 [US4] Add Previous/Next navigation using `getSiblings` in `src/pages/Track.tsx` and pass links to `Player` (navigating stops the current audio)
-- [ ] T058 [P] [US4] Implement `src/components/OfflineNotice.tsx` using `online`/`offline` events (`navigator.onLine`) and mount it in `src/components/Layout.tsx` (created in T016a)
+- [X] T055 [P] [US4] Add remaining `player.*` keys (replay, next, previous, speed, speedNormal, speedSlow) to `src/locales/en.json` and `src/locales/es.json`
+- [X] T056 [US4] Extend `src/components/Player.tsx`: Replay button, `ended` → stop (no auto-advance) with Replay and Next prominent, speed toggle (0.75×/1×, resets to 1× on track change, not persisted), accessible labels (depends on T030)
+- [X] T057 [US4] Add Previous/Next navigation using `getSiblings` in `src/pages/Track.tsx` and pass links to `Player` (navigating stops the current audio)
+- [X] T058 [P] [US4] Implement `src/components/OfflineNotice.tsx` using `online`/`offline` events (`navigator.onLine`) and mount it in `src/components/Layout.tsx` (created in T016a)
 - (T059 removed: Media Session API deferred; not in spec; IDs are not renumbered)
-- [ ] T060 [US4] Add responsive CSS in `src/styles/` (single column at ≤ 600px; centered max-width column and larger tap grid on desktop; player controls ≥ 44px; long/translated titles wrap without hiding controls)
+- [X] T060 [US4] Add responsive CSS in `src/styles/` (single column at ≤ 600px; centered max-width column and larger tap grid on desktop; player controls ≥ 44px; long/translated titles wrap without hiding controls)
 
 **Checkpoint**: All four stories functional and independently testable.
 

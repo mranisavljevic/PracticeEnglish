@@ -6,7 +6,7 @@ test('Home → book → unit → track → player in ≤4 taps; Back returns one
   await page.getByRole('link', { name: /Meeting People/ }).click()
   await page.getByRole('link', { name: /Track 12a/ }).click()
   await expect(page).toHaveURL(/\/b\/sample-textbook\/u\/unit-1\/t\/track-12a$/)
-  const play = page.getByRole('button', { name: 'Play' })
+  const play = page.getByRole('button', { name: 'Play', exact: true })
   await expect(play).toBeVisible()
   const audio = page.locator('audio')
   await expect(audio).toHaveAttribute('src', 'http://localhost:5174/sample/track-12a.mp3')
@@ -17,7 +17,7 @@ test('Home → book → unit → track → player in ≤4 taps; Back returns one
 
 test('direct link opens the player without autoplay', async ({ page }) => {
   await page.goto('/b/sample-textbook/u/unit-1/t/track-1')
-  await expect(page.getByRole('button', { name: 'Play' })).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Play', exact: true })).toBeVisible()
   const paused = await page.locator('audio').evaluate((a: HTMLAudioElement) => a.paused)
   expect(paused).toBe(true)
 })
