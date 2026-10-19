@@ -1,0 +1,9 @@
+node_modules
+dist
+audio-source/
+.env*
+!.env.example
+.firebase
+.DS_Store
+playwright-report
+test-results

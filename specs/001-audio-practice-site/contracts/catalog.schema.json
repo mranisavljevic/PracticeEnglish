@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PracticeEnglish catalogue",
+  "type": "object",
+  "required": ["version", "levels", "books"],
+  "additionalProperties": false,
+  "properties": {
+    "version": { "const": 1 },
+    "levels": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "$ref": "#/$defs/id" },
+          "title": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "books": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "levelId", "type", "title", "units"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "$ref": "#/$defs/id" },
+          "levelId": { "$ref": "#/$defs/id" },
+          "type": { "enum": ["textbook", "workbook"] },
+          "title": { "type": "string", "minLength": 1 },
+          "titleTranslations": { "$ref": "#/$defs/translations" },
+          "cover": { "type": "string" },
+          "units": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["id", "number", "title", "tracks"],
+              "additionalProperties": false,
+              "properties": {
+                "id": { "$ref": "#/$defs/id" },
+                "number": { "type": "string", "minLength": 1 },
+                "title": { "type": "string" },
+                "titleTranslations": { "$ref": "#/$defs/translations" },
+                "tracks": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["id", "label", "file"],
+                    "additionalProperties": false,
+                    "properties": {
+                      "id": { "$ref": "#/$defs/id" },
+                      "label": { "type": "string", "minLength": 1 },
+                      "file": { "type": "string", "pattern": "^(?!/)(?!.*\\.\\.)(?![a-z]+:).+\\.(mp3|m4a|ogg)$" },
+                      "durationSec": { "type": "number", "exclusiveMinimum": 0 }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+    "translations": { "type": "object", "additionalProperties": { "type": "string" } }
+  },
+  "x-additional-rules": [
+    "ids unique within parent; track label unique within unit",
+    "book.levelId must reference an existing level",
+    "track.file must exist in audio-source/ (checked by scripts/validate-catalog.ts)"
+  ]
+}
