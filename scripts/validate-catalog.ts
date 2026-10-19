@@ -1,10 +1,12 @@
 import { existsSync, readFileSync } from 'node:fs'
-import { validateCatalog } from './catalog-rules'
+import { checkSources, validateCatalog } from './catalog-rules'
 
 const catalog = JSON.parse(readFileSync('src/content/catalog.json', 'utf8'))
 const errors = validateCatalog(catalog)
 
 if (errors.length === 0) {
+  const sources = existsSync('docs/SOURCES.md') ? readFileSync('docs/SOURCES.md', 'utf8') : ''
+  errors.push(...checkSources(catalog, sources))
   const haveSource = existsSync('audio-source')
   if (!haveSource) console.warn('warning: audio-source/ not found; skipping file existence checks for real audio')
   for (const book of catalog.books) {

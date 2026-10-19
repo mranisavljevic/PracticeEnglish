@@ -44,3 +44,24 @@ export function validateCatalog(data: unknown): string[] {
   }
   return errors
 }
+
+interface SourcesCatalog {
+  books: { id: string; units: { id: string; tracks: { id: string; file: string }[] }[] }[]
+}
+
+/** Every track.file outside sample/ must have a row in docs/SOURCES.md (first column = path). */
+export function checkSources(catalog: SourcesCatalog, sourcesMarkdown: string): string[] {
+  const listed = new Set(
+    sourcesMarkdown
+      .split('\n')
+      .filter((l) => l.trim().startsWith('|'))
+      .map((l) => l.split('|')[1]?.trim() ?? ''),
+  )
+  const errors: string[] = []
+  for (const b of catalog.books)
+    for (const u of b.units)
+      for (const t of u.tracks)
+        if (!t.file.startsWith('sample/') && !listed.has(t.file))
+          errors.push(`no docs/SOURCES.md row for ${t.file} (${b.id}/${u.id}/${t.id})`)
+  return errors
+}
