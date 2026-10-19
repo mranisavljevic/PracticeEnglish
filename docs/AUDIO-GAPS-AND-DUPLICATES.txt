@@ -1,0 +1,69 @@
+AUDIO GAPS AND DUPLICATES REPORT
+Generated 2026-10-18 from ~/Downloads/audio-level-1 .. audio-level-4
+
+How to read this: file names look like EIA_3e_SB1_012_0.mp3. SB = Student Book, WB = Workbook,
+the first digit is the level, the next number is the TRACK NUMBER (assumed to match the track number
+printed in the book), and any trailing _0/_1/_2/_3/_6 is ignored here (it looks like export noise).
+
+TO CHECK IN THE PHYSICAL BOOKS: for each gap below, does the book print that track number?
+  - If the book has no such track, the gap is fine and nothing is missing.
+  - If the book does print it, that audio file still needs to be found.
+For each duplicate: the copies are compared by file hash, so you know if they are identical.
+
+======================================================================
+LEVEL 1 STUDENT BOOK (SB1)
+  files: 144   distinct track numbers: 144   range: 1-146
+  GAPS (track numbers with no file, inside the range above):
+    tracks 18-19  (2 tracks)
+  DUPLICATES: none
+======================================================================
+LEVEL 1 WORKBOOK (WB1)
+  files: 56   distinct track numbers: 56   range: 1-56
+  GAPS: none
+  DUPLICATES: none
+======================================================================
+LEVEL 2 STUDENT BOOK (SB2)
+  files: 115   distinct track numbers: 115   range: 1-115
+  GAPS: none
+  DUPLICATES: none
+======================================================================
+LEVEL 2 WORKBOOK (WB2)
+  files: 57   distinct track numbers: 57   range: 1-57
+  GAPS: none
+  DUPLICATES: none
+======================================================================
+LEVEL 3 STUDENT BOOK (SB3)
+  files: 75   distinct track numbers: 75   range: 1-75
+  GAPS: none
+  DUPLICATES: none
+======================================================================
+LEVEL 3 WORKBOOK (WB3)
+  files: 51   distinct track numbers: 51   range: 1-51
+  GAPS: none
+  DUPLICATES: none
+======================================================================
+LEVEL 4 STUDENT BOOK (SB4)
+  files: 81   distinct track numbers: 77   range: 1-84
+  GAPS (track numbers with no file, inside the range above):
+    tracks 28-34  (7 tracks)
+  DUPLICATES (same track number, more than one file):
+    track 24: EIA_3e_SB4_24_1.mp3, EIA_3e_SB4_24_2.mp3  -> byte-identical
+    track 25: EIA_3e_SB4_25_1.mp3, EIA_3e_SB4_25_2.mp3  -> byte-identical
+    track 26: EIA_3e_SB4_26_1.mp3, EIA_3e_SB4_26_2.mp3  -> byte-identical
+    track 27: EIA_3e_SB4_27_1.mp3, EIA_3e_SB4_27_2.mp3  -> byte-identical
+======================================================================
+LEVEL 4 WORKBOOK (WB4)
+  files: 51   distinct track numbers: 51   range: 1-51
+  GAPS: none
+  DUPLICATES: none
+======================================================================
+Total files examined: 630
+
+CAVEATS
+  - A gap can only be detected BETWEEN the lowest and highest file. If a book prints tracks beyond the
+    highest number listed above, those would be missing too. Check the last track number in each book.
+  - Level 4 Student Book: tracks 24-27 have two identical copies while 28-34 are missing entirely. It is worth
+    checking whether the duplicated copies were meant to be 28-31 (but they are byte-identical, so they cannot
+    be different recordings).
+  - The SB1/SB2 numbering reaches 146/115, far more than a unit-based listing would suggest, so these numbers
+    are probably CD track numbers, not page numbers. Confirm against a printed track number in the book.
