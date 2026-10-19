@@ -1,3 +1,5 @@
+import { safeStorage } from '../storage/safeStorage'
+
 export type Dictionary = Record<string, string>
 export type Dictionaries = Record<string, Dictionary>
 export type TParams = Record<string, string | number>
@@ -33,4 +35,22 @@ export function createTranslator(lang: string, dicts: Dictionaries = dictionarie
     }
     return text
   }
+}
+
+export const LANG_KEY = 'pe.lang'
+
+export function isSupported(code: string, dicts: Dictionaries = dictionaries): boolean {
+  return Object.prototype.hasOwnProperty.call(dicts, code)
+}
+
+/** Saved choice → first supported browser language → English. */
+export function detectLanguage(dicts: Dictionaries = dictionaries): string {
+  const saved = safeStorage.getItem(LANG_KEY)
+  if (saved && isSupported(saved, dicts)) return saved
+  const preferred = typeof navigator !== 'undefined' ? (navigator.languages ?? [navigator.language]) : []
+  for (const tag of preferred) {
+    const primary = tag?.toLowerCase().split('-')[0]
+    if (primary && isSupported(primary, dicts)) return primary
+  }
+  return 'en'
 }

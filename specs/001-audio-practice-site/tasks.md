@@ -111,22 +111,22 @@ description: "Task list for PracticeEnglish Audio Site"
 
 ### Tests for User Story 2 (write first; confirm FAIL)
 
-- [ ] T033 [P] [US2] Unit tests for language selection in `tests/unit/i18n-detect.test.ts` (saved `pe.lang` wins if registered; else first supported primary subtag of `navigator.languages`; unsupported e.g. `fr` → `en`; invalid saved value ignored; storage throwing → detection still works)
-- [ ] T034 [P] [US2] Locale parity unit test in `tests/unit/locale-parity.test.ts` (every key in `en.json` exists in every discovered locale; every locale file has a non-empty `meta.nativeName`; `{placeholder}` sets match per key; fails if a component source under `src/` contains literal user-facing JSX text — simple regex check on `src/pages` and `src/components`)
-- [ ] T035 [P] [US2] Component test in `tests/component/language-switcher.test.tsx` (switcher present on every page, lists `nativeName`s, switching changes text immediately, keeps current route and does not remount/pause the player, writes `pe.lang`)
-- [ ] T036 [P] [US2] Playwright test in `tests/e2e/language.spec.ts` (browser locale `es-MX` → Spanish UI; switch to English → reload → English persists; English book titles visible in Spanish mode)
+- [X] T033 [P] [US2] Unit tests for language selection in `tests/unit/i18n-detect.test.ts` (saved `pe.lang` wins if registered; else first supported primary subtag of `navigator.languages`; unsupported e.g. `fr` → `en`; invalid saved value ignored; storage throwing → detection still works)
+- [X] T034 [P] [US2] Locale parity unit test in `tests/unit/locale-parity.test.ts` (every key in `en.json` exists in every discovered locale; every locale file has a non-empty `meta.nativeName`; `{placeholder}` sets match per key; fails if a component source under `src/` contains literal user-facing JSX text — simple regex check on `src/pages` and `src/components`)
+- [X] T035 [P] [US2] Component test in `tests/component/language-switcher.test.tsx` (switcher present on every page, lists `nativeName`s, switching changes text immediately, keeps current route and does not remount/pause the player, writes `pe.lang`)
+- [X] T036 [P] [US2] Playwright test in `tests/e2e/language.spec.ts` (browser locale `es-MX` → Spanish UI; switch to English → reload → English persists; English book titles visible in Spanish mode)
 
-- [ ] T036a [P] [US2] Component test in `tests/component/credit.test.tsx` (Credit renders on Home, Book, Unit, Track and NotFound routes via Layout, in both `en` and `es`, and includes the source credit and non-endorsement text; per FR-018; must FAIL before T041/T042)
+- [X] T036a [P] [US2] Component test in `tests/component/credit.test.tsx` (Credit renders on Home, Book, Unit, Track and NotFound routes via Layout, in both `en` and `es`, and includes the source credit and non-endorsement text; per FR-018; must FAIL before T041/T042)
 
 ### Implementation for User Story 2
 
-- [ ] T037 [US2] Extend `src/i18n/index.ts` with `detectLanguage()` and `isSupported()` implementing the order saved → `navigator.languages` → `en` (uses `safeStorage`, key `pe.lang`)
-- [ ] T038 [US2] Update `src/i18n/LocaleProvider.tsx` to initialise from `detectLanguage()`, persist on `setLang` to `pe.lang`, and update `<html lang>`
-- [ ] T039 [P] [US2] Add `lang.*` and `credit.*` (source, noEndorsement) key groups to `src/locales/en.json` and `src/locales/es.json`
-- [ ] T040 [P] [US2] Implement `src/components/LanguageSwitcher.tsx` (native `<select>` or button group labelled via `lang.*`, options from the discovered locales' `nativeName`)
-- [ ] T041 [P] [US2] Implement `src/components/Credit.tsx` (translated credit to *English in Action* and its publisher + non-endorsement statement; per FR-018)
-- [ ] T042 [US2] Extend `src/components/Layout.tsx` (created in T016a) to place `LanguageSwitcher` in the header slot and `Credit` in the footer slot, so both appear on every page (incl. NotFound) (depends on T040, T041)
-- [ ] T043 [US2] Ensure book/unit titles always render the printed English `title` with `titleTranslations[lang]` only as secondary text in `src/components/BookCard.tsx`, `src/pages/Book.tsx`, `src/pages/Unit.tsx` (FR-017)
+- [X] T037 [US2] Extend `src/i18n/index.ts` with `detectLanguage()` and `isSupported()` implementing the order saved → `navigator.languages` → `en` (uses `safeStorage`, key `pe.lang`)
+- [X] T038 [US2] Update `src/i18n/LocaleProvider.tsx` to initialise from `detectLanguage()`, persist on `setLang` to `pe.lang`, and update `<html lang>`
+- [X] T039 [P] [US2] Add `lang.*` and `credit.*` (source, noEndorsement) key groups to `src/locales/en.json` and `src/locales/es.json`
+- [X] T040 [P] [US2] Implement `src/components/LanguageSwitcher.tsx` (native `<select>` or button group labelled via `lang.*`, options from the discovered locales' `nativeName`)
+- [X] T041 [P] [US2] Implement `src/components/Credit.tsx` (translated credit to *English in Action* and its publisher + non-endorsement statement; per FR-018)
+- [X] T042 [US2] Extend `src/components/Layout.tsx` (created in T016a) to place `LanguageSwitcher` in the header slot and `Credit` in the footer slot, so both appear on every page (incl. NotFound) (depends on T040, T041)
+- [X] T043 [US2] Ensure book/unit titles always render the printed English `title` with `titleTranslations[lang]` only as secondary text in `src/components/BookCard.tsx`, `src/pages/Book.tsx`, `src/pages/Unit.tsx` (FR-017)
 
 **Checkpoint**: US1 + US2 both work independently; parity test green.
 

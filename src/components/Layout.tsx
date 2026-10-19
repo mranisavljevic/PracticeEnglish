@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { Outlet, Link, useLocation } from 'react-router-dom'
+import { Credit } from './Credit'
+import { LanguageSwitcher } from './LanguageSwitcher'
 import { useLocale } from '../i18n/LocaleProvider'
 
 export function Layout() {
@@ -22,11 +24,14 @@ export function Layout() {
         <Link to="/" className="layout__brand">
           {t('app.name')}
         </Link>
+        <LanguageSwitcher />
       </header>
       <main className="layout__main">
         <Outlet />
       </main>
-      <footer className="layout__footer" />
+      <footer className="layout__footer">
+        <Credit />
+      </footer>
     </div>
   )
 }
