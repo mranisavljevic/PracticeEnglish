@@ -83,21 +83,21 @@ description: "Task list for PracticeEnglish Audio Site"
 
 ### Tests for User Story 1 (write first; confirm FAIL)
 
-- [ ] T021 [P] [US1] Component tests for Home/Book/Unit pages in `tests/component/browse.test.tsx` (books grouped by level with title + type + cover/level label; book page lists units; unit page lists tracks by printed label incl. "12a"; unknown book/unit id renders the NotFound page (component itself is covered by T010a); Back link goes to parent path)
-- [ ] T022 [P] [US1] Component tests for the Player in `tests/component/player.test.tsx` (audio `src` equals `${base}/${track.file}`; play/pause toggles; shows loading state; `error` event shows translated `error.audioFailed` with Retry and a link to choose another track; changing track stops the previous audio — only one `<audio>` element exists)
-- [ ] T023 [P] [US1] Playwright journey in `tests/e2e/browse-play.spec.ts` (390×844: Home → book → unit → track → player visible with play control in ≤4 taps (SC-001); Back returns one level; direct link `/b/…/u/…/t/…` opens the player without autoplay)
+- [X] T021 [P] [US1] Component tests for Home/Book/Unit pages in `tests/component/browse.test.tsx` (books grouped by level with title + type + cover/level label; book page lists units; unit page lists tracks by printed label incl. "12a"; unknown book/unit id renders the NotFound page (component itself is covered by T010a); Back link goes to parent path)
+- [X] T022 [P] [US1] Component tests for the Player in `tests/component/player.test.tsx` (audio `src` equals `${base}/${track.file}`; play/pause toggles; shows loading state; `error` event shows translated `error.audioFailed` with Retry and a link to choose another track; changing track stops the previous audio — only one `<audio>` element exists)
+- [X] T023 [P] [US1] Playwright journey in `tests/e2e/browse-play.spec.ts` (390×844: Home → book → unit → track → player visible with play control in ≤4 taps (SC-001); Back returns one level; direct link `/b/…/u/…/t/…` opens the player without autoplay)
 
 ### Implementation for User Story 1
 
-- [ ] T024 [P] [US1] Add `home.*`, `book.*`, `unit.*`, `player.*` (play, pause, loading, chooseAnother) key groups to `src/locales/en.json` and `src/locales/es.json`
-- [ ] T025 [P] [US1] Implement `src/components/Breadcrumb.tsx` (Back control to the parent path + printed titles; English title always shown)
-- [ ] T026 [P] [US1] Implement `src/components/BookCard.tsx` (printed title, type badge textbook/workbook, level, optional cover from `public/`, secondary `titleTranslations[lang]` text) 
-- [ ] T027 [US1] Implement `src/pages/Home.tsx` (books grouped by level using `booksByLevel`, each linking to `/b/:bookId`) (depends on T025, T026)
-- [ ] T028 [US1] Implement `src/pages/Book.tsx` (unit list linking to `/b/:bookId/u/:unitId`; NotFound on unknown id) (depends on T025)
-- [ ] T029 [US1] Implement `src/pages/Unit.tsx` (track list showing `label` verbatim, linking to the track path; NotFound on unknown id) (depends on T025)
-- [ ] T030 [US1] Implement `src/components/Player.tsx` with a single native `<audio preload="metadata">`, accessible play/pause button, loading indicator, error state with Retry and a `player.chooseAnother` link to the unit's track list (path passed in as a prop), state machine `idle → loading → playing ⇄ paused → ended | error` per data-model.md
-- [ ] T031 [US1] Implement `src/pages/Track.tsx` (resolves ids, builds audio URL from `VITE_AUDIO_BASE_URL`, renders Breadcrumb + Player, NotFound on unknown ids, no autoplay on load) (depends on T030)
-- [ ] T032 [US1] Wire pages into `src/router.tsx`, replacing placeholders from T017
+- [X] T024 [P] [US1] Add `home.*`, `book.*`, `unit.*`, `player.*` (play, pause, loading, chooseAnother) key groups to `src/locales/en.json` and `src/locales/es.json`
+- [X] T025 [P] [US1] Implement `src/components/Breadcrumb.tsx` (Back control to the parent path + printed titles; English title always shown)
+- [X] T026 [P] [US1] Implement `src/components/BookCard.tsx` (printed title, type badge textbook/workbook, level, optional cover from `public/`, secondary `titleTranslations[lang]` text) 
+- [X] T027 [US1] Implement `src/pages/Home.tsx` (books grouped by level using `booksByLevel`, each linking to `/b/:bookId`) (depends on T025, T026)
+- [X] T028 [US1] Implement `src/pages/Book.tsx` (unit list linking to `/b/:bookId/u/:unitId`; NotFound on unknown id) (depends on T025)
+- [X] T029 [US1] Implement `src/pages/Unit.tsx` (track list showing `label` verbatim, linking to the track path; NotFound on unknown id) (depends on T025)
+- [X] T030 [US1] Implement `src/components/Player.tsx` with a single native `<audio preload="metadata">`, accessible play/pause button, loading indicator, error state with Retry and a `player.chooseAnother` link to the unit's track list (path passed in as a prop), state machine `idle → loading → playing ⇄ paused → ended | error` per data-model.md
+- [X] T031 [US1] Implement `src/pages/Track.tsx` (resolves ids, builds audio URL from `VITE_AUDIO_BASE_URL`, renders Breadcrumb + Player, NotFound on unknown ids, no autoplay on load) (depends on T030)
+- [X] T032 [US1] Wire pages into `src/router.tsx`, replacing placeholders from T017
 
 **Checkpoint**: US1 independently functional — MVP. Run T021–T023; `npm run check` green.
 

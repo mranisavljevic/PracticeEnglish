@@ -7,5 +7,20 @@
   "error.audioFailed": "No se pudo reproducir el audio.",
   "error.offline": "No tienes conexión. El audio necesita internet.",
   "error.notFound": "Página no encontrada",
-  "error.retry": "Intentar de nuevo"
+  "error.retry": "Intentar de nuevo",
+  "home.title": "Elige tu libro",
+  "home.intro": "Elige tu libro, luego una unidad y un número de pista.",
+  "book.type.textbook": "Libro de texto",
+  "book.type.workbook": "Cuaderno de ejercicios",
+  "book.units": "Unidades",
+  "book.noUnits": "Aún no hay unidades disponibles.",
+  "unit.heading": "Unidad {number}: {title}",
+  "unit.headingNoTitle": "Unidad {number}",
+  "unit.tracks": "Pistas",
+  "unit.track": "Pista {label}",
+  "player.track": "Pista {label}",
+  "player.play": "Reproducir",
+  "player.pause": "Pausar",
+  "player.loading": "Cargando…",
+  "player.chooseAnother": "Elegir otra pista"
 }

@@ -1,19 +1,19 @@
 import type { RouteObject } from 'react-router-dom'
 import { Layout } from './components/Layout'
+import { Book } from './pages/Book'
+import { Home } from './pages/Home'
 import { NotFound } from './pages/NotFound'
-
-function Placeholder({ name }: { name: string }) {
-  return <h1 tabIndex={-1}>{name}</h1>
-}
+import { Track } from './pages/Track'
+import { Unit } from './pages/Unit'
 
 export const routes: RouteObject[] = [
   {
     element: <Layout />,
     children: [
-      { index: true, element: <Placeholder name="Home" /> },
-      { path: 'b/:bookId', element: <Placeholder name="Book" /> },
-      { path: 'b/:bookId/u/:unitId', element: <Placeholder name="Unit" /> },
-      { path: 'b/:bookId/u/:unitId/t/:trackId', element: <Placeholder name="Track" /> },
+      { index: true, element: <Home /> },
+      { path: 'b/:bookId', element: <Book /> },
+      { path: 'b/:bookId/u/:unitId', element: <Unit /> },
+      { path: 'b/:bookId/u/:unitId/t/:trackId', element: <Track /> },
       { path: '*', element: <NotFound /> },
     ],
   },
