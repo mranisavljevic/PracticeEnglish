@@ -1,13 +1,17 @@
+import { ContinueCard } from '../components/ContinueCard'
 import { BookCard } from '../components/BookCard'
 import { useCatalog } from '../content/CatalogProvider'
 import { useLocale } from '../i18n/LocaleProvider'
+import { loadProgress } from '../storage/progress'
 
 export function Home() {
   const { t } = useLocale()
-  const { booksByLevel } = useCatalog()
+  const { catalog, booksByLevel } = useCatalog()
+  const progress = loadProgress(catalog)
   return (
     <>
       <h1 tabIndex={-1}>{t('home.title')}</h1>
+      {progress && <ContinueCard progress={progress} />}
       <p>{t('home.intro')}</p>
       {booksByLevel().map(({ level, books }) => (
         <section key={level.id}>

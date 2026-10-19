@@ -25,5 +25,7 @@
   "player.chooseAnother": "Elegir otra pista",
   "lang.label": "Idioma",
   "credit.source": "El audio y los libros son de English in Action y de su editorial.",
-  "credit.noEndorsement": "Este sitio no está afiliado a la editorial ni cuenta con su respaldo."
+  "credit.noEndorsement": "Este sitio no está afiliado a la editorial ni cuenta con su respaldo.",
+  "continue.title": "Continuar: {track}",
+  "continue.where": "{book} · {unit}"
 }
