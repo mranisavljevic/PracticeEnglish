@@ -12,7 +12,9 @@
     "validate:catalog": "tsx scripts/validate-catalog.ts",
     "check": "npm run typecheck && npm run lint && npm run test && npm run validate:catalog",
     "test:e2e": "playwright test",
-    "dev:audio": "tsx scripts/serve-audio.ts"
+    "dev:audio": "tsx scripts/serve-audio.ts",
+    "build:catalog": "tsx scripts/build-catalog.ts",
+    "dev:audio:real": "AUDIO_ROOT=audio-source tsx scripts/serve-audio.ts"
   },
   "dependencies": {
     "react": "^19.3.1",

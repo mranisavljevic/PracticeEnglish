@@ -7,7 +7,7 @@ export default defineConfig({
   use: { baseURL: 'http://localhost:5173', viewport: { width: 390, height: 844 } },
   webServer: [
     {
-      command: 'VITE_AUDIO_BASE_URL=http://localhost:5174 npm run dev -- --port 5173 --strictPort',
+      command: 'VITE_CATALOG_FILE=tests/fixtures/catalog.sample.json VITE_AUDIO_BASE_URL=http://localhost:5174 npm run dev -- --port 5173 --strictPort',
       url: 'http://localhost:5173',
       reuseExistingServer: !process.env.CI,
     },

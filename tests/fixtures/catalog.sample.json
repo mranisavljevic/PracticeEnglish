@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "levels": [
+    { "id": "level-1", "title": "Level 1" },
+    { "id": "level-2", "title": "Level 2" }
+  ],
+  "books": [
+    {
+      "id": "sample-textbook",
+      "levelId": "level-1",
+      "type": "textbook",
+      "title": "Sample Textbook: A Deliberately Long English Title to Check That Wrapping Works on Narrow Screens",
+      "titleTranslations": {
+        "es": "Libro de texto de muestra: un título deliberadamente largo en español para comprobar que el texto se ajusta correctamente en pantallas estrechas"
+      },
+      "units": [
+        {
+          "id": "unit-1",
+          "number": "1",
+          "title": "Meeting People",
+          "titleTranslations": { "es": "Conocer gente" },
+          "tracks": [
+            { "id": "track-1", "label": "1", "file": "sample/track-1.mp3" },
+            { "id": "track-2", "label": "2", "file": "sample/track-2.mp3" },
+            { "id": "track-12a", "label": "12a", "file": "sample/track-12a.mp3" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sample-workbook",
+      "levelId": "level-1",
+      "type": "workbook",
+      "title": "Sample Workbook",
+      "titleTranslations": { "es": "Cuaderno de muestra" },
+      "units": [
+        {
+          "id": "unit-1",
+          "number": "1",
+          "title": "Practice",
+          "tracks": [{ "id": "track-1", "label": "1", "file": "sample/track-1.mp3" }]
+        }
+      ]
+    },
+    {
+      "id": "sample-level-2",
+      "levelId": "level-2",
+      "type": "textbook",
+      "title": "Sample Level 2 Textbook",
+      "units": []
+    }
+  ]
+}

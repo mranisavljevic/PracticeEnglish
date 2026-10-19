@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { readFileSync } from 'node:fs'
 import { validateCatalog } from '../../scripts/catalog-rules'
 import catalog from '../../src/content/catalog.json'
+import sample from '../fixtures/catalog.sample.json'
 
 function clone<T>(v: T): T {
   return JSON.parse(JSON.stringify(v))
@@ -34,6 +35,10 @@ const valid = {
 describe('catalog validation', () => {
   it('the bundled catalog.json is valid', () => {
     expect(validateCatalog(catalog)).toEqual([])
+  })
+
+  it('the e2e sample catalog is valid', () => {
+    expect(validateCatalog(sample)).toEqual([])
   })
 
   it('schema file is the contract file', () => {

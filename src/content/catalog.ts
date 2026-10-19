@@ -1,4 +1,4 @@
-import catalogJson from './catalog.json'
+import catalogJson from '@catalog'
 
 export type TrackType = 'textbook' | 'workbook'
 
