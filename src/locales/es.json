@@ -1,0 +1,11 @@
+{
+  "meta.nativeName": "Español",
+  "app.name": "PracticeEnglish",
+  "app.tagline": "Audio para English in Action",
+  "nav.home": "Inicio",
+  "nav.back": "Atrás",
+  "error.audioFailed": "No se pudo reproducir el audio.",
+  "error.offline": "No tienes conexión. El audio necesita internet.",
+  "error.notFound": "Página no encontrada",
+  "error.retry": "Intentar de nuevo"
+}
