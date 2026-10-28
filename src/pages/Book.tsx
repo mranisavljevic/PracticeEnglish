@@ -1,5 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
 import { Breadcrumb } from '../components/Breadcrumb'
+import { ScanButton } from '../components/ScanButton'
 import { useCatalog } from '../content/CatalogProvider'
 import { useLocale } from '../i18n/LocaleProvider'
 import { NotFound } from './NotFound'
@@ -16,6 +17,7 @@ export function Book() {
       <Breadcrumb backTo="/" trail={[]} />
       <h1 tabIndex={-1}>{book.title}</h1>
       {translated && <p className="secondary">{translated}</p>}
+      <ScanButton bookId={book.id} />
       <h2>{t('book.units')}</h2>
       {book.units.length === 0 ? (
         <p>{t('book.noUnits')}</p>

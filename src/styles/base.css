@@ -1,3 +1,7 @@
+@font-face { font-family: 'Commissioner'; font-style: normal; font-weight: 400; font-display: swap; src: url('/fonts/Commissioner-Regular.woff2') format('woff2'); }
+@font-face { font-family: 'Commissioner'; font-style: normal; font-weight: 600; font-display: swap; src: url('/fonts/Commissioner-SemiBold.woff2') format('woff2'); }
+@font-face { font-family: 'Commissioner'; font-style: normal; font-weight: 700; font-display: swap; src: url('/fonts/Commissioner-Bold.woff2') format('woff2'); }
+
 :root {
   --bg: #ffffff;
   --fg: #111827;
@@ -9,13 +13,15 @@
   --danger: #b91c1c;
   --radius: 10px;
   --gap: 1rem;
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Commissioner', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   line-height: 1.5;
   color: var(--fg);
   background: var(--bg);
 }
 
 * { box-sizing: border-box; }
+
+button, input, select, textarea { font: inherit; }
 
 html, body { margin: 0; min-width: 360px; }
 body { overflow-x: hidden; }
@@ -96,6 +102,19 @@ audio { display: none; }
 .player__row > * { flex: 1 1 8rem; }
 .player__status { margin: 0; color: var(--muted); }
 .offline-notice { margin: 0; padding: 0.5rem 1rem; background: #fef3c7; color: #78350f; text-align: center; }
+
+/* Scan audio icon */
+.scan-button { margin: 0.5rem 0 1rem; min-height: 48px; }
+.scan { position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; justify-content: flex-end; background: #000; color: #fff; outline: none; }
+.scan__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.scan__reticle { position: absolute; top: 38%; left: 50%; width: min(70vw, 16rem); height: 6rem; transform: translate(-50%, -50%); border: 3px solid #fff; border-radius: var(--radius); box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.35); pointer-events: none; }
+.scan__panel { position: relative; display: flex; flex-direction: column; gap: 0.5rem; padding: 1rem 1rem calc(1rem + env(safe-area-inset-bottom)); background: rgba(0, 0, 0, 0.75); }
+.scan__title { margin: 0; font-size: 1.125rem; }
+.scan__instructions, .scan__status p { margin: 0; }
+.scan__status { min-height: 1.5rem; }
+.scan__number { font-size: 1.5rem; font-weight: 700; }
+.scan__actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.scan__actions > * { flex: 1 1 8rem; min-height: 48px; }
 
 /* Responsive */
 @media (max-width: 600px) {

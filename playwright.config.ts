@@ -14,7 +14,28 @@ export default defineConfig({
     { command: 'npm run dev:audio', url: 'http://localhost:5174/health', reuseExistingServer: !process.env.CI },
   ],
   projects: [
-    { name: 'chromium', use: { ...devices['Desktop Chrome'], viewport: { width: 390, height: 844 } } },
-    { name: 'webkit', use: { ...devices['Desktop Safari'], viewport: { width: 390, height: 844 } } },
+    {
+      name: 'chromium',
+      testIgnore: /scan\.spec/,
+      use: { ...devices['Desktop Chrome'], viewport: { width: 390, height: 844 } },
+    },
+    { name: 'webkit', testIgnore: /scan\.spec/, use: { ...devices['Desktop Safari'], viewport: { width: 390, height: 844 } } },
+    {
+      // Scanning needs a camera: Chromium feeds a recorded badge clip in as the fake device.
+      name: 'scan',
+      testMatch: /scan\.spec/,
+      use: {
+        ...devices['Pixel 7'],
+        viewport: { width: 390, height: 844 },
+        permissions: ['camera'],
+        launchOptions: {
+          args: [
+            '--use-fake-device-for-media-stream',
+            '--use-fake-ui-for-media-stream',
+            '--use-file-for-fake-video-capture=tests/fixtures/badges/badge.y4m',
+          ],
+        },
+      },
+    },
   ],
 })

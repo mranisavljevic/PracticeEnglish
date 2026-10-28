@@ -1,8 +1,14 @@
 {
   "version": 1,
   "levels": [
-    { "id": "level-1", "title": "Level 1" },
-    { "id": "level-2", "title": "Level 2" }
+    {
+      "id": "level-1",
+      "title": "Level 1"
+    },
+    {
+      "id": "level-2",
+      "title": "Level 2"
+    }
   ],
   "books": [
     {
@@ -18,11 +24,30 @@
           "id": "unit-1",
           "number": "1",
           "title": "Meeting People",
-          "titleTranslations": { "es": "Conocer gente" },
+          "titleTranslations": {
+            "es": "Conocer gente"
+          },
           "tracks": [
-            { "id": "track-1", "label": "1", "file": "sample/track-1.mp3" },
-            { "id": "track-2", "label": "2", "file": "sample/track-2.mp3" },
-            { "id": "track-12a", "label": "12a", "file": "sample/track-12a.mp3" }
+            {
+              "id": "track-1",
+              "label": "1",
+              "file": "sample/track-1.mp3"
+            },
+            {
+              "id": "track-2",
+              "label": "2",
+              "file": "sample/track-2.mp3"
+            },
+            {
+              "id": "track-12a",
+              "label": "12a",
+              "file": "sample/track-12a.mp3"
+            },
+            {
+              "id": "track-15",
+              "label": "15",
+              "file": "sample/track-15.mp3"
+            }
           ]
         }
       ]
@@ -32,13 +57,21 @@
       "levelId": "level-1",
       "type": "workbook",
       "title": "Sample Workbook",
-      "titleTranslations": { "es": "Cuaderno de muestra" },
+      "titleTranslations": {
+        "es": "Cuaderno de muestra"
+      },
       "units": [
         {
           "id": "unit-1",
           "number": "1",
           "title": "Practice",
-          "tracks": [{ "id": "track-1", "label": "1", "file": "sample/track-1.mp3" }]
+          "tracks": [
+            {
+              "id": "track-1",
+              "label": "1",
+              "file": "sample/track-1.mp3"
+            }
+          ]
         }
       ]
     },

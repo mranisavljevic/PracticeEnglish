@@ -33,5 +33,19 @@
   "player.previous": "Anterior",
   "player.speed": "Velocidad",
   "player.speedNormal": "1×",
-  "player.speedSlow": "0.75×"
+  "player.speedSlow": "0.75×",
+  "scan.button": "Escanear icono de audio",
+  "scan.title": "Escanear icono de audio",
+  "scan.instructions": "Apunta la cámara al icono de audio y mantén firme el teléfono.",
+  "scan.cancel": "Cancelar",
+  "scan.detected": "Pista {number}",
+  "scan.open": "Abrir",
+  "scan.notFound": "La pista {number} no está en este libro.",
+  "scan.tips": "Todavía no se puede leer. Acércate, busca más luz y mantén firme el teléfono.",
+  "scan.moveCloser": "Acércate al icono de audio.",
+  "scan.ambiguous": "Hay varios iconos de audio a la vista. Acércate a uno solo.",
+  "scan.error.denied": "El acceso a la cámara está bloqueado. Permite la cámara en los ajustes del navegador para escanear.",
+  "scan.error.unavailable": "El escáner no pudo iniciarse en este dispositivo.",
+  "scan.chooseManually": "Elegir manualmente",
+  "scan.loading": "Iniciando la cámara…"
 }
