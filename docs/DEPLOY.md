@@ -10,7 +10,7 @@ Two hosts: the app on Netlify (`practiceenglish.net`) and the audio on Firebase 
 ## 2. Audio on Firebase (Spark plan)
 1. Create a project at console.firebase.google.com, then Build → Hosting → Get started.
 2. `npm i -g firebase-tools && firebase login`.
-3. Put the project id in `firebase/.firebaserc` (replace `REPLACE_WITH_FIREBASE_PROJECT_ID`).
+3. The project id goes in `.firebaserc` at the repo root (`firebase.json` is there too; Firebase requires the hosting folder `audio-source/` to sit inside the project directory).
 4. Hosting → Add custom domain → `audio.practiceenglish.net`; add the exact A/TXT records Firebase displays at your registrar and wait for the certificate.
 5. Put the audio in `audio-source/` (see `docs/SOURCES.md`), then run `scripts/deploy-audio.sh`.
 

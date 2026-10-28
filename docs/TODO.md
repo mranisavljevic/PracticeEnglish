@@ -29,7 +29,7 @@ MVP ships **Level 2 only** (ranges done, track 1 of each book omitted as a title
 - [ ] Create the Netlify site from the repo; set `VITE_AUDIO_BASE_URL=https://audio.practiceenglish.net`
 - [ ] Add `practiceenglish.net` and its DNS records at your registrar
 - [ ] Create the Firebase project and Hosting site (Spark plan)
-- [ ] Put the Firebase project id in `firebase/.firebaserc` (replace the placeholder)
+- [ ] Put the Firebase project id in `.firebaserc` (replace the placeholder)
 - [ ] Add `audio.practiceenglish.net` and its DNS records
 - [ ] Run `scripts/deploy-audio.sh`
 - [ ] Verify HTTPS is valid on both hosts

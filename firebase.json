@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "../audio-source",
+    "public": "audio-source",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "headers": [
       {
