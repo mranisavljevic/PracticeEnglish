@@ -1,0 +1,1079 @@
+{
+  "version": 1,
+  "levels": [
+    {
+      "id": "level-2",
+      "title": "Level 2"
+    }
+  ],
+  "books": [
+    {
+      "id": "level-2-student-book",
+      "levelId": "level-2",
+      "type": "textbook",
+      "title": "English in Action 2: Student Book",
+      "titleTranslations": {
+        "es": "English in Action 2: Libro del estudiante"
+      },
+      "units": [
+        {
+          "id": "unit-0",
+          "number": "0",
+          "title": "Welcome Unit",
+          "tracks": [
+            {
+              "id": "track-2",
+              "label": "2",
+              "file": "level-2/sb/002.mp3"
+            },
+            {
+              "id": "track-3",
+              "label": "3",
+              "file": "level-2/sb/003.mp3"
+            },
+            {
+              "id": "track-4",
+              "label": "4",
+              "file": "level-2/sb/004.mp3"
+            },
+            {
+              "id": "track-5",
+              "label": "5",
+              "file": "level-2/sb/005.mp3"
+            },
+            {
+              "id": "track-6",
+              "label": "6",
+              "file": "level-2/sb/006.mp3"
+            },
+            {
+              "id": "track-7",
+              "label": "7",
+              "file": "level-2/sb/007.mp3"
+            },
+            {
+              "id": "track-8",
+              "label": "8",
+              "file": "level-2/sb/008.mp3"
+            },
+            {
+              "id": "track-9",
+              "label": "9",
+              "file": "level-2/sb/009.mp3"
+            },
+            {
+              "id": "track-10",
+              "label": "10",
+              "file": "level-2/sb/010.mp3"
+            },
+            {
+              "id": "track-11",
+              "label": "11",
+              "file": "level-2/sb/011.mp3"
+            },
+            {
+              "id": "track-12",
+              "label": "12",
+              "file": "level-2/sb/012.mp3"
+            }
+          ]
+        },
+        {
+          "id": "unit-1",
+          "number": "1",
+          "title": "My School",
+          "tracks": [
+            {
+              "id": "track-13",
+              "label": "13",
+              "file": "level-2/sb/013.mp3"
+            },
+            {
+              "id": "track-14",
+              "label": "14",
+              "file": "level-2/sb/014.mp3"
+            },
+            {
+              "id": "track-15",
+              "label": "15",
+              "file": "level-2/sb/015.mp3"
+            },
+            {
+              "id": "track-16",
+              "label": "16",
+              "file": "level-2/sb/016.mp3"
+            },
+            {
+              "id": "track-17",
+              "label": "17",
+              "file": "level-2/sb/017.mp3"
+            },
+            {
+              "id": "track-18",
+              "label": "18",
+              "file": "level-2/sb/018.mp3"
+            },
+            {
+              "id": "track-19",
+              "label": "19",
+              "file": "level-2/sb/019.mp3"
+            }
+          ]
+        },
+        {
+          "id": "unit-2",
+          "number": "2",
+          "title": "The Family",
+          "tracks": [
+            {
+              "id": "track-20",
+              "label": "20",
+              "file": "level-2/sb/020.mp3"
+            },
+            {
+              "id": "track-21",
+              "label": "21",
+              "file": "level-2/sb/021.mp3"
+            },
+            {
+              "id": "track-22",
+              "label": "22",
+              "file": "level-2/sb/022.mp3"
+            },
+            {
+              "id": "track-23",
+              "label": "23",
+              "file": "level-2/sb/023.mp3"
+            },
+            {
+              "id": "track-24",
+              "label": "24",
+              "file": "level-2/sb/024.mp3"
+            },
+            {
+              "id": "track-25",
+              "label": "25",
+              "file": "level-2/sb/025.mp3"
+            },
+            {
+              "id": "track-26",
+              "label": "26",
+              "file": "level-2/sb/026.mp3"
+            },
+            {
+              "id": "track-27",
+              "label": "27",
+              "file": "level-2/sb/027.mp3"
+            }
+          ]
+        },
+        {
+          "id": "unit-3",
+          "number": "3",
+          "title": "Home",
+          "tracks": [
+            {
+              "id": "track-28",
+              "label": "28",
+              "file": "level-2/sb/028.mp3"
+            },
+            {
+              "id": "track-29",
+              "label": "29",
+              "file": "level-2/sb/029.mp3"
+            },
+            {
+              "id": "track-30",
+              "label": "30",
+              "file": "level-2/sb/030.mp3"
+            },
+            {
+              "id": "track-31",
+              "label": "31",
+              "file": "level-2/sb/031.mp3"
+            },
+            {
+              "id": "track-32",
+              "label": "32",
+              "file": "level-2/sb/032.mp3"
+            },
+            {
+              "id": "track-33",
+              "label": "33",
+              "file": "level-2/sb/033.mp3"
+            },
+            {
+              "id": "track-34",
+              "label": "34",
+              "file": "level-2/sb/034.mp3"
+            },
+            {
+              "id": "track-35",
+              "label": "35",
+              "file": "level-2/sb/035.mp3"
+            },
+            {
+              "id": "track-36",
+              "label": "36",
+              "file": "level-2/sb/036.mp3"
+            },
+            {
+              "id": "track-37",
+              "label": "37",
+              "file": "level-2/sb/037.mp3"
+            }
+          ]
+        },
+        {
+          "id": "unit-4",
+          "number": "4",
+          "title": "A Typical Day",
+          "tracks": [
+            {
+              "id": "track-38",
+              "label": "38",
+              "file": "level-2/sb/038.mp3"
+            },
+            {
+              "id": "track-39",
+              "label": "39",
+              "file": "level-2/sb/039.mp3"
+            },
+            {
+              "id": "track-40",
+              "label": "40",
+              "file": "level-2/sb/040.mp3"
+            },
+            {
+              "id": "track-41",
+              "label": "41",
+              "file": "level-2/sb/041.mp3"
+            },
+            {
+              "id": "track-42",
+              "label": "42",
+              "file": "level-2/sb/042.mp3"
+            },
+            {
+              "id": "track-43",
+              "label": "43",
+              "file": "level-2/sb/043.mp3"
+            },
+            {
+              "id": "track-44",
+              "label": "44",
+              "file": "level-2/sb/044.mp3"
+            }
+          ]
+        },
+        {
+          "id": "unit-5",
+          "number": "5",
+          "title": "Airport Jobs",
+          "tracks": [
+            {
+              "id": "track-45",
+              "label": "45",
+              "file": "level-2/sb/045.mp3"
+            },
+            {
+              "id": "track-46",
+              "label": "46",
+              "file": "level-2/sb/046.mp3"
+            },
+            {
+              "id": "track-47",
+              "label": "47",
+              "file": "level-2/sb/047.mp3"
+            },
+            {
+              "id": "track-48",
+              "label": "48",
+              "file": "level-2/sb/048.mp3"
+            },
+            {
+              "id": "track-49",
+              "label": "49",
+              "file": "level-2/sb/049.mp3"
+            },
+            {
+              "id": "track-50",
+              "label": "50",
+              "file": "level-2/sb/050.mp3"
+            },
+            {
+              "id": "track-51",
+              "label": "51",
+              "file": "level-2/sb/051.mp3"
+            },
+            {
+              "id": "track-52",
+              "label": "52",
+              "file": "level-2/sb/052.mp3"
+            },
+            {
+              "id": "track-53",
+              "label": "53",
+              "file": "level-2/sb/053.mp3"
+            }
+          ]
+        },
+        {
+          "id": "unit-6",
+          "number": "6",
+          "title": "Safety at Work",
+          "tracks": [
+            {
+              "id": "track-54",
+              "label": "54",
+              "file": "level-2/sb/054.mp3"
+            },
+            {
+              "id": "track-55",
+              "label": "55",
+              "file": "level-2/sb/055.mp3"
+            },
+            {
+              "id": "track-56",
+              "label": "56",
+              "file": "level-2/sb/056.mp3"
+            },
+            {
+              "id": "track-57",
+              "label": "57",
+              "file": "level-2/sb/057.mp3"
+            },
+            {
+              "id": "track-58",
+              "label": "58",
+              "file": "level-2/sb/058.mp3"
+            },
+            {
+              "id": "track-59",
+              "label": "59",
+              "file": "level-2/sb/059.mp3"
+            }
+          ]
+        },
+        {
+          "id": "unit-7",
+          "number": "7",
+          "title": "Eating Out",
+          "tracks": [
+            {
+              "id": "track-60",
+              "label": "60",
+              "file": "level-2/sb/060.mp3"
+            },
+            {
+              "id": "track-61",
+              "label": "61",
+              "file": "level-2/sb/061.mp3"
+            },
+            {
+              "id": "track-62",
+              "label": "62",
+              "file": "level-2/sb/062.mp3"
+            },
+            {
+              "id": "track-63",
+              "label": "63",
+              "file": "level-2/sb/063.mp3"
+            },
+            {
+              "id": "track-64",
+              "label": "64",
+              "file": "level-2/sb/064.mp3"
+            },
+            {
+              "id": "track-65",
+              "label": "65",
+              "file": "level-2/sb/065.mp3"
+            },
+            {
+              "id": "track-66",
+              "label": "66",
+              "file": "level-2/sb/066.mp3"
+            }
+          ]
+        },
+        {
+          "id": "unit-8",
+          "number": "8",
+          "title": "Good Weekend / Bad Weekend",
+          "tracks": [
+            {
+              "id": "track-67",
+              "label": "67",
+              "file": "level-2/sb/067.mp3"
+            },
+            {
+              "id": "track-68",
+              "label": "68",
+              "file": "level-2/sb/068.mp3"
+            },
+            {
+              "id": "track-69",
+              "label": "69",
+              "file": "level-2/sb/069.mp3"
+            },
+            {
+              "id": "track-70",
+              "label": "70",
+              "file": "level-2/sb/070.mp3"
+            },
+            {
+              "id": "track-71",
+              "label": "71",
+              "file": "level-2/sb/071.mp3"
+            }
+          ]
+        },
+        {
+          "id": "unit-9",
+          "number": "9",
+          "title": "Last Weekend",
+          "tracks": [
+            {
+              "id": "track-72",
+              "label": "72",
+              "file": "level-2/sb/072.mp3"
+            },
+            {
+              "id": "track-73",
+              "label": "73",
+              "file": "level-2/sb/073.mp3"
+            },
+            {
+              "id": "track-74",
+              "label": "74",
+              "file": "level-2/sb/074.mp3"
+            },
+            {
+              "id": "track-75",
+              "label": "75",
+              "file": "level-2/sb/075.mp3"
+            },
+            {
+              "id": "track-76",
+              "label": "76",
+              "file": "level-2/sb/076.mp3"
+            },
+            {
+              "id": "track-77",
+              "label": "77",
+              "file": "level-2/sb/077.mp3"
+            },
+            {
+              "id": "track-78",
+              "label": "78",
+              "file": "level-2/sb/078.mp3"
+            },
+            {
+              "id": "track-79",
+              "label": "79",
+              "file": "level-2/sb/079.mp3"
+            },
+            {
+              "id": "track-80",
+              "label": "80",
+              "file": "level-2/sb/080.mp3"
+            },
+            {
+              "id": "track-81",
+              "label": "81",
+              "file": "level-2/sb/081.mp3"
+            },
+            {
+              "id": "track-82",
+              "label": "82",
+              "file": "level-2/sb/082.mp3"
+            },
+            {
+              "id": "track-83",
+              "label": "83",
+              "file": "level-2/sb/083.mp3"
+            },
+            {
+              "id": "track-84",
+              "label": "84",
+              "file": "level-2/sb/084.mp3"
+            }
+          ]
+        },
+        {
+          "id": "unit-10",
+          "number": "10",
+          "title": "Growing Up",
+          "tracks": [
+            {
+              "id": "track-85",
+              "label": "85",
+              "file": "level-2/sb/085.mp3"
+            },
+            {
+              "id": "track-86",
+              "label": "86",
+              "file": "level-2/sb/086.mp3"
+            },
+            {
+              "id": "track-87",
+              "label": "87",
+              "file": "level-2/sb/087.mp3"
+            },
+            {
+              "id": "track-88",
+              "label": "88",
+              "file": "level-2/sb/088.mp3"
+            },
+            {
+              "id": "track-89",
+              "label": "89",
+              "file": "level-2/sb/089.mp3"
+            },
+            {
+              "id": "track-90",
+              "label": "90",
+              "file": "level-2/sb/090.mp3"
+            },
+            {
+              "id": "track-91",
+              "label": "91",
+              "file": "level-2/sb/091.mp3"
+            },
+            {
+              "id": "track-92",
+              "label": "92",
+              "file": "level-2/sb/092.mp3"
+            },
+            {
+              "id": "track-93",
+              "label": "93",
+              "file": "level-2/sb/093.mp3"
+            }
+          ]
+        },
+        {
+          "id": "unit-11",
+          "number": "11",
+          "title": "People and Places",
+          "tracks": [
+            {
+              "id": "track-94",
+              "label": "94",
+              "file": "level-2/sb/094.mp3"
+            },
+            {
+              "id": "track-95",
+              "label": "95",
+              "file": "level-2/sb/095.mp3"
+            },
+            {
+              "id": "track-96",
+              "label": "96",
+              "file": "level-2/sb/096.mp3"
+            },
+            {
+              "id": "track-97",
+              "label": "97",
+              "file": "level-2/sb/097.mp3"
+            },
+            {
+              "id": "track-98",
+              "label": "98",
+              "file": "level-2/sb/098.mp3"
+            },
+            {
+              "id": "track-99",
+              "label": "99",
+              "file": "level-2/sb/099.mp3"
+            }
+          ]
+        },
+        {
+          "id": "unit-12",
+          "number": "12",
+          "title": "Goals and Plans",
+          "tracks": [
+            {
+              "id": "track-100",
+              "label": "100",
+              "file": "level-2/sb/100.mp3"
+            },
+            {
+              "id": "track-101",
+              "label": "101",
+              "file": "level-2/sb/101.mp3"
+            },
+            {
+              "id": "track-102",
+              "label": "102",
+              "file": "level-2/sb/102.mp3"
+            },
+            {
+              "id": "track-103",
+              "label": "103",
+              "file": "level-2/sb/103.mp3"
+            },
+            {
+              "id": "track-104",
+              "label": "104",
+              "file": "level-2/sb/104.mp3"
+            },
+            {
+              "id": "track-105",
+              "label": "105",
+              "file": "level-2/sb/105.mp3"
+            },
+            {
+              "id": "track-106",
+              "label": "106",
+              "file": "level-2/sb/106.mp3"
+            },
+            {
+              "id": "track-107",
+              "label": "107",
+              "file": "level-2/sb/107.mp3"
+            },
+            {
+              "id": "track-108",
+              "label": "108",
+              "file": "level-2/sb/108.mp3"
+            }
+          ]
+        },
+        {
+          "id": "unit-13",
+          "number": "13",
+          "title": "Vacations",
+          "tracks": [
+            {
+              "id": "track-109",
+              "label": "109",
+              "file": "level-2/sb/109.mp3"
+            },
+            {
+              "id": "track-110",
+              "label": "110",
+              "file": "level-2/sb/110.mp3"
+            },
+            {
+              "id": "track-111",
+              "label": "111",
+              "file": "level-2/sb/111.mp3"
+            },
+            {
+              "id": "track-112",
+              "label": "112",
+              "file": "level-2/sb/112.mp3"
+            },
+            {
+              "id": "track-113",
+              "label": "113",
+              "file": "level-2/sb/113.mp3"
+            },
+            {
+              "id": "track-114",
+              "label": "114",
+              "file": "level-2/sb/114.mp3"
+            },
+            {
+              "id": "track-115",
+              "label": "115",
+              "file": "level-2/sb/115.mp3"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "level-2-workbook",
+      "levelId": "level-2",
+      "type": "workbook",
+      "title": "English in Action 2: Workbook",
+      "titleTranslations": {
+        "es": "English in Action 2: Cuaderno de ejercicios"
+      },
+      "units": [
+        {
+          "id": "unit-0",
+          "number": "0",
+          "title": "Welcome Unit",
+          "tracks": [
+            {
+              "id": "track-2",
+              "label": "2",
+              "file": "level-2/wb/002.mp3"
+            },
+            {
+              "id": "track-3",
+              "label": "3",
+              "file": "level-2/wb/003.mp3"
+            },
+            {
+              "id": "track-4",
+              "label": "4",
+              "file": "level-2/wb/004.mp3"
+            },
+            {
+              "id": "track-5",
+              "label": "5",
+              "file": "level-2/wb/005.mp3"
+            }
+          ]
+        },
+        {
+          "id": "unit-1",
+          "number": "1",
+          "title": "My School",
+          "tracks": [
+            {
+              "id": "track-6",
+              "label": "6",
+              "file": "level-2/wb/006.mp3"
+            },
+            {
+              "id": "track-7",
+              "label": "7",
+              "file": "level-2/wb/007.mp3"
+            },
+            {
+              "id": "track-8",
+              "label": "8",
+              "file": "level-2/wb/008.mp3"
+            },
+            {
+              "id": "track-9",
+              "label": "9",
+              "file": "level-2/wb/009.mp3"
+            },
+            {
+              "id": "track-10",
+              "label": "10",
+              "file": "level-2/wb/010.mp3"
+            }
+          ]
+        },
+        {
+          "id": "unit-2",
+          "number": "2",
+          "title": "The Family",
+          "tracks": [
+            {
+              "id": "track-11",
+              "label": "11",
+              "file": "level-2/wb/011.mp3"
+            },
+            {
+              "id": "track-12",
+              "label": "12",
+              "file": "level-2/wb/012.mp3"
+            },
+            {
+              "id": "track-13",
+              "label": "13",
+              "file": "level-2/wb/013.mp3"
+            },
+            {
+              "id": "track-14",
+              "label": "14",
+              "file": "level-2/wb/014.mp3"
+            },
+            {
+              "id": "track-15",
+              "label": "15",
+              "file": "level-2/wb/015.mp3"
+            }
+          ]
+        },
+        {
+          "id": "unit-3",
+          "number": "3",
+          "title": "Home",
+          "tracks": [
+            {
+              "id": "track-16",
+              "label": "16",
+              "file": "level-2/wb/016.mp3"
+            },
+            {
+              "id": "track-17",
+              "label": "17",
+              "file": "level-2/wb/017.mp3"
+            },
+            {
+              "id": "track-18",
+              "label": "18",
+              "file": "level-2/wb/018.mp3"
+            },
+            {
+              "id": "track-19",
+              "label": "19",
+              "file": "level-2/wb/019.mp3"
+            }
+          ]
+        },
+        {
+          "id": "unit-4",
+          "number": "4",
+          "title": "A Typical Day",
+          "tracks": [
+            {
+              "id": "track-20",
+              "label": "20",
+              "file": "level-2/wb/020.mp3"
+            },
+            {
+              "id": "track-21",
+              "label": "21",
+              "file": "level-2/wb/021.mp3"
+            },
+            {
+              "id": "track-22",
+              "label": "22",
+              "file": "level-2/wb/022.mp3"
+            },
+            {
+              "id": "track-23",
+              "label": "23",
+              "file": "level-2/wb/023.mp3"
+            }
+          ]
+        },
+        {
+          "id": "unit-5",
+          "number": "5",
+          "title": "Airport Jobs",
+          "tracks": [
+            {
+              "id": "track-24",
+              "label": "24",
+              "file": "level-2/wb/024.mp3"
+            },
+            {
+              "id": "track-25",
+              "label": "25",
+              "file": "level-2/wb/025.mp3"
+            },
+            {
+              "id": "track-26",
+              "label": "26",
+              "file": "level-2/wb/026.mp3"
+            },
+            {
+              "id": "track-27",
+              "label": "27",
+              "file": "level-2/wb/027.mp3"
+            }
+          ]
+        },
+        {
+          "id": "unit-6",
+          "number": "6",
+          "title": "Safety at Work",
+          "tracks": [
+            {
+              "id": "track-28",
+              "label": "28",
+              "file": "level-2/wb/028.mp3"
+            },
+            {
+              "id": "track-29",
+              "label": "29",
+              "file": "level-2/wb/029.mp3"
+            },
+            {
+              "id": "track-30",
+              "label": "30",
+              "file": "level-2/wb/030.mp3"
+            },
+            {
+              "id": "track-31",
+              "label": "31",
+              "file": "level-2/wb/031.mp3"
+            },
+            {
+              "id": "track-32",
+              "label": "32",
+              "file": "level-2/wb/032.mp3"
+            }
+          ]
+        },
+        {
+          "id": "unit-7",
+          "number": "7",
+          "title": "Eating Out",
+          "tracks": [
+            {
+              "id": "track-33",
+              "label": "33",
+              "file": "level-2/wb/033.mp3"
+            },
+            {
+              "id": "track-34",
+              "label": "34",
+              "file": "level-2/wb/034.mp3"
+            },
+            {
+              "id": "track-35",
+              "label": "35",
+              "file": "level-2/wb/035.mp3"
+            },
+            {
+              "id": "track-36",
+              "label": "36",
+              "file": "level-2/wb/036.mp3"
+            }
+          ]
+        },
+        {
+          "id": "unit-8",
+          "number": "8",
+          "title": "Good Weekend / Bad Weekend",
+          "tracks": [
+            {
+              "id": "track-37",
+              "label": "37",
+              "file": "level-2/wb/037.mp3"
+            },
+            {
+              "id": "track-38",
+              "label": "38",
+              "file": "level-2/wb/038.mp3"
+            },
+            {
+              "id": "track-39",
+              "label": "39",
+              "file": "level-2/wb/039.mp3"
+            }
+          ]
+        },
+        {
+          "id": "unit-9",
+          "number": "9",
+          "title": "Last Weekend",
+          "tracks": [
+            {
+              "id": "track-40",
+              "label": "40",
+              "file": "level-2/wb/040.mp3"
+            },
+            {
+              "id": "track-41",
+              "label": "41",
+              "file": "level-2/wb/041.mp3"
+            },
+            {
+              "id": "track-42",
+              "label": "42",
+              "file": "level-2/wb/042.mp3"
+            },
+            {
+              "id": "track-43",
+              "label": "43",
+              "file": "level-2/wb/043.mp3"
+            }
+          ]
+        },
+        {
+          "id": "unit-10",
+          "number": "10",
+          "title": "Growing Up",
+          "tracks": [
+            {
+              "id": "track-44",
+              "label": "44",
+              "file": "level-2/wb/044.mp3"
+            },
+            {
+              "id": "track-45",
+              "label": "45",
+              "file": "level-2/wb/045.mp3"
+            },
+            {
+              "id": "track-46",
+              "label": "46",
+              "file": "level-2/wb/046.mp3"
+            }
+          ]
+        },
+        {
+          "id": "unit-11",
+          "number": "11",
+          "title": "People and Places",
+          "tracks": [
+            {
+              "id": "track-47",
+              "label": "47",
+              "file": "level-2/wb/047.mp3"
+            },
+            {
+              "id": "track-48",
+              "label": "48",
+              "file": "level-2/wb/048.mp3"
+            },
+            {
+              "id": "track-49",
+              "label": "49",
+              "file": "level-2/wb/049.mp3"
+            },
+            {
+              "id": "track-50",
+              "label": "50",
+              "file": "level-2/wb/050.mp3"
+            }
+          ]
+        },
+        {
+          "id": "unit-12",
+          "number": "12",
+          "title": "Goals and Plans",
+          "tracks": [
+            {
+              "id": "track-51",
+              "label": "51",
+              "file": "level-2/wb/051.mp3"
+            },
+            {
+              "id": "track-52",
+              "label": "52",
+              "file": "level-2/wb/052.mp3"
+            },
+            {
+              "id": "track-53",
+              "label": "53",
+              "file": "level-2/wb/053.mp3"
+            },
+            {
+              "id": "track-54",
+              "label": "54",
+              "file": "level-2/wb/054.mp3"
+            }
+          ]
+        },
+        {
+          "id": "unit-13",
+          "number": "13",
+          "title": "Vacations",
+          "tracks": [
+            {
+              "id": "track-55",
+              "label": "55",
+              "file": "level-2/wb/055.mp3"
+            },
+            {
+              "id": "track-56",
+              "label": "56",
+              "file": "level-2/wb/056.mp3"
+            },
+            {
+              "id": "track-57",
+              "label": "57",
+              "file": "level-2/wb/057.mp3"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
