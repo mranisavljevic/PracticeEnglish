@@ -10,6 +10,6 @@ function mp3(seconds: number): Buffer {
 }
 
 mkdirSync('tests/fixtures/audio/sample', { recursive: true })
-for (const name of ['track-1', 'track-2', 'track-12a']) {
+for (const name of ['track-1', 'track-2', 'track-12a', 'track-15']) {
   writeFileSync(`tests/fixtures/audio/sample/${name}.mp3`, mp3(4))
 }

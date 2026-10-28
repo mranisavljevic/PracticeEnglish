@@ -17,6 +17,14 @@ npm run dev
 - MVP scope: only Level 2 is in the catalogue; Levels 1, 3 and 4 are hidden (`HIDDEN_LEVELS` in `scripts/build-catalog.ts`) until their unit ranges are filled in. Tracks to leave out (e.g. title reads) go in `OMITTED` in the same file.
 - Real audio lives in git-ignored `audio-source/`; every file must be listed in `docs/SOURCES.md` or validation fails.
 
+## Scan audio icon
+
+On touch devices with a camera, the Book and Unit pages offer **Scan audio icon**: aim at a printed badge, confirm the detected number, and the track opens. Recognition runs on the device (tesseract.js); nothing is uploaded.
+
+- OCR assets are self-hosted in `public/ocr/`. Refresh them with `npm run copy:ocr` (downloads the fast English model once).
+- The typeface (Commissioner 400/600/700) is self-hosted in `public/fonts/`. Regenerate with `scripts/subset-font.sh` (needs `python3 -m pip install fonttools brotli`; set `FONT_SRC` to the folder holding the downloaded font and its `OFL.txt`).
+- The scan e2e test feeds a recorded badge clip to Chromium as a fake camera; see `tests/fixtures/badges/README.md`. Full-page publisher photos belong in the gitignored `tests/fixtures/private/`.
+
 ## Adding a language
 Add `src/locales/<code>.json` with every key from `en.json` plus `"meta.nativeName"`. No code changes; a test checks parity.
 

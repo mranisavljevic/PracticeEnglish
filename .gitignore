@@ -7,3 +7,4 @@ audio-source/
 .DS_Store
 playwright-report
 test-results
+tests/fixtures/private/

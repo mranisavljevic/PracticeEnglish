@@ -33,5 +33,19 @@
   "player.previous": "Previous",
   "player.speed": "Speed",
   "player.speedNormal": "1×",
-  "player.speedSlow": "0.75×"
+  "player.speedSlow": "0.75×",
+  "scan.button": "Scan audio icon",
+  "scan.title": "Scan audio icon",
+  "scan.instructions": "Point the camera at the audio icon and hold steady.",
+  "scan.cancel": "Cancel",
+  "scan.detected": "Track {number}",
+  "scan.open": "Open",
+  "scan.notFound": "Track {number} is not in this book.",
+  "scan.tips": "Can't read it yet. Move closer, add light and hold steady.",
+  "scan.moveCloser": "Move closer to the audio icon.",
+  "scan.ambiguous": "Several audio icons are in view. Move closer to just one.",
+  "scan.error.denied": "Camera access is blocked. Allow the camera in your browser settings to scan.",
+  "scan.error.unavailable": "The scanner could not start on this device.",
+  "scan.chooseManually": "Choose manually",
+  "scan.loading": "Starting the camera…"
 }

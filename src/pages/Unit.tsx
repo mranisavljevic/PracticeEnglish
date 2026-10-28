@@ -1,5 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
 import { Breadcrumb } from '../components/Breadcrumb'
+import { ScanButton } from '../components/ScanButton'
 import { useCatalog } from '../content/CatalogProvider'
 import { useLocale } from '../i18n/LocaleProvider'
 import { NotFound } from './NotFound'
@@ -20,6 +21,7 @@ export function Unit() {
       <Breadcrumb backTo={`/b/${book.id}`} trail={[book.title]} />
       <h1 tabIndex={-1}>{heading}</h1>
       {translated && <p className="secondary">{translated}</p>}
+      <ScanButton bookId={book.id} currentUnitId={unit.id} />
       <h2>{t('unit.tracks')}</h2>
       <ul className="tracks">
         {unit.tracks.map((track) => (
