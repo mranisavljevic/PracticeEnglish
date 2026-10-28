@@ -1,0 +1,31 @@
+hooks:
+  before_clarify:
+    - extension: git
+      command: speckit.git.commit
+      description: Commit current work before clarify
+      prompt: Commit current work before running clarify?
+      optional: false
+  before_plan:
+    - extension: git
+      command: speckit.git.commit
+      description: Commit current work before plan
+      prompt: Commit current work before running plan?
+      optional: false
+  before_tasks:
+    - extension: git
+      command: speckit.git.commit
+      description: Commit current work before tasks
+      prompt: Commit current work before running tasks?
+      optional: false
+  before_analyze:
+    - extension: git
+      command: speckit.git.commit
+      description: Commit current work before analyze
+      prompt: Commit current work before running analyze?
+      optional: false
+  before_implement:
+    - extension: git
+      command: speckit.git.commit
+      description: Commit current work before implement
+      prompt: Commit current work before running implement?
+      optional: false
