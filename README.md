@@ -14,6 +14,7 @@ npm run dev
 
 ## Content
 - Catalogue: `src/content/catalog.json` (level → book → unit → track; track `label` is verbatim, e.g. "12a"). Validated by `npm run validate:catalog`.
+- MVP scope: only Level 2 is in the catalogue; Levels 1, 3 and 4 are hidden (`HIDDEN_LEVELS` in `scripts/build-catalog.ts`) until their unit ranges are filled in. Tracks to leave out (e.g. title reads) go in `OMITTED` in the same file.
 - Real audio lives in git-ignored `audio-source/`; every file must be listed in `docs/SOURCES.md` or validation fails.
 
 ## Adding a language

@@ -53,11 +53,18 @@ const KINDS = [
   { key: 'wb' as const, dir: 'wb', id: 'workbook', type: 'workbook' as const, en: 'Workbook', es: 'Cuaderno de ejercicios' },
 ]
 
+// Tracks deliberately left out of the site (e.g. a spoken title/credits page), keyed `level/book`.
+const OMITTED: Record<string, number[]> = { '2/sb': [1], '2/wb': [1] }
+
+// Levels kept out of the catalogue until their unit track ranges are known (MVP ships Level 2 only).
+const HIDDEN_LEVELS = new Set([1, 3, 4])
+
 const units = parseUnits(readFileSync('docs/UNITS-DRAFT.md', 'utf8'))
 const levels: { id: string; title: string }[] = []
 const books: unknown[] = []
 
 for (const lvl of [1, 2, 3, 4]) {
+  if (HIDDEN_LEVELS.has(lvl)) continue
   levels.push({ id: `level-${lvl}`, title: `Level ${lvl}` })
   for (const k of KINDS) {
     const dir = `audio-source/level-${lvl}/${k.dir}`
@@ -82,7 +89,8 @@ for (const lvl of [1, 2, 3, 4]) {
         present.forEach((n) => assigned.add(n))
         bookUnits.push({ id: `unit-${u.number}`, number: u.number, title: u.title, tracks: present.map(track) })
       }
-      const rest = tracks.filter((n) => !assigned.has(n))
+      const omitted = OMITTED[`${lvl}/${k.dir}`] ?? []
+      const rest = tracks.filter((n) => !assigned.has(n) && !omitted.includes(n))
       if (rest.length) bookUnits.push({ id: 'other-tracks', number: '99', title: 'Other tracks', tracks: rest.map(track) })
     }
     books.push({

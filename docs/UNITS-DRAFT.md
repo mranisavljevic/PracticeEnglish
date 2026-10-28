@@ -32,20 +32,20 @@ Assumptions to confirm:
 
 | Unit | Title | SB page | SB tracks (SB2) | WB tracks (WB2) |
 |---|---|---|---|---|
-| 0 (Welcome) | Welcome Unit | 2 | | |
-| 1 | My School | 17 | | |
-| 2 | The Family | 33 | | |
-| 3 | Home | 49 | | |
-| 4 | A Typical Day | 67 | | |
-| 5 | Airport Jobs | 85 | | |
-| 6 | Safety at Work | 103 | | |
-| 7 | Eating Out | 121 | | |
-| 8 | Good Weekend / Bad Weekend | 139 | | |
-| 9 | Last Weekend | 155 | | |
-| 10 | Growing Up | 173 | | |
-| 11 | People and Places | 191 | | |
-| 12 | Goals and Plans | 207 | | |
-| 13 | Vacations | 225 | | |
+| 0 (Welcome) | Welcome Unit | 2 | 2-12 | 2-5 |
+| 1 | My School | 17 | 13-19 | 6-10 |
+| 2 | The Family | 33 | 20-27 | 11-15 |
+| 3 | Home | 49 | 28-37 | 16-19 |
+| 4 | A Typical Day | 67 | 38-44 | 20-23 |
+| 5 | Airport Jobs | 85 | 45-53 | 24-27 |
+| 6 | Safety at Work | 103 | 54-59 | 28-32 |
+| 7 | Eating Out | 121 | 60-66 | 33-36 |
+| 8 | Good Weekend / Bad Weekend | 139 | 67-71 | 37-39 |
+| 9 | Last Weekend | 155 | 72-84 | 40-43 |
+| 10 | Growing Up | 173 | 85-93 | 44-46 |
+| 11 | People and Places | 191 | 94-99 | 47-50 |
+| 12 | Goals and Plans | 207 | 100-108 | 51-54 |
+| 13 | Vacations | 225 | 109-115 | 55-57 |
 
 ## Level 3
 

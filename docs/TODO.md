@@ -2,7 +2,9 @@
 
 ## 1. Fill in the unit track ranges (T067b)
 
-- [ ] At the library, open each book and fill the blank "SB tracks" and "WB tracks" columns in `docs/UNITS-DRAFT.md` (ranges like `1-8, 10`)
+MVP ships **Level 2 only** (ranges done, track 1 of each book omitted as a title read). Levels 1, 3 and 4 are hidden via `HIDDEN_LEVELS` in `scripts/build-catalog.ts`. For each level you finish below, remove it from that set and run `npm run build:catalog`.
+
+- [ ] For Levels 1, 3 and 4, open each book and fill the blank "SB tracks" and "WB tracks" columns in `docs/UNITS-DRAFT.md` (ranges like `1-8, 10`)
 - [ ] Check the gaps in `docs/AUDIO-GAPS-AND-DUPLICATES.txt` against the printed books:
   - [ ] Level 1 Student Book: tracks 18–19
   - [ ] Level 4 Student Book: tracks 28–34
