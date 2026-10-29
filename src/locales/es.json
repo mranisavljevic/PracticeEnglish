@@ -47,5 +47,6 @@
   "scan.error.denied": "El acceso a la cámara está bloqueado. Permite la cámara en los ajustes del navegador para escanear.",
   "scan.error.unavailable": "El escáner no pudo iniciarse en este dispositivo.",
   "scan.chooseManually": "Elegir manualmente",
-  "scan.loading": "Iniciando la cámara…"
+  "scan.loading": "Iniciando la cámara…",
+  "analytics.privacy": "Este sitio cuenta visitas y uso de funciones de forma anónima (idioma, teléfono u ordenador, qué pistas se reproducen). Sin datos personales, cookies ni seguimiento entre visitas."
 }

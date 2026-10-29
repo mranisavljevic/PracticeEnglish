@@ -15,9 +15,11 @@
     "dev:audio": "tsx scripts/serve-audio.ts",
     "build:catalog": "tsx scripts/build-catalog.ts",
     "dev:audio:real": "AUDIO_ROOT=audio-source tsx scripts/serve-audio.ts",
-    "copy:ocr": "tsx scripts/copy-ocr-assets.ts"
+    "copy:ocr": "tsx scripts/copy-ocr-assets.ts",
+    "report": "tsx scripts/analytics-report.ts"
   },
   "dependencies": {
+    "@netlify/blobs": "^10.7.13",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "react-router-dom": "^7.18.4",

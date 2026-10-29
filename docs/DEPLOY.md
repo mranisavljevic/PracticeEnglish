@@ -22,3 +22,11 @@ Two hosts: the app on Netlify (`practiceenglish.net`) and the audio on Firebase 
 ## 4. Roll back / take a file down
 - Remove the file from `audio-source/`, run `scripts/deploy-audio.sh`, delete its entries from `src/content/catalog.json` and its row from `docs/SOURCES.md`, push (Netlify redeploys).
 - To roll back the app: Netlify → Deploys → pick a previous deploy → Publish deploy. For audio: Firebase console → Hosting → release history → Rollback.
+
+## 5. Usage analytics (optional)
+Anonymous, first-party counts (visits, language, phone/desktop, which tracks start and how, errors). No cookies, no IP or user-agent stored. The collector is two Netlify Functions in `netlify/functions/` writing to Netlify Blobs.
+1. Site settings → Environment variables:
+   - `VITE_ANALYTICS_ENDPOINT=/api/e` — scope it to the **Production** context only. When unset (dev, tests, deploy previews) the client sends nothing.
+   - `ANALYTICS_REPORT_TOKEN=<long random string>` — guards `/api/report`. Without it the report always answers 401.
+2. Redeploy. Read the numbers with `ANALYTICS_REPORT_TOKEN=… npm run report -- --from 2026-10-01 --to 2026-10-29` (add `--url http://localhost:8888` for `netlify dev`).
+3. Netlify keeps its own request logs outside the app's collection; the on-page privacy note does not cover them.

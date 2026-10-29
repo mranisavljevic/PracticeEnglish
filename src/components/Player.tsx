@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useAnalytics } from '../analytics/AnalyticsProvider'
+import type { TrackIds, TrackSource } from '../analytics/events'
+import { withSource } from '../analytics/source'
 import { useLocale } from '../i18n/LocaleProvider'
 
 type PlayerState = 'idle' | 'loading' | 'playing' | 'paused' | 'ended' | 'error'
@@ -14,13 +17,22 @@ interface Props {
   onPlay?: () => void
   prevTo?: string
   nextTo?: string
+  /** How the learner reached this track; labels the first recorded start. */
+  source?: TrackSource
+  /** Catalog ids for usage events; without them the player records nothing. */
+  ids?: TrackIds
 }
 
-export function Player({ src, chooseAnotherTo, onPlay, prevTo, nextTo }: Props) {
+export function Player({ src, chooseAnotherTo, onPlay, prevTo, nextTo, source = 'navigation', ids }: Props) {
   const { t } = useLocale()
+  const analytics = useAnalytics()
   const audioRef = useRef<HTMLAudioElement>(null)
   const [state, setState] = useState<PlayerState>('idle')
   const [slow, setSlow] = useState(false)
+  // A start is recorded when audio actually begins playing, not when the learner presses a button.
+  // This assumes playback only ever follows a Play/Replay press: adding autoplay means revisiting it.
+  const pendingStart = useRef<TrackSource | null>(null)
+  const recordedStart = useRef(false)
 
   // Leaving the track (unmount) stops its audio.
   useEffect(() => {
@@ -32,25 +44,49 @@ export function Player({ src, chooseAnotherTo, onPlay, prevTo, nextTo }: Props) 
     if (audioRef.current) audioRef.current.playbackRate = slow ? SLOW_RATE : 1
   }, [slow])
 
-  function start() {
+  function fail() {
+    pendingStart.current = null
+    setState('error')
+    if (ids) analytics.playbackFailure(ids)
+  }
+
+  /** `startSource` is null when this press resumes a pause rather than beginning a new play. */
+  function start(startSource: TrackSource | null) {
     const audio = audioRef.current
     if (!audio) return
+    if (startSource) pendingStart.current = startSource
     setState('loading')
     onPlay?.()
     audio.play()?.catch((err: unknown) => {
       if (err instanceof DOMException && err.name === 'AbortError') return
-      setState('error')
+      fail()
     })
+  }
+
+  const firstOrRepeat = recordedStart.current ? 'repeat' : source
+
+  function press() {
+    if (state === 'paused') start(null)
+    else start(state === 'ended' ? 'repeat' : firstOrRepeat)
   }
 
   function retry() {
     audioRef.current?.load()
-    start()
+    start(firstOrRepeat)
   }
 
   function replay() {
     if (audioRef.current) audioRef.current.currentTime = 0
-    start()
+    start('repeat')
+  }
+
+  function playing() {
+    setState('playing')
+    const label = pendingStart.current
+    if (!label) return
+    pendingStart.current = null
+    recordedStart.current = true
+    if (ids) analytics.trackStarted(label, ids)
   }
 
   const wantsPlay = state === 'loading' || state === 'playing'
@@ -63,11 +99,11 @@ export function Player({ src, chooseAnotherTo, onPlay, prevTo, nextTo }: Props) 
         ref={audioRef}
         src={src}
         preload="metadata"
-        onPlaying={() => setState('playing')}
+        onPlaying={playing}
         onPause={() => setState((s) => (s === 'ended' || s === 'error' ? s : 'paused'))}
         onEnded={() => setState('ended')}
         onWaiting={() => setState((s) => (s === 'playing' ? 'loading' : s))}
-        onError={() => setState('error')}
+        onError={fail}
       />
       {state === 'error' ? (
         <div role="alert" className="player__error">
@@ -84,7 +120,7 @@ export function Player({ src, chooseAnotherTo, onPlay, prevTo, nextTo }: Props) 
           <button
             type="button"
             className="player__toggle"
-            onClick={() => (wantsPlay ? audioRef.current?.pause() : start())}
+            onClick={() => (wantsPlay ? audioRef.current?.pause() : press())}
           >
             {wantsPlay ? t('player.pause') : t('player.play')}
           </button>
@@ -116,7 +152,7 @@ export function Player({ src, chooseAnotherTo, onPlay, prevTo, nextTo }: Props) 
           </Link>
         ) : null}
         {nextTo ? (
-          <Link to={nextTo} className="button button--secondary">
+          <Link to={nextTo} state={withSource('next')} className="button button--secondary">
             {t('player.next')}
           </Link>
         ) : null}
