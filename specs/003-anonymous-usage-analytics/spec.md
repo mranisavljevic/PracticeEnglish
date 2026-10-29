@@ -10,7 +10,18 @@
 
 ## Constitution Justification *(required by Technology & Content Constraints)*
 
-The constitution forbids collecting personal data and requires a spec-level justification for any analytics or data leaving the device. This feature is justified as follows: the site owner needs aggregate insight into audience size and feature usage to decide what to improve. To stay within the constitution's intent, the feature sends only a small fixed set of coarse, non-identifying events; it never sends names, account data, persistent identifiers, IP-derived profiles, free text, or specific track titles; and it does not track individuals across visits or sites. If the plan cannot meet these limits, a constitution amendment is required instead.
+The constitution forbids collecting personal data and requires a spec-level justification for any analytics or data leaving the device. This feature is justified as follows: the site owner needs aggregate insight into audience size and feature usage to decide what to improve. To stay within the constitution's intent, the feature sends only a small fixed set of coarse, non-identifying events; it never sends names, account data, persistent identifiers, IP-derived profiles, or free text; and it does not track individuals across visits or sites. Public catalog identifiers (level, book type, unit, track) are sent on track-start events because they describe the content, not the learner. If the plan cannot meet these limits, a constitution amendment is required instead.
+
+## Clarifications
+
+### Session 2026-10-29
+
+- Q: How should the app decide whether a visitor counts as "mobile" or "desktop"? → A: Browser user-agent string, evaluated locally; only the resulting class is transmitted.
+- Added (owner request, post-session): an "error" event with a fixed type label (playback-failure, scan-failure, unexpected), with no error messages or stack traces transmitted.
+- Q: At what moment should a "track started" event be recorded? → A: When audio actually begins playing; a failed load or blocked play records nothing.
+- Q: Should repeat/next/list picks record a separate "continue" event as well as "track started"? → A: No "continue" event; "track started" alone carries the source (scan, navigation, resume, repeat, next).
+- Q: Which content details should a track-start event carry? → A: Level, book type, unit, and track (all public catalog identifiers); supersedes the earlier "coarse level/book-type only" assumption.
+- Q: What should count as one "visit" for the visit event and the "don't count reloads again" rule? → A: One visit per browser tab session; reloads and in-app navigation don't recount, a new tab or reopened browser does.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -52,13 +63,13 @@ As the site owner, I want to know, once a learner is playing a track, whether th
 
 **Why this priority**: It refines understanding of engagement but is less critical than audience and entry-point data.
 
-**Independent Test**: Play a track, press repeat, press next, then pick a different track from a list; confirm the report shows one event of each continuation type.
+**Independent Test**: Play a track, press repeat, press next, then pick a different track from a list; confirm the report shows one "track started" event each with source "repeat", "next", and "navigation" (plus the initial one).
 
 **Acceptance Scenarios**:
 
-1. **Given** a track is playing or finished, **When** the learner presses "repeat", **Then** a "continue" event with type "repeat" is recorded.
-2. **Given** a track is playing or finished, **When** the learner presses "next", **Then** a "continue" event with type "next" is recorded.
-3. **Given** a learner has played a track, **When** they pick a different track from the file lists, **Then** a "continue" event with type "pick-from-list" is recorded.
+1. **Given** a track is playing or finished, **When** the learner presses "repeat" and playback begins, **Then** a "track started" event with source "repeat" is recorded.
+2. **Given** a track is playing or finished, **When** the learner presses "next" and playback begins, **Then** a "track started" event with source "next" is recorded.
+3. **Given** a learner has played a track, **When** they pick a different track from the file lists, **Then** a "track started" event with source "navigation" is recorded.
 
 ---
 
@@ -77,11 +88,32 @@ As the site owner, I want to know how often learners use the "continue where I l
 
 ---
 
+### User Story 5 - Know when things break (Priority: P2)
+
+As the site owner, I want to know when learners hit errors such as audio failing to play, so I can find and fix broken tracks or flows I would otherwise never hear about.
+
+**Why this priority**: Errors are invisible to the owner today, and a broken track silently loses a learner.
+
+**Independent Test**: Trigger a playback failure (e.g. a track whose audio cannot load); confirm the report shows one "error" event with type "playback-failure" and the track's content identifiers, and no "track started" event for it.
+
+**Acceptance Scenarios**:
+
+1. **Given** a learner selects a track whose audio fails to load or play, **When** the failure occurs, **Then** an "error" event with type "playback-failure" is recorded, carrying level, book type, unit, and track.
+2. **Given** a scan attempt fails (e.g. the code or icon is not recognised or the scan feature errors), **When** the failure occurs, **Then** an "error" event with type "scan-failure" is recorded.
+3. **Given** an uncaught application error occurs, **When** it is detected, **Then** an "error" event with type "unexpected" is recorded with no message or stack trace.
+4. **Given** the same failure repeats many times in a row (e.g. a retry loop), **When** it recurs, **Then** at most one identical error event is recorded per tab session per error type and track.
+
+---
+
 ### Edge Cases
+
+- A playback failure records an "error" event and no "track started" event for that attempt.
+- Error events MUST NOT include error messages, stack traces, URLs, or any free text; only the type label and, for playback failures, the content identifiers.
 
 - The learner's browser blocks analytics, or has "Do Not Track"/global privacy signals enabled: the app MUST work identically, send nothing, and show no errors.
 - The learner is offline or the analytics service is unreachable: events are dropped silently without delaying playback or the UI.
-- A device is ambiguous (e.g. tablet, or desktop window resized to a narrow width): it is classified consistently by a single documented rule.
+- A device is ambiguous (e.g. tablet, or desktop window resized to a narrow width): it is classified by the user-agent rule (see Device Class), so window size never changes the class and tablets follow whatever their user-agent declares.
+- The user-agent string is missing, empty, or unrecognised: the device class defaults to "desktop".
 - The interface language is one not yet supported and falls back to a default: the recorded language is the one actually displayed.
 - Rapid repeated taps on "repeat"/"next": each real action is recorded, but duplicate events from a single tap are not.
 - Automated tests and local development runs MUST NOT pollute the owner's production data.
@@ -90,25 +122,26 @@ As the site owner, I want to know how often learners use the "continue where I l
 
 ### Functional Requirements
 
-- **FR-001**: The system MUST record one "visit" event per visit, including interface language and device class (mobile or desktop).
-- **FR-002**: The system MUST record a "track started" event whenever playback of a track begins, labelled with its source: scan, navigation, or resume.
-- **FR-003**: The system MUST record a "continue" event whenever a learner proceeds after a track, labelled repeat, next, or pick-from-list.
+- **FR-001**: The system MUST record one "visit" event per browser tab session (a reload or in-app navigation within the same tab session does not count again; a new tab or reopened browser does), including interface language and device class (mobile or desktop). Visit state is held only for the life of the tab session and MUST NOT persist across sessions.
+- **FR-002**: The system MUST record a "track started" event at the moment audio actually begins playing (not on tap or selection; a failed load or blocked play records nothing), labelled with exactly one source: scan, navigation (a pick from the level/book/unit file lists, whether first or later), resume, repeat, or next.
+- **FR-003**: *(Removed: a separate "continue" event is not recorded; repeat, next, and list picks are captured as sources of "track started" under FR-002.)*
 - **FR-004**: The system MUST record a "resume used" event when the "continue where I left off" entry point is activated.
 - **FR-005**: The system MUST record a "language changed" event when the learner switches interface language, including the new language.
 - **FR-006**: Every event MUST carry the current interface language and device class.
 - **FR-007**: The system MUST NOT collect or transmit personal data, free text, account data, or persistent per-person identifiers, and MUST NOT identify a learner across visits.
-- **FR-008**: The system MUST NOT transmit track titles or other content identifiers beyond the coarse level/book-type needed to interpret usage; [assumed: level and book type are permitted, individual track identity is not].
+- **FR-008**: Every "track started" event, and every "playback-failure" error event, MUST include the content identifiers level, book type, unit, and track. These are public catalog identifiers and are the only content details sent; free text, search input, and anything about the learner MUST NOT be sent.
 - **FR-009**: The system MUST honour browser "Do Not Track" / global privacy control signals by sending no events.
 - **FR-010**: Analytics failures, blocking, or latency MUST NOT affect app functionality, load speed, or playback.
 - **FR-011**: Events from automated tests and local development MUST be excluded from, or clearly separated from, production data.
-- **FR-012**: The owner MUST be able to view aggregated counts of visits, languages, device classes, track-start sources, continuation types, and resume usage over a chosen time range.
+- **FR-012**: The owner MUST be able to view aggregated counts of visits, languages, device classes, track-start sources, resume usage, and error counts by type over a chosen time range.
 - **FR-013**: The app MUST state, in a short accessible privacy note translated into all supported languages, that anonymous usage statistics are collected and no personal data is gathered.
+- **FR-014**: The system MUST record an "error" event when playback fails (playback-failure, with level, book type, unit, and track), when a scan attempt fails (scan-failure), or when an uncaught application error occurs (unexpected). Error events carry only the fixed type label and, for playback failures, the content identifiers; duplicates of the same type and track within one tab session MUST be suppressed.
 
 ### Key Entities
 
-- **Usage Event**: A single anonymous record of something that happened. Attributes: event type (visit, track started, continue, resume used, language changed), interface language, device class, optional label (source or continuation type), and timestamp. Never linked to a person.
-- **Device Class**: Mobile or desktop, determined by one consistent rule.
-- **Event Label**: A small fixed vocabulary distinguishing track-start sources (scan, navigation, resume) and continuation types (repeat, next, pick-from-list).
+- **Usage Event**: A single anonymous record of something that happened. Attributes: event type (visit, track started, resume used, language changed, error), interface language, device class, optional label (track-start source, or error type: playback-failure, scan-failure, unexpected), content identifiers (level, book type, unit, track; present on track-start events), and timestamp. Never linked to a person.
+- **Device Class**: Mobile or desktop, determined once per visit by inspecting the browser's user-agent string on the device. Only the resulting class value is transmitted; the user-agent string itself, and any browser or OS detail, MUST NOT be sent or stored (FR-007).
+- **Event Label**: A small fixed vocabulary for the track-start source: scan, navigation, resume, repeat, next.
 
 ## Success Criteria *(mandatory)*
 
@@ -116,7 +149,7 @@ As the site owner, I want to know how often learners use the "continue where I l
 
 - **SC-001**: The owner can read total visits, split by language and device class, for any chosen date range from a single report.
 - **SC-002**: For a scripted session covering every tracked action, 100% of expected events appear in the report with the correct labels, and 0 unexpected events appear.
-- **SC-003**: The share of track starts by scan, navigation and resume, and of continuations by repeat, next and list picks, can be read directly from the report without manual data processing.
+- **SC-003**: The share of track starts by each source (scan, navigation, resume, repeat, next) can be read directly from the report without manual data processing.
 - **SC-004**: Learners see no measurable change in time-to-first-playback (no more than 50 ms added) with analytics enabled.
 - **SC-005**: With analytics blocked or the service unreachable, 100% of existing app journeys still pass their automated tests.
 - **SC-006**: A review of the transmitted data confirms 0 personal data fields and 0 persistent per-person identifiers.
@@ -125,8 +158,8 @@ As the site owner, I want to know how often learners use the "continue where I l
 
 - A third-party privacy-friendly, cookieless analytics service or a self-hosted equivalent will be used; the choice is deferred to planning, subject to FR-007 and FR-009.
 - Because no personal data or persistent identifiers are used, a consent banner is not required; the short privacy note (FR-013) is sufficient. This should be revisited if the plan's chosen service uses cookies.
-- "Visitor" is approximated by anonymous visit counts; exact unique-person counts are not required and may be approximate.
-- Device class is mobile vs. desktop only; browser, OS, and screen size are out of scope.
-- Tracking time spent listening, completion rate, and per-track popularity are out of scope for this version.
-- Suggested additional events beyond the request: "language changed" (included) and book level/type on track starts (included as coarse context).
+- "Visitor" is approximated by anonymous visit counts (one per tab session); exact unique-person counts are not required, and the same person returning in a new tab or session is counted again.
+- Device class is mobile vs. desktop only; browser, OS, and screen size are out of scope. If the chosen analytics service records the user-agent or derives browser/OS on its own, the plan must disable that or pick a service that does not, to stay within FR-007.
+- Tracking time spent listening and completion rate are out of scope for this version. Per-track popularity is derivable from the content identifiers on track-start events (FR-008), though a dedicated popularity view is not required.
+- Suggested additional events beyond the request: "language changed" (included) and level, book type, unit, and track on track starts (included per FR-008).
 - Existing scan, navigation, repeat/next, and resume features already exist (specs 001 and 002) and are only observed, not changed.
