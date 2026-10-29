@@ -123,7 +123,7 @@ As the site owner, I want to know when learners hit errors such as audio failing
 ### Functional Requirements
 
 - **FR-001**: The system MUST record one "visit" event per browser tab session (a reload or in-app navigation within the same tab session does not count again; a new tab or reopened browser does), including interface language and device class (mobile or desktop). Visit state is held only for the life of the tab session and MUST NOT persist across sessions.
-- **FR-002**: The system MUST record a "track started" event at the moment audio actually begins playing (not on tap or selection; a failed load or blocked play records nothing), labelled with exactly one source: scan, navigation (a pick from the level/book/unit file lists, whether first or later), resume, repeat, or next.
+- **FR-002**: The system MUST record a "track started" event at the moment audio actually begins playing (not on tap or selection; a failed load or blocked play records nothing), labelled with exactly one source: scan, navigation (a pick from the level/book/unit file lists, whether first or later), resume, repeat, or next. The source describes the learner's action, not the page: reloading or navigating back/forward to a track page MUST NOT re-record a scan or resume arrival (such a later start is labelled "navigation").
 - **FR-003**: *(Removed: a separate "continue" event is not recorded; repeat, next, and list picks are captured as sources of "track started" under FR-002.)*
 - **FR-004**: The system MUST record a "resume used" event when the "continue where I left off" entry point is activated.
 - **FR-005**: The system MUST record a "language changed" event when the learner switches interface language, including the new language.
@@ -132,16 +132,16 @@ As the site owner, I want to know when learners hit errors such as audio failing
 - **FR-008**: Every "track started" event, and every "playback-failure" error event, MUST include the content identifiers level, book type, unit, and track. These are public catalog identifiers and are the only content details sent; free text, search input, and anything about the learner MUST NOT be sent.
 - **FR-009**: The system MUST honour browser "Do Not Track" / global privacy control signals by sending no events.
 - **FR-010**: Analytics failures, blocking, or latency MUST NOT affect app functionality, load speed, or playback.
-- **FR-011**: Events from automated tests and local development MUST be excluded from, or clearly separated from, production data.
+- **FR-011**: Events from automated tests and local development MUST be excluded from, or clearly separated from, production data. Analytics MUST be off by default: with no analytics endpoint configured, nothing is sent.
 - **FR-012**: The owner MUST be able to view aggregated counts of visits, languages, device classes, track-start sources, resume usage, and error counts by type over a chosen time range.
-- **FR-013**: The app MUST state, in a short accessible privacy note translated into all supported languages, that anonymous usage statistics are collected and no personal data is gathered.
+- **FR-013**: The app MUST state, in a short accessible privacy note (plain text exposed to assistive technology, with sufficient contrast) translated into all supported languages, that anonymous usage statistics are collected and no personal data is gathered. The note covers the app's own collection only; the hosting provider's standard request logs are outside the app's control and are not described by it.
 - **FR-014**: The system MUST record an "error" event when playback fails (playback-failure, with level, book type, unit, and track), when a scan attempt fails (scan-failure), or when an uncaught application error occurs (unexpected). Error events carry only the fixed type label and, for playback failures, the content identifiers; duplicates of the same type and track within one tab session MUST be suppressed.
 
 ### Key Entities
 
-- **Usage Event**: A single anonymous record of something that happened. Attributes: event type (visit, track started, resume used, language changed, error), interface language, device class, optional label (track-start source, or error type: playback-failure, scan-failure, unexpected), content identifiers (level, book type, unit, track; present on track-start events), and timestamp. Never linked to a person.
+- **Usage Event**: A single anonymous record of something that happened. Attributes: event type (visit, track started, resume used, language changed, error), interface language, device class, optional label (track-start source, or error type: playback-failure, scan-failure, unexpected), content identifiers (level, book type, unit, track; present on track-start events and playback-failure error events), and a day-level timestamp (the UTC day, set by the collector; no time of day). Never linked to a person.
 - **Device Class**: Mobile or desktop, determined once per visit by inspecting the browser's user-agent string on the device. Only the resulting class value is transmitted; the user-agent string itself, and any browser or OS detail, MUST NOT be sent or stored (FR-007).
-- **Event Label**: A small fixed vocabulary for the track-start source: scan, navigation, resume, repeat, next.
+- **Event Label**: A small fixed vocabulary: for track-start events the source (scan, navigation, resume, repeat, next); for error events the type (playback-failure, scan-failure, unexpected).
 
 ## Success Criteria *(mandatory)*
 
