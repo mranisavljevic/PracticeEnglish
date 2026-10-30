@@ -94,6 +94,35 @@ describe('ScanOverlay', () => {
     expect(dialog.querySelector('video')).not.toBeNull()
   })
 
+  it('lays out header, viewport and panel in that order, with status only in the panel', async () => {
+    await openOverlay()
+    const dialog = screen.getByRole('dialog')
+    expect([...dialog.children].map((el) => el.className)).toEqual(['scan__header', 'scan__viewport', 'scan__panel'])
+    const header = dialog.querySelector('.scan__header')!
+    expect(header.querySelector('#scan-title')).not.toBeNull()
+    expect(header.querySelector('.scan__instructions')).not.toBeNull()
+    expect(header.querySelector('.scan__status')).toBeNull()
+    const viewport = dialog.querySelector('.scan__viewport')!
+    expect(viewport.querySelector('video')).not.toBeNull()
+    expect(viewport.querySelector('.scan__reticle')).not.toBeNull()
+    expect(dialog.querySelector('.scan__panel .scan__status')).toHaveAttribute('aria-live', 'polite')
+  })
+
+  it('puts hint text in the bottom status area, not the header', async () => {
+    vi.mocked(pickBadge).mockReturnValue({ kind: 'tooSmall' })
+    await openOverlay()
+    const hint = await screen.findByText('Move closer to the audio icon.')
+    expect(hint.closest('.scan__status')).not.toBeNull()
+    expect(hint.closest('.scan__header')).toBeNull()
+  })
+
+  it('renders the same zones in Spanish', async () => {
+    vi.spyOn(navigator, 'languages', 'get').mockReturnValue(['es'])
+    await openOverlay()
+    const dialog = screen.getByRole('dialog')
+    expect([...dialog.children].map((el) => el.className)).toEqual(['scan__header', 'scan__viewport', 'scan__panel'])
+  })
+
   it('shows the detected number and an Open button once a matching number is stable', async () => {
     vi.mocked(pickBadge).mockReturnValue(badge as never)
     vi.mocked(readNumber).mockResolvedValue({ number: '2', confidence: 90 })
@@ -190,6 +219,17 @@ describe('ScanOverlay', () => {
       await openOverlayWith(() => fail('NotAllowedError'))
       expect(await screen.findByText(/camera access is blocked/i)).toBeInTheDocument()
       expect(screen.getByRole('button', { name: 'Choose manually' })).toBeInTheDocument()
+    })
+
+    it('keeps the title on top, hides the viewport and shows the error at the bottom', async () => {
+      await openOverlayWith(() => fail('NotAllowedError'))
+      const error = await screen.findByText(/camera access is blocked/i)
+      const dialog = screen.getByRole('dialog')
+      expect(error.closest('.scan__panel')).not.toBeNull()
+      expect(dialog.querySelector('.scan__header #scan-title')).not.toBeNull()
+      expect(dialog.querySelector('.scan__instructions')).toBeNull()
+      expect(dialog.querySelector('.scan__viewport')).toHaveAttribute('hidden')
+      expect(dialog.querySelector('video')).not.toBeNull()
     })
 
     it.each(['NotFoundError', 'NotReadableError'])('shows the unavailable message for %s', async (name) => {
