@@ -172,10 +172,10 @@ Single project: client in `src/`, serverless collector in `netlify/functions/`, 
 
 ## Phase 8: Polish & Cross-Cutting Concerns
 
-- [ ] T043 [P] Privacy review (SC-006): capture a real request body and listed blob key from the local run in `quickstart.md` §2, and confirm only fields from `contracts/collector-api.md` appear; note the result in the PR description
+- [X] T043 [P] Privacy review (SC-006): capture a real request body and listed blob key from the local run in `quickstart.md` §2, and confirm only fields from `contracts/collector-api.md` appear; note the result in the PR description
 - [ ] T044 [P] Timing check (SC-004; automated guard is the synchronous-`track` assertion in T008): measure time-to-first-playback with analytics enabled vs. unset on a mobile profile and confirm the added time is ≤ 50 ms
 - [X] T045 [P] Update `README.md` with a short "Analytics" section pointing to `docs/DEPLOY.md` and `npm run report`
-- [ ] T046 Run `npm run check` and `npm run test:e2e`, fix any failures, then walk through `specs/003-anonymous-usage-analytics/quickstart.md` sections 1–2 and tick off every item
+- [X] T046 Run `npm run check` and `npm run test:e2e`, fix any failures, then walk through `specs/003-anonymous-usage-analytics/quickstart.md` sections 1–2 and tick off every item
 
 ---
 
