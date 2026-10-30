@@ -77,13 +77,17 @@ export function ScanOverlay({ bookId, currentUnitId, onClose }: Props) {
       tabIndex={-1}
       onKeyDown={trapTab}
     >
-      <video ref={videoRef} className="scan__video" playsInline muted autoPlay />
-      {state.status !== 'error' && <div className="scan__reticle" aria-hidden="true" />}
-      <div className="scan__panel">
+      <header className="scan__header">
         <h2 id="scan-title" className="scan__title">
           {t('scan.title')}
         </h2>
         {state.status !== 'error' && <p className="scan__instructions">{t('scan.instructions')}</p>}
+      </header>
+      <div className="scan__viewport" hidden={state.status === 'error'}>
+        <video ref={videoRef} className="scan__video" playsInline muted autoPlay />
+        <div className="scan__reticle" aria-hidden="true" />
+      </div>
+      <div className="scan__panel">
         <div className="scan__status" aria-live="polite">
           {state.status === 'detected' && <p className="scan__number">{t('scan.detected', { number: state.number })}</p>}
           {status && <p>{status}</p>}
