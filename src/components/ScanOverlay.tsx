@@ -1,5 +1,7 @@
 import { useEffect, useRef, type KeyboardEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useAnalytics } from '../analytics/AnalyticsProvider'
+import { withSource } from '../analytics/source'
 import { useCatalog } from '../content/CatalogProvider'
 import { useLocale } from '../i18n/LocaleProvider'
 import { useScanner } from '../scan/useScanner'
@@ -14,11 +16,17 @@ const FOCUSABLE = 'button, [href], input, select, textarea, [tabindex]:not([tabi
 
 export function ScanOverlay({ bookId, currentUnitId, onClose }: Props) {
   const { t } = useLocale()
+  const { scanFailure } = useAnalytics()
   const { getBook } = useCatalog()
   const navigate = useNavigate()
   const book = getBook(bookId)
   const dialogRef = useRef<HTMLDivElement>(null)
   const { state, videoRef } = useScanner(book ?? { id: bookId, levelId: '', type: 'textbook', title: '', units: [] })
+
+  const failed = state.status === 'error' || state.status === 'notFound'
+  useEffect(() => {
+    if (failed) scanFailure()
+  }, [failed, scanFailure])
 
   // Move focus into the dialog and put it back where it was when the dialog closes.
   useEffect(() => {
@@ -57,7 +65,7 @@ export function ScanOverlay({ bookId, currentUnitId, onClose }: Props) {
     const unitPath = `/b/${bookId}/u/${state.match.unitId}`
     // Going through the unit first makes back (link or browser) land on that unit's track list.
     if (state.match.unitId !== currentUnitId) navigate(unitPath)
-    navigate(`${unitPath}/t/${state.match.trackId}`)
+    navigate(`${unitPath}/t/${state.match.trackId}`, { state: withSource('scan') })
     onClose()
   }
 

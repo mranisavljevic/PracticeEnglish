@@ -8,3 +8,6 @@ audio-source/
 playwright-report
 test-results
 tests/fixtures/private/
+
+# Local Netlify folder
+.netlify

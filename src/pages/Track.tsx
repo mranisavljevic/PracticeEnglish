@@ -1,5 +1,6 @@
-import { useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { clearSource, hasSource, readSource } from '../analytics/source'
 import { Breadcrumb } from '../components/Breadcrumb'
 import { Player } from '../components/Player'
 import { audioUrl } from '../content/catalog'
@@ -16,6 +17,24 @@ export function Track() {
   const unit = getUnit(bookId, unitId)
   const track = getTrack(bookId, unitId, trackId)
   const known = Boolean(book && unit && track)
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  // The arrival source rides in history state; this page stays mounted across Next/Previous, so keep it per arrival.
+  const [arrival, setArrival] = useState(() => ({
+    key: location.key,
+    path: location.pathname,
+    source: readSource(location.state),
+  }))
+  if (hasSource(location.state) && arrival.key !== location.key) {
+    setArrival({ key: location.key, path: location.pathname, source: readSource(location.state) })
+  } else if (arrival.path !== location.pathname) {
+    setArrival({ key: location.key, path: location.pathname, source: 'navigation' })
+  }
+  // Once read, drop it from the history entry so a reload or back/forward is plain navigation.
+  useEffect(() => {
+    if (hasSource(location.state)) clearSource(navigate, location)
+  }, [location, navigate])
 
   // Visiting a track page (including a direct link) records it as the place to continue from.
   useEffect(() => {
@@ -36,6 +55,8 @@ export function Track() {
         chooseAnotherTo={unitPath}
         prevTo={prev && trackPath(prev.id)}
         nextTo={next && trackPath(next.id)}
+        source={arrival.source}
+        ids={{ level: book.levelId, bookType: book.type, unit: unit.id, track: track.id }}
         onPlay={() => saveProgress({ bookId, unitId, trackId })}
       />
     </>

@@ -11,15 +11,27 @@ export default defineConfig({
       url: 'http://localhost:5173',
       reuseExistingServer: !process.env.CI,
     },
+    {
+      // Same app with analytics switched on; only analytics.spec runs against it (the collector is intercepted).
+      command:
+        'VITE_ANALYTICS_ENDPOINT=/api/e VITE_CATALOG_FILE=tests/fixtures/catalog.sample.json VITE_AUDIO_BASE_URL=http://localhost:5174 npm run dev -- --port 5175 --strictPort',
+      url: 'http://localhost:5175',
+      reuseExistingServer: !process.env.CI,
+    },
     { command: 'npm run dev:audio', url: 'http://localhost:5174/health', reuseExistingServer: !process.env.CI },
   ],
   projects: [
     {
       name: 'chromium',
-      testIgnore: /scan\.spec/,
+      testIgnore: /(scan|analytics)\.spec/,
       use: { ...devices['Desktop Chrome'], viewport: { width: 390, height: 844 } },
     },
-    { name: 'webkit', testIgnore: /scan\.spec/, use: { ...devices['Desktop Safari'], viewport: { width: 390, height: 844 } } },
+    { name: 'webkit', testIgnore: /(scan|analytics)\.spec/, use: { ...devices['Desktop Safari'], viewport: { width: 390, height: 844 } } },
+    {
+      name: 'analytics',
+      testMatch: /analytics\.spec/,
+      use: { ...devices['Desktop Chrome'], baseURL: 'http://localhost:5175', viewport: { width: 390, height: 844 } },
+    },
     {
       // Scanning needs a camera: Chromium feeds a recorded badge clip in as the fake device.
       name: 'scan',
