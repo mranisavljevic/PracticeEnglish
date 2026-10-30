@@ -1,10 +1,13 @@
 import { Link } from 'react-router-dom'
+import { useAnalytics } from '../analytics/AnalyticsProvider'
+import { withSource } from '../analytics/source'
 import { useCatalog } from '../content/CatalogProvider'
 import type { Progress } from '../storage/progress'
 import { useLocale } from '../i18n/LocaleProvider'
 
 export function ContinueCard({ progress }: { progress: Progress }) {
   const { t } = useLocale()
+  const { resumeUsed } = useAnalytics()
   const { getBook, getUnit, getTrack } = useCatalog()
   const book = getBook(progress.bookId)
   const unit = getUnit(progress.bookId, progress.unitId)
@@ -16,6 +19,8 @@ export function ContinueCard({ progress }: { progress: Progress }) {
   return (
     <Link
       to={`/b/${book.id}/u/${unit.id}/t/${track.id}`}
+      state={withSource('resume')}
+      onClick={resumeUsed}
       className="card card--continue"
     >
       <span className="card__body">

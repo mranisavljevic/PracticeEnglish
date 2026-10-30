@@ -47,5 +47,6 @@
   "scan.error.denied": "Camera access is blocked. Allow the camera in your browser settings to scan.",
   "scan.error.unavailable": "The scanner could not start on this device.",
   "scan.chooseManually": "Choose manually",
-  "scan.loading": "Starting the camera…"
+  "scan.loading": "Starting the camera…",
+  "analytics.privacy": "This site counts anonymous visits and feature use (language, phone or desktop, which tracks are played). No personal data, cookies or tracking across visits."
 }

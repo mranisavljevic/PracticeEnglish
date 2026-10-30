@@ -33,6 +33,7 @@ export function Layout() {
       </main>
       <footer className="layout__footer">
         <Credit />
+        <p>{t('analytics.privacy')}</p>
       </footer>
     </div>
   )
