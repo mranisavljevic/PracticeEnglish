@@ -106,7 +106,7 @@ As the site owner, I want the previous self-hosted collection and report removed
 
 - **FR-001**: The system MUST send its usage events (visit, track started, resume used, language changed, error) to the owner's Google Analytics account instead of the self-hosted collector.
 - **FR-002**: The set of events, labels (track-start source; error type), and content identifiers (level, book type, unit, track) MUST match spec 003's definitions (003 FR-001, FR-002, FR-004, FR-005, FR-006, FR-008, FR-014), including its timing and de-duplication rules, unchanged.
-- **FR-002a**: The system MUST disable all Google Analytics automatic and enhanced-measurement events (including automatic page views, scrolls, outbound clicks, site search, and file downloads) so that only the five defined events are sent. The visit event is sent explicitly once per tab session.
+- **FR-002a**: The system MUST be configured so Google Analytics automatic and enhanced-measurement events (including automatic page views, scrolls, outbound clicks, site search, and file downloads) are not sent: the code disables automatic page views and the owner turns off Enhanced measurement on the stream. This MUST be verified in DebugView before release. Only the five defined events are sent. The visit event is sent explicitly once per tab session.
 - **FR-003**: Every event MUST carry the interface language and device class so reports can be segmented by them.
 - **FR-004**: Events MUST be distinguishable as belonging to PracticeEnglish so the owner can filter it from their other apps.
 - **FR-005**: The system MUST NOT enable Google advertising features, remarketing, cross-site linking, or user-level identifiers, and MUST request anonymised IP handling.
@@ -140,7 +140,8 @@ As the site owner, I want the previous self-hosted collection and report removed
 ## Assumptions
 
 - The owner already has (or will create) a Google Analytics account and will supply the identifier for PracticeEnglish; creating it is outside this feature.
-- Events keep the same names and labels as spec 003 so the owner's mental model carries over.
+- Events keep the same names and labels as spec 003 so the owner's mental model carries over. If GA4 reserves any of the names, all names are prefixed `pe_` and the contracts are updated.
+- Data retention is set to the GA4 minimum of 2 months.
 - Consent is required for every visitor (mixed-region audience) and shown as a minimal, accessible, translated prompt; the owner may later turn it off via configuration if their audience does not require it.
 - GA4 does not offer an IP-anonymisation setting (it does not store full IPs), so FR-005's anonymised-IP request is satisfied by GA4's default behaviour.
 - Do Not Track and global privacy control remain honoured even though Google does not require it, preserving spec 003 behaviour.

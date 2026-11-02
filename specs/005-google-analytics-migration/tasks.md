@@ -23,7 +23,7 @@ Single project: `src/`, `tests/`, `netlify/`, `scripts/` at repo root.
 
 **Purpose**: Governance and configuration that everything else relies on.
 
-- [ ] T001 Amend `.specify/memory/constitution.md` to v2.1.0: replace the "MUST NOT collect personal data" bullet with the Google Analytics allowance (opt-in consent, DNT/GPC honoured, no advertising features or user-level identifiers, no free text, minimal retention); update the Sync Impact Report and version line (FR-013, research D7).
+- [ ] T001 Amend `.specify/memory/constitution.md` to v2.1.0: replace the "MUST NOT collect personal data" bullet with the Google Analytics allowance (opt-in consent, DNT/GPC honoured, no advertising features or user-level identifiers, no free text, minimal retention); update the Sync Impact Report and version line (FR-013, research D7). Set Last Amended to the date of the change, and add to the Sync Impact Report the impact on existing specs (spec 003 FR-007 is superseded; 003's no-persistent-identifier wording no longer applies). Version bump 2.0.0 → 2.1.0 (MINOR: materially expanded guidance). State retention as "2-month data retention".
 - [ ] T002 [P] Declare `VITE_GA_MEASUREMENT_ID` and `VITE_CONSENT_PROMPT` on `ImportMetaEnv` (and remove `VITE_ANALYTICS_ENDPOINT`) in the project's Vite env declaration file (`src/vite-env.d.ts`, or wherever `ImportMetaEnv` is declared), and add a `gtag`/`dataLayer` `Window` augmentation in `src/analytics/ga.d.ts`.
 
 ---
@@ -40,10 +40,10 @@ Single project: `src/`, `tests/`, `netlify/`, `scripts/` at repo root.
 
 ### Implementation
 
-- [ ] T006 Move the vocabulary types (`EventType`, `TrackSource`, `ErrorType`, `DeviceClass`, `BookType`, `UsageEvent`) from `netlify/functions/lib/schema.ts` into `src/analytics/events.ts` (define them there; do not delete the schema file yet), add `privacySignalPresent(nav, win)` and the new `trackingAllowed(env, nav, win, consent)` (drop `VITE_ANALYTICS_ENDPOINT`). Makes T003 pass.
+- [ ] T006 Move the vocabulary types (`EventType`, `TrackSource`, `ErrorType`, `DeviceClass`, `BookType`, `UsageEvent`) from `netlify/functions/lib/schema.ts` into `src/analytics/events.ts` (define them there; do not delete the schema file yet), update every import of `netlify/functions/lib/schema` in `src/` and `tests/` to `src/analytics/events`, add `privacySignalPresent(nav, win)` and the new `trackingAllowed(env, nav, win, consent)` (drop `VITE_ANALYTICS_ENDPOINT`). Makes T003 pass.
 - [ ] T007 [P] Create `src/analytics/consent.ts` per `contracts/client-contract.md` (`getConsent`, `setConsent`, `subscribe`, `promptVisible`; `localStorage['pe.consent']`; memory fallback; `_ga*` cookie cleanup on decline). Makes T004 pass.
 - [ ] T008 [P] Create `src/analytics/ga.ts` with `ensureGa(id)` and `sendEvent(event)` per the client and event contracts. Makes T005 pass.
-- [ ] T009 Rewrite `tests/helpers/analytics.ts`: `captureEvents()` stubs `VITE_GA_MEASUREMENT_ID` (e.g. `G-TEST123`), sets consent granted, stubs `window.gtag` as a recording `vi.fn`, and returns the `('event', name, params)` calls as events; `restoreEvents()` clears env, storage, `dataLayer`, `gtag`, privacy-signal properties and injected GA `<script>` tags.
+- [ ] T009 Rewrite `tests/helpers/analytics.ts` and, in the same task, update the existing component tests that import it (`analytics-track-started`, `analytics-source-handoff`, `analytics-resume`, `analytics-errors`) so they compile and run against the stub (T016–T018 add the new assertions): `captureEvents()` stubs `VITE_GA_MEASUREMENT_ID` (e.g. `G-TEST123`), sets consent granted, stubs `window.gtag` as a recording `vi.fn`, and returns the `('event', name, params)` calls as events; `restoreEvents()` clears env, storage, `dataLayer`, `gtag`, privacy-signal properties and injected GA `<script>` tags.
 
 **Checkpoint**: Foundation ready; new unit tests (T003–T005) pass.
 
@@ -111,6 +111,8 @@ Single project: `src/`, `tests/`, `netlify/`, `scripts/` at repo root.
 - [ ] T026 [US3] Create `src/analytics/ConsentBanner.tsx`: `ConsentBanner` (compact bottom bar, `role="region"`, keyboard-operable buttons ≥44 px, link to the privacy note, no focus trap) and `PrivacySettingsButton`; style with existing tokens/CSS conventions. Makes T021 pass.
 - [ ] T027 [US3] Update `src/components/Layout.tsx`: mount `ConsentBanner` and render `PrivacySettingsButton` in the footer next to the privacy note. Makes T021–T023 pass.
 
+- [ ] T035a [US3] Verify against a throwaway GA4 stream (quickstart steps 2–4): off by default, consent flow works, DebugView shows only the five defined events and none of `page_view`, `scroll`, `click`, `file_download`, `view_search_results`, and none of the five event names is reserved (otherwise prefix all with `pe_` and update `contracts/ga-event-contract.md`, `src/analytics/ga.ts` and tests). Release gate for US4 (FR-002a, FR-012).
+
 **Checkpoint**: Privacy behaviour complete in en and es.
 
 ---
@@ -121,7 +123,7 @@ Single project: `src/`, `tests/`, `netlify/`, `scripts/` at repo root.
 
 **Independent Test**: `git grep` finds no collector references outside `specs/`; build succeeds; nothing posts to `/api/e`.
 
-> Run only after US1–US3 are verified against a GA test stream (quickstart step 3).
+> Run only after US1–US3 are verified against a GA test stream (T035a).
 
 - [ ] T028 [US4] Delete `netlify/functions/collect.ts`, `netlify/functions/report.ts`, `netlify/functions/lib/schema.ts` (the `netlify/functions` directory goes away) and `scripts/analytics-report.ts`.
 - [ ] T029 [P] [US4] Delete `tests/unit/analytics-collect.test.ts`, `tests/unit/analytics-report.test.ts`, `tests/unit/analytics-schema.test.ts`.
@@ -137,9 +139,9 @@ Single project: `src/`, `tests/`, `netlify/`, `scripts/` at repo root.
 ## Phase 7: Polish & cross-cutting
 
 - [ ] T034 Run `npm run check` and `npm run test:e2e`; fix any typecheck, lint or locale-parity failures.
-- [ ] T035 Walk `quickstart.md` steps 2–4 against a throwaway GA4 stream: confirm off-by-default, consent flow, DebugView events with no automatic events, and that none of the five event names is reserved (otherwise prefix all with `pe_` and update `contracts/ga-event-contract.md`, `src/analytics/ga.ts` and tests).
+- [ ] T035 Re-run the T035a checks against the final build after US4 removal to confirm nothing regressed.
 - [ ] T036 Measure time-to-first-playback with analytics on vs off (quickstart step 5); added time must be ≤ 50 ms (SC-004).
-- [ ] T037 Complete the owner-side rollout checklist in `quickstart.md` (separate web stream, Enhanced measurement off, Google signals off, 2-month retention, custom dimensions registered, `VITE_GA_MEASUREMENT_ID` set in Netlify production only) and confirm the privacy note renders in en and es (SC-006).
+- [ ] T037 Complete the owner-side rollout checklist in `quickstart.md` (separate web stream, Enhanced measurement off, Google signals off, 2-month retention, custom dimensions registered, `VITE_GA_MEASUREMENT_ID` set in Netlify production only) and confirm the privacy note renders in en and es (SC-006). Also: scope the ID to the Netlify Production context only, so deploy previews and branch deploys have it unset (load a preview and confirm no Google request, FR-008); confirm in GA admin that IP storage is not configurable (GA4 default, satisfies FR-005); time the SC-001 check (PracticeEnglish visible and filterable in under one minute).
 
 ---
 
@@ -149,7 +151,7 @@ Single project: `src/`, `tests/`, `netlify/`, `scripts/` at repo root.
 - **US1** (after Phase 2): no dependency on other stories; consent is set via storage in tests.
 - **US2** (after US1): reuses `track.ts`/`ga.ts` from US1; mostly test work.
 - **US3** (after Phase 2; practically after US1): needs `consent.ts` (Phase 2) and the provider change (T014). Required before release because it is the only UI path to opt in.
-- **US4** (last): only after US1–US3 pass and GA is verified; T006 must be done before T028 (types moved out of the schema file).
+- **US4** (last): only after US1–US3 pass and T035a has verified GA; T006 must be done before T028 (types moved out of the schema file).
 - Polish: after all stories.
 
 Within a story: tests (fail) → implementation → checkpoint.
