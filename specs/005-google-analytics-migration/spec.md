@@ -12,6 +12,13 @@
 
 The constitution forbids collecting personal data and requires a spec-level justification for any analytics or data leaving the device. This feature replaces the self-hosted analytics from spec 003 with Google Analytics so the owner sees all of their apps in one place. Google Analytics is a third-party service that, by default, assigns a persistent per-browser identifier and may derive location, browser, and OS detail. That conflicts with 003's FR-007 (no persistent per-person identifiers) and the constitution's "MUST NOT collect personal data" rule. Therefore this feature MUST either (a) be configured to stay within those limits (no advertising features, no cross-site linking, no user-level identifiers, IP anonymisation, minimal retention), or (b) be accompanied by a constitution amendment that explicitly permits Google Analytics with the safeguards below. Choosing (b) is expected; the amendment is part of this feature's scope, and 003's FR-007 is superseded accordingly.
 
+## Clarifications
+
+### Session 2026-10-30
+
+- Q: Should the consent prompt appear for every visitor, or only for visitors in regions that legally require it? → A: Show it to every visitor; nothing is sent until they opt in; a configuration flag lets the owner turn it off later.
+- Q: Should Google Analytics' automatic extra events (scrolls, outbound clicks, downloads, etc.) be turned off so only our own events are sent? → A: Yes; disable all automatic/enhanced measurement and send only the five defined events (visit, track started, resume used, language changed, error).
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - See PracticeEnglish alongside all my other apps (Priority: P1)
@@ -58,7 +65,7 @@ As a learner, I want the app to keep honouring my privacy signals and to be told
 **Acceptance Scenarios**:
 
 1. **Given** the browser sends Do Not Track or a global privacy control signal, **When** the app loads, **Then** no data is sent to Google and the Google Analytics script is not loaded.
-2. **Given** a learner has not granted consent (where consent is required), **When** they use the app, **Then** nothing is sent until they opt in.
+2. **Given** a learner has not granted consent, **When** they use the app, **Then** nothing is sent until they opt in (unless the owner has turned the consent prompt off in configuration).
 3. **Given** a learner opens the privacy note, **Then** it names Google Analytics, states what is collected, and is available in every supported language.
 
 ---
@@ -95,6 +102,7 @@ As the site owner, I want the previous self-hosted collection and report removed
 
 - **FR-001**: The system MUST send its usage events (visit, track started, resume used, language changed, error) to the owner's Google Analytics account instead of the self-hosted collector.
 - **FR-002**: The set of events, labels (track-start source; error type), and content identifiers (level, book type, unit, track) MUST match spec 003's definitions (003 FR-001, FR-002, FR-004, FR-005, FR-006, FR-008, FR-014), including its timing and de-duplication rules, unchanged.
+- **FR-002a**: The system MUST disable all Google Analytics automatic and enhanced-measurement events (including automatic page views, scrolls, outbound clicks, site search, and file downloads) so that only the five defined events are sent. The visit event is sent explicitly once per tab session.
 - **FR-003**: Every event MUST carry the interface language and device class so reports can be segmented by them.
 - **FR-004**: Events MUST be distinguishable as belonging to PracticeEnglish so the owner can filter it from their other apps.
 - **FR-005**: The system MUST NOT enable Google advertising features, remarketing, cross-site linking, or user-level identifiers, and MUST request anonymised IP handling.
@@ -103,7 +111,7 @@ As the site owner, I want the previous self-hosted collection and report removed
 - **FR-008**: Analytics MUST be off by default: with no Google Analytics configuration supplied, no script is loaded and nothing is sent. Automated tests and local development MUST NOT send data to production reports.
 - **FR-009**: Analytics failures, blocking, or latency MUST NOT affect app functionality, load speed, or playback.
 - **FR-010**: The privacy note MUST be updated, in all supported languages, to name Google Analytics as the service, say what is collected, and state that no personal data is deliberately gathered. Its wording MUST accurately reflect any cookies or identifiers Google Analytics sets.
-- **FR-011**: Where the owner's audience requires consent for cookies or identifiers, the system MUST NOT send data until the learner opts in.
+- **FR-011**: The system MUST show a consent prompt to every visitor and MUST NOT load Google Analytics or send data until the learner opts in. A configuration flag MAY disable the prompt (treating consent as granted), and it MUST default to enabled. No region detection is performed. The learner's choice is remembered on the device and can be changed later.
 - **FR-012**: The previous self-hosted collection and report components (spec 003) MUST be removed once Google Analytics is verified, so events are not sent to both places.
 - **FR-013**: The project constitution MUST be amended to permit Google Analytics with the safeguards above, and spec 003's FR-007 MUST be marked superseded.
 - **FR-014**: The owner MUST be able to read visits by language and device class, track-start source shares, resume usage, and error counts by type for a chosen time range directly in Google Analytics.
@@ -112,7 +120,7 @@ As the site owner, I want the previous self-hosted collection and report removed
 
 - **Usage Event**: Unchanged from spec 003 (event type, language, device class, optional label, content identifiers), now delivered to Google Analytics.
 - **Analytics Configuration**: The owner's Google Analytics identifier for PracticeEnglish; absent means analytics is off.
-- **Consent State**: Whether the learner has opted in to analytics (where consent is required); governs whether anything is sent.
+- **Consent State**: Whether the learner has opted in to analytics (unset, granted, or declined; remembered on the device); governs whether anything is sent.
 
 ## Success Criteria *(mandatory)*
 
@@ -129,7 +137,8 @@ As the site owner, I want the previous self-hosted collection and report removed
 
 - The owner already has (or will create) a Google Analytics account and will supply the identifier for PracticeEnglish; creating it is outside this feature.
 - Events keep the same names and labels as spec 003 so the owner's mental model carries over.
-- Consent is required by default (cookie/identifier consent for a mixed-region audience) and shown as a minimal, accessible, translated prompt; the owner may later turn it off if their audience does not require it.
+- Consent is required for every visitor (mixed-region audience) and shown as a minimal, accessible, translated prompt; the owner may later turn it off via configuration if their audience does not require it.
+- GA4 does not offer an IP-anonymisation setting (it does not store full IPs), so FR-005's anonymised-IP request is satisfied by GA4's default behaviour.
 - Do Not Track and global privacy control remain honoured even though Google does not require it, preserving spec 003 behaviour.
 - Historical 003 data is not migrated; the old report is retired after Google Analytics is verified.
 - Content-identifier dimensions (level, book type, unit, track) and language/device class are registered as reporting dimensions in Google Analytics by the owner as part of rollout.
