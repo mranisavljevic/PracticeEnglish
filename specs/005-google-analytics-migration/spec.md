@@ -19,6 +19,10 @@ The constitution forbids collecting personal data and requires a spec-level just
 - Q: Should the consent prompt appear for every visitor, or only for visitors in regions that legally require it? → A: Show it to every visitor; nothing is sent until they opt in; a configuration flag lets the owner turn it off later.
 - Q: Should Google Analytics' automatic extra events (scrolls, outbound clicks, downloads, etc.) be turned off so only our own events are sent? → A: Yes; disable all automatic/enhanced measurement and send only the five defined events (visit, track started, resume used, language changed, error).
 
+### Session 2026-11-02
+
+- Q: When a visitor's browser sends Do Not Track or a global privacy control signal, should the app still show the consent prompt? → A: No; the signal wins, the prompt is hidden, and analytics stays off with no choice offered.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - See PracticeEnglish alongside all my other apps (Priority: P1)
@@ -106,12 +110,12 @@ As the site owner, I want the previous self-hosted collection and report removed
 - **FR-003**: Every event MUST carry the interface language and device class so reports can be segmented by them.
 - **FR-004**: Events MUST be distinguishable as belonging to PracticeEnglish so the owner can filter it from their other apps.
 - **FR-005**: The system MUST NOT enable Google advertising features, remarketing, cross-site linking, or user-level identifiers, and MUST request anonymised IP handling.
-- **FR-006**: The system MUST honour Do Not Track and global privacy control signals by loading nothing from Google and sending no events.
+- **FR-006**: The system MUST honour Do Not Track and global privacy control signals by loading nothing from Google and sending no events. When such a signal is present, the consent prompt MUST NOT be shown and no opt-in is offered.
 - **FR-007**: The system MUST NOT send free text, error messages, account data, or any other personal data to Google Analytics.
 - **FR-008**: Analytics MUST be off by default: with no Google Analytics configuration supplied, no script is loaded and nothing is sent. Automated tests and local development MUST NOT send data to production reports.
 - **FR-009**: Analytics failures, blocking, or latency MUST NOT affect app functionality, load speed, or playback.
 - **FR-010**: The privacy note MUST be updated, in all supported languages, to name Google Analytics as the service, say what is collected, and state that no personal data is deliberately gathered. Its wording MUST accurately reflect any cookies or identifiers Google Analytics sets.
-- **FR-011**: The system MUST show a consent prompt to every visitor and MUST NOT load Google Analytics or send data until the learner opts in. A configuration flag MAY disable the prompt (treating consent as granted), and it MUST default to enabled. No region detection is performed. The learner's choice is remembered on the device and can be changed later.
+- **FR-011**: The system MUST show a consent prompt to every visitor whose browser is not sending a Do Not Track or global privacy control signal (see FR-006), and MUST NOT load Google Analytics or send data until the learner opts in. A configuration flag MAY disable the prompt (treating consent as granted), and it MUST default to enabled. No region detection is performed. The learner's choice is remembered on the device and can be changed later.
 - **FR-012**: The previous self-hosted collection and report components (spec 003) MUST be removed once Google Analytics is verified, so events are not sent to both places.
 - **FR-013**: The project constitution MUST be amended to permit Google Analytics with the safeguards above, and spec 003's FR-007 MUST be marked superseded.
 - **FR-014**: The owner MUST be able to read visits by language and device class, track-start source shares, resume usage, and error counts by type for a chosen time range directly in Google Analytics.
