@@ -1,113 +1,85 @@
-# Implementation Plan: [FEATURE]
+# Implementation Plan: French Translation
 
-**Branch**: `[###-feature-name]` | **Date**: [DATE] | **Spec**: [link]
+**Branch**: `007-french-translation` | **Date**: 2026-11-12 | **Spec**: [spec.md](spec.md)
 
-**Input**: Feature specification from `/specs/[###-feature-name]/spec.md`
-
-**Note**: This template is filled in by the `/speckit-plan` command; its definition describes the execution workflow.
+**Input**: Feature specification from `/specs/007-french-translation/spec.md`
 
 ## Summary
 
-[Extract from feature spec: primary requirement + technical approach from research]
+Add French as a third interface language. The i18n layer already discovers locales by globbing `src/locales/*.json`, detects the browser's primary subtag (so `fr-CA`/`fr-BE`/`fr-CH` resolve to `fr`), persists the choice, sets `<html lang>`, and lists locales in the switcher. The feature is therefore a new `src/locales/fr.json` (formal "vous", 60 keys, placeholders intact) plus test updates: two existing assertions treat `fr` as unsupported and must change, and new tests cover French detection, a French parity/vous check, a French e2e journey, and a 360px overflow check in French. No runtime code or dependency changes.
 
 ## Technical Context
 
-<!--
-  ACTION REQUIRED: Replace the content in this section with the technical details
-  for the project. The structure here is presented in advisory capacity to guide
-  the iteration process.
--->
+**Language/Version**: TypeScript (strict), React 19, Vite
 
-**Language/Version**: [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]
+**Primary Dependencies**: none added (existing i18n module, react-router-dom)
 
-**Primary Dependencies**: [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]
+**Storage**: `localStorage` key `pe.lang` (unchanged)
 
-**Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]
+**Testing**: Vitest + Testing Library (unit/component), Playwright (e2e, mobile viewport)
 
-**Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]
+**Target Platform**: Mobile-first web, modern browsers
 
-**Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
+**Project Type**: web-app (single frontend project)
 
-**Project Type**: [e.g., library/cli/web-service/mobile-app/compiler/desktop-app or NEEDS CLARIFICATION]
+**Performance Goals**: Language switch visible < 1 s without reload (already in-memory; locale JSON is eagerly bundled, ~4 KB added)
 
-**Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]
+**Constraints**: French strings run longer than English; no clipping or horizontal scroll at 360px; placeholders `{number}`, `{label}`, `{title}`, `{track}`, `{book}`, `{unit}` preserved
 
-**Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]
-
-**Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
+**Scale/Scope**: 1 new JSON file (60 keys), ~4 test files touched/added, README note
 
 ## Constitution Check
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+| Principle | Status | Notes |
+|---|---|---|
+| I. Mobile-First | PASS | 360px no-overflow e2e check run in French (FR-008) |
+| II. Multilingual by Default | PASS | Exactly the "add a language = resources only" path; strings from resources; titles stay English; browser-language default reused |
+| III. Resume | PASS | Untouched |
+| IV. Test-First | PASS | Tests written first and observed failing (fr undefined) before `fr.json` is added; unit tests for detection/fallback, e2e for journey |
+| V. Simplicity | PASS | No new dependencies, no code changes |
+| Constraints / Workflow | PASS | Accessibility labels translated (`lang.label`); consent/analytics text translated per "all supported languages" rule; no data collection change |
+
+Post-design re-check: PASS, no violations; Complexity Tracking not needed.
 
 ## Project Structure
 
 ### Documentation (this feature)
 
 ```text
-specs/[###-feature]/
-├── plan.md              # This file (/speckit-plan command output)
-├── research.md          # Phase 0 output (/speckit-plan command)
-├── data-model.md        # Phase 1 output (/speckit-plan command)
-├── quickstart.md        # Phase 1 output (/speckit-plan command)
-├── contracts/           # Phase 1 output (/speckit-plan command)
-└── tasks.md             # Phase 2 output (/speckit-tasks command - NOT created by /speckit-plan)
+specs/007-french-translation/
+├── plan.md
+├── research.md
+├── data-model.md
+├── quickstart.md
+├── contracts/
+│   └── locale-resource.md
+└── tasks.md             # /speckit-tasks
 ```
 
 ### Source Code (repository root)
-<!--
-  ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
-  for this feature. Delete unused options and expand the chosen structure with
-  real paths (e.g., apps/admin, packages/something). The delivered plan must
-  not include Option labels.
--->
 
 ```text
-# [REMOVE IF UNUSED] Option 1: Single project (DEFAULT)
 src/
-├── models/
-├── services/
-├── cli/
-└── lib/
+└── locales/
+    ├── en.json
+    ├── es.json
+    └── fr.json            # NEW
 
 tests/
-├── contract/
-├── integration/
-└── unit/
+├── unit/
+│   ├── i18n-detect.test.ts     # CHANGE: 'fr' no longer unsupported; add fr cases
+│   └── locale-parity.test.ts   # ADD: fr formal-register check
+└── e2e/
+    ├── language.spec.ts        # ADD: French device journey + persistence
+    └── responsive.spec.ts      # ADD: 360px no-overflow in French
 
-# [REMOVE IF UNUSED] Option 2: Web application (when "frontend" + "backend" detected)
-backend/
-├── src/
-│   ├── models/
-│   ├── services/
-│   └── api/
-└── tests/
-
-frontend/
-├── src/
-│   ├── components/
-│   ├── pages/
-│   └── services/
-└── tests/
-
-# [REMOVE IF UNUSED] Option 3: Mobile + API (when "iOS/Android" detected)
-api/
-└── [same as backend above]
-
-ios/ or android/
-└── [platform-specific structure: feature modules, UI flows, platform tests]
+README.md                       # CHANGE: list supported languages (optional note)
 ```
 
-**Structure Decision**: [Document the selected structure and reference the real
-directories captured above]
+**Structure Decision**: Existing single-project layout; the glob-based locale registry means no registration code is needed.
 
 ## Complexity Tracking
 
-> **Fill ONLY if Constitution Check has violations that must be justified**
-
-| Violation | Why Needed | Simpler Alternative Rejected Because |
-|-----------|------------|-------------------------------------|
-| [e.g., 4th project] | [current need] | [why 3 projects insufficient] |
-| [e.g., Repository pattern] | [specific problem] | [why direct DB access insufficient] |
+No violations.
