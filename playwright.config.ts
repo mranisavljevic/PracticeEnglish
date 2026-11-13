@@ -12,9 +12,9 @@ export default defineConfig({
       reuseExistingServer: !process.env.CI,
     },
     {
-      // Same app with analytics switched on; only analytics.spec runs against it (the collector is intercepted).
+      // Same app with analytics switched on; only analytics.spec runs against it (Google hosts are intercepted).
       command:
-        'VITE_ANALYTICS_ENDPOINT=/api/e VITE_CATALOG_FILE=tests/fixtures/catalog.sample.json VITE_AUDIO_BASE_URL=http://localhost:5174 npm run dev -- --port 5175 --strictPort',
+        'VITE_GA_MEASUREMENT_ID=G-TEST123 VITE_CATALOG_FILE=tests/fixtures/catalog.sample.json VITE_AUDIO_BASE_URL=http://localhost:5174 npm run dev -- --port 5175 --strictPort',
       url: 'http://localhost:5175',
       reuseExistingServer: !process.env.CI,
     },

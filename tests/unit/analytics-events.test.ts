@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { detectDevice, trackingAllowed } from '../../src/analytics/events'
+import { detectDevice, privacySignalPresent, trackingAllowed } from '../../src/analytics/events'
 
 describe('detectDevice', () => {
   it.each([
@@ -22,25 +22,39 @@ describe('detectDevice', () => {
   })
 })
 
+describe('privacySignalPresent', () => {
+  it('is false without a signal', () => {
+    expect(privacySignalPresent({})).toBe(false)
+    expect(privacySignalPresent({ doNotTrack: '0', globalPrivacyControl: false }, { doNotTrack: null })).toBe(false)
+  })
+
+  it('is true for Do Not Track on navigator or window, and for Global Privacy Control', () => {
+    expect(privacySignalPresent({ doNotTrack: '1' })).toBe(true)
+    expect(privacySignalPresent({}, { doNotTrack: '1' })).toBe(true)
+    expect(privacySignalPresent({ globalPrivacyControl: true })).toBe(true)
+  })
+})
+
 describe('trackingAllowed', () => {
-  const env = { VITE_ANALYTICS_ENDPOINT: '/api/e' }
+  const env = { VITE_GA_MEASUREMENT_ID: 'G-ABC123' }
 
-  it('is true with an endpoint and no privacy signal', () => {
-    expect(trackingAllowed(env, {})).toBe(true)
-    expect(trackingAllowed(env, { doNotTrack: '0', globalPrivacyControl: false }, { doNotTrack: null })).toBe(true)
+  it('is true with a valid id, no privacy signal and granted consent', () => {
+    expect(trackingAllowed(env, {}, undefined, 'granted')).toBe(true)
+    expect(trackingAllowed(env, { doNotTrack: '0', globalPrivacyControl: false }, { doNotTrack: null }, 'granted')).toBe(true)
   })
 
-  it.each([undefined, ''])('is false when the endpoint is %j (dev, tests and previews)', (endpoint) => {
-    expect(trackingAllowed({ VITE_ANALYTICS_ENDPOINT: endpoint }, {})).toBe(false)
-    expect(trackingAllowed({}, {})).toBe(false)
+  it.each([undefined, '', 'UA-12345-1', 'g-abc123', 'G-abc', 'G-', 'G-AB C'])('is false when the id is %j (dev, tests, previews)', (id) => {
+    expect(trackingAllowed({ VITE_GA_MEASUREMENT_ID: id }, {}, undefined, 'granted')).toBe(false)
+    expect(trackingAllowed({}, {}, undefined, 'granted')).toBe(false)
   })
 
-  it('is false when Do Not Track is on, on navigator or window', () => {
-    expect(trackingAllowed(env, { doNotTrack: '1' })).toBe(false)
-    expect(trackingAllowed(env, {}, { doNotTrack: '1' })).toBe(false)
+  it.each(['unset', 'declined'] as const)('is false while consent is %s', (consent) => {
+    expect(trackingAllowed(env, {}, undefined, consent)).toBe(false)
   })
 
-  it('is false when Global Privacy Control is on', () => {
-    expect(trackingAllowed(env, { globalPrivacyControl: true })).toBe(false)
+  it('is false with a privacy signal even when consent is granted', () => {
+    expect(trackingAllowed(env, { doNotTrack: '1' }, undefined, 'granted')).toBe(false)
+    expect(trackingAllowed(env, {}, { doNotTrack: '1' }, 'granted')).toBe(false)
+    expect(trackingAllowed(env, { globalPrivacyControl: true }, undefined, 'granted')).toBe(false)
   })
 })

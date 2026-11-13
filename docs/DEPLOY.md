@@ -24,9 +24,7 @@ Two hosts: the app on Netlify (`practiceenglish.net`) and the audio on Firebase 
 - To roll back the app: Netlify → Deploys → pick a previous deploy → Publish deploy. For audio: Firebase console → Hosting → release history → Rollback.
 
 ## 5. Usage analytics (optional)
-Anonymous, first-party counts (visits, language, phone/desktop, which tracks start and how, errors). No cookies, no IP or user-agent stored. The collector is two Netlify Functions in `netlify/functions/` writing to Netlify Blobs.
-1. Site settings → Environment variables:
-   - `VITE_ANALYTICS_ENDPOINT=/api/e` — scope it to the **Production** context only. When unset (dev, tests, deploy previews) the client sends nothing.
-   - `ANALYTICS_REPORT_TOKEN=<long random string>` — guards `/api/report`. Without it the report always answers 401.
-2. Redeploy. Read the numbers with `ANALYTICS_REPORT_TOKEN=… npm run report -- --from 2026-10-01 --to 2026-10-29` (add `--url http://localhost:8888` for `netlify dev`).
-3. Netlify keeps its own request logs outside the app's collection; the on-page privacy note does not cover them.
+Google Analytics 4, loaded only after the visitor accepts the consent banner and never when the browser sends Do Not Track or Global Privacy Control. The app sends five events (`visit`, `track_started`, `resume_used`, `language_changed`, `error`); no personal data is deliberately collected.
+1. In Google Analytics, create a separate web data stream for PracticeEnglish: Enhanced measurement off, Google signals off, event data retention 2 months. Register event-scoped custom dimensions `app`, `ui_lang`, `device_class`, `source`, `error_type`, `level`, `book_type`, `unit`, `track`.
+2. Site settings → Environment variables: `VITE_GA_MEASUREMENT_ID=G-XXXXXXXXXX` — scope it to the **Production** context only. When unset (dev, tests, deploy previews) the client loads nothing from Google. Optional `VITE_CONSENT_PROMPT=off` treats consent as granted and hides the banner.
+3. Redeploy, then confirm in GA DebugView that only the five events arrive.

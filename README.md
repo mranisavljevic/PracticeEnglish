@@ -27,7 +27,7 @@ On touch devices with a camera, the Book and Unit pages offer **Scan audio icon*
 
 ## Analytics
 
-Anonymous, cookieless usage counts (visits, language, phone or desktop, which tracks start and how, errors) go to a first-party Netlify Function and are stored as Netlify Blobs. The client sends nothing unless `VITE_ANALYTICS_ENDPOINT` is set (Production only) and honours Do Not Track and Global Privacy Control. Setup and env vars: [docs/DEPLOY.md](docs/DEPLOY.md). Read the numbers with `ANALYTICS_REPORT_TOKEN=… npm run report -- --from 2026-10-01 --to 2026-10-29`.
+Usage counts (visits, language, phone or desktop, which tracks start and how, errors) go to Google Analytics 4, and only after the visitor accepts the consent banner. The client loads nothing from Google unless `VITE_GA_MEASUREMENT_ID` is set (Production only), always honours Do Not Track and Global Privacy Control, and `VITE_CONSENT_PROMPT=off` skips the prompt. Setup and env vars: [docs/DEPLOY.md](docs/DEPLOY.md).
 
 ## Adding a language
 Add `src/locales/<code>.json` with every key from `en.json` plus `"meta.nativeName"`. No code changes; a test checks parity.

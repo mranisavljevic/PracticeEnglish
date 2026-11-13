@@ -1,5 +1,13 @@
 <!--
 Sync Impact Report
+- Version change: 2.0.0 → 2.1.0 (MINOR: Technology & Content Constraints materially expanded)
+- Modified: the "MUST NOT collect personal data" constraint now allows Google Analytics under
+  safeguards: opt-in consent, Do Not Track / Global Privacy Control honoured, no advertising
+  features or user-level identifiers, no free text, 2-month data retention.
+- Impact: specs/003-anonymous-usage-analytics FR-007 is superseded by specs/005-google-analytics-migration;
+  003's "no persistent identifier" wording no longer applies (Google's pseudonymous _ga cookie is
+  permitted after consent).
+---- Previous report (2.0.0) ----
 - Version change: 1.1.0 → 2.0.0 (MAJOR: principle III redefined in a backward-incompatible way)
 - Modified: III. Resume Where You Left Off — stores last-played track but NOT playback
   position; resuming a track always starts from the beginning.
@@ -86,7 +94,11 @@ mobile and is easier to maintain.
   the rights holder asks for content to be removed, it MUST be removed promptly.
 - Interactive controls MUST be keyboard-operable and have accessible labels, and touch targets
   MUST be large enough for comfortable mobile use.
-- The app MUST NOT collect personal data. Any analytics or data leaving the device requires a
+- The app MUST NOT deliberately collect personal data. Google Analytics is the only permitted
+  analytics service, and only with all of these safeguards: it loads only after the learner opts
+  in; Do Not Track and Global Privacy Control signals are always honoured; advertising features,
+  Google signals and user-level identifiers are not used; no free text is ever sent; and
+  2-month data retention is configured. Any other data leaving the device requires a
   constitution amendment or a documented spec-level justification.
 
 ## Development Workflow & Quality Gates
@@ -109,4 +121,4 @@ way, MINOR for adding a principle or section or materially expanding guidance, P
 clarifications and wording fixes. Compliance MUST be checked at every plan (Constitution Check)
 and at every review.
 
-**Version**: 2.0.0 | **Ratified**: 2026-10-18 | **Last Amended**: 2026-10-18
+**Version**: 2.1.0 | **Ratified**: 2026-10-18 | **Last Amended**: 2026-11-02

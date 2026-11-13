@@ -1,4 +1,6 @@
+import { getConsent } from './consent'
 import { detectDevice, trackingAllowed, type UsageEvent } from './events'
+import { ensureGa, sendEvent } from './ga'
 
 type Event = Omit<UsageEvent, 'lang' | 'device'>
 
@@ -7,31 +9,22 @@ const ERRORS_KEY = 'pe.errs'
 
 const memory = new Set<string>()
 
-function endpoint(): string | undefined {
-  const url = import.meta.env.VITE_ANALYTICS_ENDPOINT as string | undefined
-  if (!url || typeof navigator === 'undefined') return undefined
+/** The measurement id when tracking is allowed right now. Re-checked on every call so a changed signal or choice takes effect at once. */
+function allowedId(): string | undefined {
+  const id = import.meta.env.VITE_GA_MEASUREMENT_ID as string | undefined
+  if (!id || typeof navigator === 'undefined') return undefined
   const nav = navigator as Navigator & { globalPrivacyControl?: boolean }
   const win = window as Window & { doNotTrack?: string | null }
-  return trackingAllowed({ VITE_ANALYTICS_ENDPOINT: url }, nav, win) ? url : undefined
-}
-
-function send(url: string, body: string) {
-  try {
-    if (navigator.sendBeacon?.(url, new Blob([body], { type: 'text/plain' }))) return
-  } catch {
-    // fall through to fetch
-  }
-  void fetch(url, { method: 'POST', body, keepalive: true, headers: { 'Content-Type': 'text/plain' } }).catch(() => {})
+  return trackingAllowed({ VITE_GA_MEASUREMENT_ID: id }, nav, win, getConsent()) ? id : undefined
 }
 
 /** Fire and forget: never awaited, never throws, does nothing unless tracking is allowed. */
 export function track(event: Event, lang: string): void {
   try {
-    const url = endpoint()
-    if (!url) return
-    const device = detectDevice(navigator.userAgent)
-    const { type, ...rest } = event
-    send(url, JSON.stringify({ type, lang, device, ...rest }))
+    const id = allowedId()
+    if (!id) return
+    ensureGa(id)
+    sendEvent({ ...event, lang, device: detectDevice(navigator.userAgent) })
   } catch {
     // analytics must never affect the app
   }
@@ -60,7 +53,7 @@ function firstTime(key: string): boolean {
 /** `track` once per tab session for `key` ('visit', or `type|trackKey` for errors). */
 export function trackOncePerSession(key: string, event: Event, lang: string): void {
   try {
-    if (!endpoint() || !firstTime(key)) return
+    if (!allowedId() || !firstTime(key)) return
     track(event, lang)
   } catch {
     // analytics must never affect the app

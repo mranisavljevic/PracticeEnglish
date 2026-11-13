@@ -128,7 +128,7 @@ As the site owner, I want to know when learners hit errors such as audio failing
 - **FR-004**: The system MUST record a "resume used" event when the "continue where I left off" entry point is activated.
 - **FR-005**: The system MUST record a "language changed" event when the learner switches interface language, including the new language.
 - **FR-006**: Every event MUST carry the current interface language and device class.
-- **FR-007**: The system MUST NOT collect or transmit personal data, free text, account data, or persistent per-person identifiers, and MUST NOT identify a learner across visits.
+- **FR-007** *(superseded by specs/005-google-analytics-migration FR-013; Google's pseudonymous `_ga` cookie is now permitted after opt-in consent)*: The system MUST NOT collect or transmit personal data, free text, account data, or persistent per-person identifiers, and MUST NOT identify a learner across visits.
 - **FR-008**: Every "track started" event, and every "playback-failure" error event, MUST include the content identifiers level, book type, unit, and track. These are public catalog identifiers and are the only content details sent; free text, search input, and anything about the learner MUST NOT be sent.
 - **FR-009**: The system MUST honour browser "Do Not Track" / global privacy control signals by sending no events.
 - **FR-010**: Analytics failures, blocking, or latency MUST NOT affect app functionality, load speed, or playback.

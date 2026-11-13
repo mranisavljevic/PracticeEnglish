@@ -23,8 +23,8 @@ Single project: `src/`, `tests/`, `netlify/`, `scripts/` at repo root.
 
 **Purpose**: Governance and configuration that everything else relies on.
 
-- [ ] T001 Amend `.specify/memory/constitution.md` to v2.1.0: replace the "MUST NOT collect personal data" bullet with the Google Analytics allowance (opt-in consent, DNT/GPC honoured, no advertising features or user-level identifiers, no free text, minimal retention); update the Sync Impact Report and version line (FR-013, research D7). Set Last Amended to the date of the change, and add to the Sync Impact Report the impact on existing specs (spec 003 FR-007 is superseded; 003's no-persistent-identifier wording no longer applies). Version bump 2.0.0 → 2.1.0 (MINOR: materially expanded guidance). State retention as "2-month data retention".
-- [ ] T002 [P] Declare `VITE_GA_MEASUREMENT_ID` and `VITE_CONSENT_PROMPT` on `ImportMetaEnv` (and remove `VITE_ANALYTICS_ENDPOINT`) in the project's Vite env declaration file (`src/vite-env.d.ts`, or wherever `ImportMetaEnv` is declared), and add a `gtag`/`dataLayer` `Window` augmentation in `src/analytics/ga.d.ts`.
+- [X] T001 Amend `.specify/memory/constitution.md` to v2.1.0: replace the "MUST NOT collect personal data" bullet with the Google Analytics allowance (opt-in consent, DNT/GPC honoured, no advertising features or user-level identifiers, no free text, minimal retention); update the Sync Impact Report and version line (FR-013, research D7). Set Last Amended to the date of the change, and add to the Sync Impact Report the impact on existing specs (spec 003 FR-007 is superseded; 003's no-persistent-identifier wording no longer applies). Version bump 2.0.0 → 2.1.0 (MINOR: materially expanded guidance). State retention as "2-month data retention".
+- [X] T002 [P] Declare `VITE_GA_MEASUREMENT_ID` and `VITE_CONSENT_PROMPT` on `ImportMetaEnv` (and remove `VITE_ANALYTICS_ENDPOINT`) in the project's Vite env declaration file (`src/vite-env.d.ts`, or wherever `ImportMetaEnv` is declared), and add a `gtag`/`dataLayer` `Window` augmentation in `src/analytics/ga.d.ts`.
 
 ---
 
@@ -34,16 +34,16 @@ Single project: `src/`, `tests/`, `netlify/`, `scripts/` at repo root.
 
 ### Tests first
 
-- [ ] T003 [P] Update `tests/unit/analytics-events.test.ts`: `privacySignalPresent` (DNT `'1'` on navigator/window, GPC `true`), and `trackingAllowed(env, nav, win, consent)` false without `VITE_GA_MEASUREMENT_ID`, with a privacy signal, or unless consent is `granted`; invalid IDs (not `^G-[A-Z0-9]+$`) are off; import types from `src/analytics/events.ts`.
-- [ ] T004 [P] Create `tests/unit/analytics-consent.test.ts`: `getConsent` returns unset/granted/declined; `VITE_CONSENT_PROMPT=off` ⇒ granted; blocked `localStorage` falls back to memory without throwing; `setConsent` persists and notifies `subscribe` listeners; declining deletes `_ga*` cookies; `promptVisible` true only when unset, prompt on, no privacy signal.
-- [ ] T005 [P] Create `tests/unit/analytics-ga.test.ts`: `ensureGa(id)` defines `dataLayer`/`gtag`, issues `config` with `send_page_view:false`, `allow_google_signals:false`, `allow_ad_personalization_signals:false`, `cookie_expires:5184000`, appends the `googletagmanager.com/gtag/js?id=` script exactly once; `sendEvent` maps each `UsageEvent` to the params in `contracts/ga-event-contract.md` (`app`, `ui_lang`, `device_class`, `source`, `error_type`, `level`, `book_type`, `unit`, `track`), never sends `user_id`, free text or UA, and never throws.
+- [X] T003 [P] Update `tests/unit/analytics-events.test.ts`: `privacySignalPresent` (DNT `'1'` on navigator/window, GPC `true`), and `trackingAllowed(env, nav, win, consent)` false without `VITE_GA_MEASUREMENT_ID`, with a privacy signal, or unless consent is `granted`; invalid IDs (not `^G-[A-Z0-9]+$`) are off; import types from `src/analytics/events.ts`.
+- [X] T004 [P] Create `tests/unit/analytics-consent.test.ts`: `getConsent` returns unset/granted/declined; `VITE_CONSENT_PROMPT=off` ⇒ granted; blocked `localStorage` falls back to memory without throwing; `setConsent` persists and notifies `subscribe` listeners; declining deletes `_ga*` cookies; `promptVisible` true only when unset, prompt on, no privacy signal.
+- [X] T005 [P] Create `tests/unit/analytics-ga.test.ts`: `ensureGa(id)` defines `dataLayer`/`gtag`, issues `config` with `send_page_view:false`, `allow_google_signals:false`, `allow_ad_personalization_signals:false`, `cookie_expires:5184000`, appends the `googletagmanager.com/gtag/js?id=` script exactly once; `sendEvent` maps each `UsageEvent` to the params in `contracts/ga-event-contract.md` (`app`, `ui_lang`, `device_class`, `source`, `error_type`, `level`, `book_type`, `unit`, `track`), never sends `user_id`, free text or UA, and never throws.
 
 ### Implementation
 
-- [ ] T006 Move the vocabulary types (`EventType`, `TrackSource`, `ErrorType`, `DeviceClass`, `BookType`, `UsageEvent`) from `netlify/functions/lib/schema.ts` into `src/analytics/events.ts` (define them there; do not delete the schema file yet), update every import of `netlify/functions/lib/schema` in `src/` and `tests/` to `src/analytics/events`, add `privacySignalPresent(nav, win)` and the new `trackingAllowed(env, nav, win, consent)` (drop `VITE_ANALYTICS_ENDPOINT`). Makes T003 pass.
-- [ ] T007 [P] Create `src/analytics/consent.ts` per `contracts/client-contract.md` (`getConsent`, `setConsent`, `subscribe`, `promptVisible`; `localStorage['pe.consent']`; memory fallback; `_ga*` cookie cleanup on decline). Makes T004 pass.
-- [ ] T008 [P] Create `src/analytics/ga.ts` with `ensureGa(id)` and `sendEvent(event)` per the client and event contracts. Makes T005 pass.
-- [ ] T009 Rewrite `tests/helpers/analytics.ts` and, in the same task, update the existing component tests that import it (`analytics-track-started`, `analytics-source-handoff`, `analytics-resume`, `analytics-errors`) so they compile and run against the stub (T016–T018 add the new assertions): `captureEvents()` stubs `VITE_GA_MEASUREMENT_ID` (e.g. `G-TEST123`), sets consent granted, stubs `window.gtag` as a recording `vi.fn`, and returns the `('event', name, params)` calls as events; `restoreEvents()` clears env, storage, `dataLayer`, `gtag`, privacy-signal properties and injected GA `<script>` tags.
+- [X] T006 Move the vocabulary types (`EventType`, `TrackSource`, `ErrorType`, `DeviceClass`, `BookType`, `UsageEvent`) from `netlify/functions/lib/schema.ts` into `src/analytics/events.ts` (define them there; do not delete the schema file yet), update every import of `netlify/functions/lib/schema` in `src/` and `tests/` to `src/analytics/events`, add `privacySignalPresent(nav, win)` and the new `trackingAllowed(env, nav, win, consent)` (drop `VITE_ANALYTICS_ENDPOINT`). Makes T003 pass.
+- [X] T007 [P] Create `src/analytics/consent.ts` per `contracts/client-contract.md` (`getConsent`, `setConsent`, `subscribe`, `promptVisible`; `localStorage['pe.consent']`; memory fallback; `_ga*` cookie cleanup on decline). Makes T004 pass.
+- [X] T008 [P] Create `src/analytics/ga.ts` with `ensureGa(id)` and `sendEvent(event)` per the client and event contracts. Makes T005 pass.
+- [X] T009 Rewrite `tests/helpers/analytics.ts` and, in the same task, update the existing component tests that import it (`analytics-track-started`, `analytics-source-handoff`, `analytics-resume`, `analytics-errors`) so they compile and run against the stub (T016–T018 add the new assertions): `captureEvents()` stubs `VITE_GA_MEASUREMENT_ID` (e.g. `G-TEST123`), sets consent granted, stubs `window.gtag` as a recording `vi.fn`, and returns the `('event', name, params)` calls as events; `restoreEvents()` clears env, storage, `dataLayer`, `gtag`, privacy-signal properties and injected GA `<script>` tags.
 
 **Checkpoint**: Foundation ready; new unit tests (T003–T005) pass.
 
@@ -57,15 +57,15 @@ Single project: `src/`, `tests/`, `netlify/`, `scripts/` at repo root.
 
 ### Tests first
 
-- [ ] T010 [P] [US1] Update `tests/unit/analytics-track.test.ts`: `track()` calls `ensureGa` on the first allowed call then `gtag('event', …)` with mapped params; no-op without ID/consent/with a privacy signal (re-checked on every call, including a signal appearing mid-session); `trackOncePerSession('visit', …)` sets its dedupe flag only when the event is actually sent (visit blocked by missing consent is sent after opt-in); never throws or awaits.
-- [ ] T011 [P] [US1] Update `tests/component/analytics-visit.test.tsx`: one `visit` on mount when consent is granted; none when unset; granting consent mid-session fires exactly one `visit`; a second mount in the same tab session sends none.
-- [ ] T012 [P] [US1] Rewrite `tests/e2e/analytics.spec.ts` visit section: intercept `**/googletagmanager.com/gtag/js*` (fulfil with an empty script) and `**/google-analytics.com/**`; with consent pre-set in `localStorage`, assert `dataLayer` holds one `visit` carrying `app: 'practice-english'`, `ui_lang`, `device_class`; reload ⇒ no second visit.
+- [X] T010 [P] [US1] Update `tests/unit/analytics-track.test.ts`: `track()` calls `ensureGa` on the first allowed call then `gtag('event', …)` with mapped params; no-op without ID/consent/with a privacy signal (re-checked on every call, including a signal appearing mid-session); `trackOncePerSession('visit', …)` sets its dedupe flag only when the event is actually sent (visit blocked by missing consent is sent after opt-in); never throws or awaits.
+- [X] T011 [P] [US1] Update `tests/component/analytics-visit.test.tsx`: one `visit` on mount when consent is granted; none when unset; granting consent mid-session fires exactly one `visit`; a second mount in the same tab session sends none.
+- [X] T012 [P] [US1] Rewrite `tests/e2e/analytics.spec.ts` visit section: intercept `**/googletagmanager.com/gtag/js*` (fulfil with an empty script) and `**/google-analytics.com/**`; with consent pre-set in `localStorage`, assert `dataLayer` holds one `visit` carrying `app: 'practice-english'`, `ui_lang`, `device_class`; reload ⇒ no second visit.
 
 ### Implementation
 
-- [ ] T013 [US1] Change `src/analytics/track.ts`: replace `endpoint()`/`send()` with the `trackingAllowed` + consent check, `ensureGa(id)` on first allowed call, and `sendEvent`; keep `track()` / `trackOncePerSession` signatures and the session dedupe helpers (`pe.visit`, `pe.errs`) unchanged except the flag-after-send rule. Makes T010 pass.
-- [ ] T014 [US1] Update `src/analytics/AnalyticsProvider.tsx`: subscribe to consent changes and re-run the `visit` effect when consent becomes granted. Makes T011 pass.
-- [ ] T015 [US1] Update `playwright.config.ts`: the analytics web server uses `VITE_GA_MEASUREMENT_ID=G-TEST123` instead of `VITE_ANALYTICS_ENDPOINT=/api/e`, and the comment mentions Google hosts being intercepted. Makes T012 pass.
+- [X] T013 [US1] Change `src/analytics/track.ts`: replace `endpoint()`/`send()` with the `trackingAllowed` + consent check, `ensureGa(id)` on first allowed call, and `sendEvent`; keep `track()` / `trackOncePerSession` signatures and the session dedupe helpers (`pe.visit`, `pe.errs`) unchanged except the flag-after-send rule. Makes T010 pass.
+- [X] T014 [US1] Update `src/analytics/AnalyticsProvider.tsx`: subscribe to consent changes and re-run the `visit` effect when consent becomes granted. Makes T011 pass.
+- [X] T015 [US1] Update `playwright.config.ts`: the analytics web server uses `VITE_GA_MEASUREMENT_ID=G-TEST123` instead of `VITE_ANALYTICS_ENDPOINT=/api/e`, and the comment mentions Google hosts being intercepted. Makes T012 pass.
 
 **Checkpoint**: US1 works and is independently testable (consent set via storage in tests).
 
@@ -79,14 +79,14 @@ Single project: `src/`, `tests/`, `netlify/`, `scripts/` at repo root.
 
 ### Tests first
 
-- [ ] T016 [P] [US2] Re-point `tests/component/analytics-track-started.test.tsx` at the gtag stub: assert `track_started` params (`source`, `level`, `book_type`, `unit`, `track`) for scan, navigation, resume, repeat and next.
-- [ ] T017 [P] [US2] Re-point `tests/component/analytics-source-handoff.test.tsx` and `tests/component/analytics-resume.test.tsx`: source hand-off still yields the right `source`; `resume_used` sent once per activation; `language_changed` carries the **new** `ui_lang`.
-- [ ] T018 [P] [US2] Re-point `tests/component/analytics-errors.test.tsx`: `error` with `error_type` (`playback-failure` with content ids, `scan-failure` and `unexpected` without), deduped per tab session, no message/stack/URL in params.
-- [ ] T019 [P] [US2] Extend `tests/e2e/analytics.spec.ts` with the scripted journey (pick track, replay, Next, resume from home, switch language, trigger a playback error): assert the exact ordered event list from `dataLayer` and zero extra events (SC-002).
+- [X] T016 [P] [US2] Re-point `tests/component/analytics-track-started.test.tsx` at the gtag stub: assert `track_started` params (`source`, `level`, `book_type`, `unit`, `track`) for scan, navigation, resume, repeat and next.
+- [X] T017 [P] [US2] Re-point `tests/component/analytics-source-handoff.test.tsx` and `tests/component/analytics-resume.test.tsx`: source hand-off still yields the right `source`; `resume_used` sent once per activation; `language_changed` carries the **new** `ui_lang`.
+- [X] T018 [P] [US2] Re-point `tests/component/analytics-errors.test.tsx`: `error` with `error_type` (`playback-failure` with content ids, `scan-failure` and `unexpected` without), deduped per tab session, no message/stack/URL in params.
+- [X] T019 [P] [US2] Extend `tests/e2e/analytics.spec.ts` with the scripted journey (pick track, replay, Next, resume from home, switch language, trigger a playback error): assert the exact ordered event list from `dataLayer` and zero extra events (SC-002).
 
 ### Implementation
 
-- [ ] T020 [US2] Make T016–T019 pass. Expected to need no source change beyond T013; if a test exposes a mapping gap, fix `src/analytics/ga.ts` (`sendEvent`) only. Do not edit call sites in `src/` that use `useAnalytics()`.
+- [X] T020 [US2] Make T016–T019 pass. Expected to need no source change beyond T013; if a test exposes a mapping gap, fix `src/analytics/ga.ts` (`sendEvent`) only. Do not edit call sites in `src/` that use `useAnalytics()`.
 
 **Checkpoint**: Event parity with 003 verified (US1 + US2 = functional MVP).
 
@@ -100,16 +100,16 @@ Single project: `src/`, `tests/`, `netlify/`, `scripts/` at repo root.
 
 ### Tests first
 
-- [ ] T021 [P] [US3] Create `tests/component/consent-banner.test.tsx`: banner renders as `role="region"` labelled by `consent.title` with accept/decline buttons when unset; accept loads GA and sends `visit`; decline loads nothing and hides the banner; hidden when a privacy signal is present; `PrivacySettingsButton` reopens the choice and is not rendered under a privacy signal; `VITE_CONSENT_PROMPT=off` shows no banner.
-- [ ] T022 [P] [US3] Update `tests/component/analytics-privacy.test.tsx`: DNT or GPC ⇒ no script injected and no events even with `pe.consent=granted`; signal appearing mid-session stops further events; blocked/failed script load leaves the app working with no console errors.
-- [ ] T023 [P] [US3] Extend `tests/e2e/analytics.spec.ts` with negative runs: no consent, declined, DNT/GPC, and Google hosts aborted ⇒ zero requests to Google hosts and the existing journeys still pass (SC-003).
-- [ ] T024 [P] [US3] Confirm `tests/unit/locale-parity.test.ts` covers the new keys (`consent.title`, `consent.body`, `consent.accept`, `consent.decline`, `consent.settings`, rewritten `analytics.privacy`); extend it if it does not enumerate keys generically.
+- [X] T021 [P] [US3] Create `tests/component/consent-banner.test.tsx`: banner renders as `role="region"` labelled by `consent.title` with accept/decline buttons when unset; accept loads GA and sends `visit`; decline loads nothing and hides the banner; hidden when a privacy signal is present; `PrivacySettingsButton` reopens the choice and is not rendered under a privacy signal; `VITE_CONSENT_PROMPT=off` shows no banner.
+- [X] T022 [P] [US3] Update `tests/component/analytics-privacy.test.tsx`: DNT or GPC ⇒ no script injected and no events even with `pe.consent=granted`; signal appearing mid-session stops further events; blocked/failed script load leaves the app working with no console errors.
+- [X] T023 [P] [US3] Extend `tests/e2e/analytics.spec.ts` with negative runs: no consent, declined, DNT/GPC, and Google hosts aborted ⇒ zero requests to Google hosts and the existing journeys still pass (SC-003).
+- [X] T024 [P] [US3] Confirm `tests/unit/locale-parity.test.ts` covers the new keys (`consent.title`, `consent.body`, `consent.accept`, `consent.decline`, `consent.settings`, rewritten `analytics.privacy`); extend it if it does not enumerate keys generically.
 
 ### Implementation
 
-- [ ] T025 [P] [US3] Add `consent.*` keys and rewrite `analytics.privacy` (names Google Analytics, lists what is collected, mentions the `_ga` cookie, states no personal data is deliberately gathered) in `src/locales/en.json` and `src/locales/es.json`.
-- [ ] T026 [US3] Create `src/analytics/ConsentBanner.tsx`: `ConsentBanner` (compact bottom bar, `role="region"`, keyboard-operable buttons ≥44 px, link to the privacy note, no focus trap) and `PrivacySettingsButton`; style with existing tokens/CSS conventions. Makes T021 pass.
-- [ ] T027 [US3] Update `src/components/Layout.tsx`: mount `ConsentBanner` and render `PrivacySettingsButton` in the footer next to the privacy note. Makes T021–T023 pass.
+- [X] T025 [P] [US3] Add `consent.*` keys and rewrite `analytics.privacy` (names Google Analytics, lists what is collected, mentions the `_ga` cookie, states no personal data is deliberately gathered) in `src/locales/en.json` and `src/locales/es.json`.
+- [X] T026 [US3] Create `src/analytics/ConsentBanner.tsx`: `ConsentBanner` (compact bottom bar, `role="region"`, keyboard-operable buttons ≥44 px, link to the privacy note, no focus trap) and `PrivacySettingsButton`; style with existing tokens/CSS conventions. Makes T021 pass.
+- [X] T027 [US3] Update `src/components/Layout.tsx`: mount `ConsentBanner` and render `PrivacySettingsButton` in the footer next to the privacy note. Makes T021–T023 pass.
 
 - [ ] T035a [US3] Verify against a throwaway GA4 stream (quickstart steps 2–4): off by default, consent flow works, DebugView shows only the five defined events and none of `page_view`, `scroll`, `click`, `file_download`, `view_search_results`, and none of the five event names is reserved (otherwise prefix all with `pe_` and update `contracts/ga-event-contract.md`, `src/analytics/ga.ts` and tests). Release gate for US4 (FR-002a, FR-012).
 
@@ -125,12 +125,12 @@ Single project: `src/`, `tests/`, `netlify/`, `scripts/` at repo root.
 
 > Run only after US1–US3 are verified against a GA test stream (T035a).
 
-- [ ] T028 [US4] Delete `netlify/functions/collect.ts`, `netlify/functions/report.ts`, `netlify/functions/lib/schema.ts` (the `netlify/functions` directory goes away) and `scripts/analytics-report.ts`.
-- [ ] T029 [P] [US4] Delete `tests/unit/analytics-collect.test.ts`, `tests/unit/analytics-report.test.ts`, `tests/unit/analytics-schema.test.ts`.
-- [ ] T030 [P] [US4] Edit `netlify.toml`: remove the `[functions]` block and the `/api/e` and `/api/report` redirects (keep the SPA fallback and cache headers).
-- [ ] T031 [P] [US4] Edit `package.json`: remove the `report` script and the `@netlify/blobs` dependency; run `npm install` to refresh `package-lock.json`.
-- [ ] T032 [US4] Mark spec 003 FR-007 as superseded by 005 in `specs/003-anonymous-usage-analytics/spec.md` (FR-013).
-- [ ] T033 [US4] Verify retirement: `git grep -nE "api/e|netlify/functions|@netlify/blobs|VITE_ANALYTICS_ENDPOINT|analytics-report"` returns nothing outside `specs/`, and `npm run build` succeeds (SC-005).
+- [X] T028 [US4] Delete `netlify/functions/collect.ts`, `netlify/functions/report.ts`, `netlify/functions/lib/schema.ts` (the `netlify/functions` directory goes away) and `scripts/analytics-report.ts`.
+- [X] T029 [P] [US4] Delete `tests/unit/analytics-collect.test.ts`, `tests/unit/analytics-report.test.ts`, `tests/unit/analytics-schema.test.ts`.
+- [X] T030 [P] [US4] Edit `netlify.toml`: remove the `[functions]` block and the `/api/e` and `/api/report` redirects (keep the SPA fallback and cache headers).
+- [X] T031 [P] [US4] Edit `package.json`: remove the `report` script and the `@netlify/blobs` dependency; run `npm install` to refresh `package-lock.json`.
+- [X] T032 [US4] Mark spec 003 FR-007 as superseded by 005 in `specs/003-anonymous-usage-analytics/spec.md` (FR-013).
+- [X] T033 [US4] Verify retirement: `git grep -nE "api/e|netlify/functions|@netlify/blobs|VITE_ANALYTICS_ENDPOINT|analytics-report"` returns nothing outside `specs/`, and `npm run build` succeeds (SC-005).
 
 **Checkpoint**: Single analytics path (GA) remains.
 
@@ -138,7 +138,7 @@ Single project: `src/`, `tests/`, `netlify/`, `scripts/` at repo root.
 
 ## Phase 7: Polish & cross-cutting
 
-- [ ] T034 Run `npm run check` and `npm run test:e2e`; fix any typecheck, lint or locale-parity failures.
+- [X] T034 Run `npm run check` and `npm run test:e2e`; fix any typecheck, lint or locale-parity failures.
 - [ ] T035 Re-run the T035a checks against the final build after US4 removal to confirm nothing regressed.
 - [ ] T036 Measure time-to-first-playback with analytics on vs off (quickstart step 5); added time must be ≤ 50 ms (SC-004).
 - [ ] T037 Complete the owner-side rollout checklist in `quickstart.md` (separate web stream, Enhanced measurement off, Google signals off, 2-month retention, custom dimensions registered, `VITE_GA_MEASUREMENT_ID` set in Netlify production only) and confirm the privacy note renders in en and es (SC-006). Also: scope the ID to the Netlify Production context only, so deploy previews and branch deploys have it unset (load a preview and confirm no Google request, FR-008); confirm in GA admin that IP storage is not configurable (GA4 default, satisfies FR-005); time the SC-001 check (PracticeEnglish visible and filterable in under one minute).

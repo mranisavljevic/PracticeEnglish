@@ -12,7 +12,7 @@ import { LocaleProvider } from '../../src/i18n/LocaleProvider'
 import { findBadges, pickBadge } from '../../src/scan/badges'
 import { readNumber } from '../../src/scan/ocr'
 import { testCatalog } from '../fixtures/testCatalog'
-import { captureEvents, restoreEvents } from '../helpers/analytics'
+import { captureEvents, common, gaIds, restoreEvents } from '../helpers/analytics'
 
 vi.mock('../../src/scan/badges', () => ({ findBadges: vi.fn(() => []), pickBadge: vi.fn() }))
 vi.mock('../../src/scan/ocr', () => ({
@@ -26,7 +26,7 @@ vi.mock('../../src/scan/camera', async (importOriginal) => ({
 }))
 
 const ids: TrackIds = { level: 'level-1', bookType: 'textbook', unit: 'unit-1', track: 't-2' }
-const playbackFailure = { type: 'error', lang: 'en', device: 'mobile', label: 'playback-failure', ...ids }
+const playbackFailure = { type: 'error', ...common(), error_type: 'playback-failure', ...gaIds(ids) }
 
 let cap: ReturnType<typeof captureEvents>
 let play: ReturnType<typeof vi.fn>
@@ -129,7 +129,7 @@ describe('scan failures', () => {
     return user
   }
 
-  const scanFailure = { type: 'error', lang: 'en', device: 'mobile', label: 'scan-failure' }
+  const scanFailure = { type: 'error', ...common(), error_type: 'scan-failure' }
 
   it('sends scan-failure when the camera cannot start, once per session', async () => {
     Object.defineProperty(navigator, 'mediaDevices', {
@@ -175,7 +175,7 @@ describe('unexpected errors', () => {
       window.dispatchEvent(rejection)
     })
     const events = await cap.events()
-    expect(events).toEqual([{ type: 'error', lang: 'en', device: 'mobile', label: 'unexpected' }])
+    expect(events).toEqual([{ type: 'error', ...common(), error_type: 'unexpected' }])
     expect(JSON.stringify(events)).not.toMatch(/secret|path/)
   })
 

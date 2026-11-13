@@ -1,5 +1,6 @@
-import { createContext, useContext, useEffect, useMemo, type ReactNode } from 'react'
+import { createContext, useContext, useEffect, useMemo, useSyncExternalStore, type ReactNode } from 'react'
 import { useLocale } from '../i18n/LocaleProvider'
+import { getConsent, subscribe } from './consent'
 import type { TrackIds, TrackSource } from './events'
 import { track, trackOncePerSession } from './track'
 
@@ -23,6 +24,7 @@ const AnalyticsContext = createContext<Analytics>({
 
 export function AnalyticsProvider({ children }: { children: ReactNode }) {
   const { lang } = useLocale()
+  const consent = useSyncExternalStore(subscribe, getConsent)
 
   const value = useMemo<Analytics>(
     () => ({
@@ -42,7 +44,7 @@ export function AnalyticsProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     trackOncePerSession('visit', { type: 'visit' }, lang)
-  }, [lang])
+  }, [lang, consent])
 
   // Only the fact that something failed is reported; the event payload is never read.
   useEffect(() => {
