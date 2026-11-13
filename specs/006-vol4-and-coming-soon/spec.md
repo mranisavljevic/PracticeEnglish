@@ -12,7 +12,7 @@
 
 ### User Story 1 - Practice with the Volume 4 Student Book (Priority: P1)
 
-A learner who owns the Volume 4 Student Book opens the site, finds the Volume 4 Student Book alongside Volume 2, browses its 14 units, and plays the audio tracks for each unit just as they do for Volume 2.
+A learner who owns the Volume 4 Student Book opens the site, finds the Volume 4 Student Book alongside Volume 2, browses its units, and plays the audio tracks for each unit just as they do for Volume 2.
 
 **Why this priority**: This is the only piece that delivers new audio content; everything else is a placeholder.
 
@@ -21,7 +21,7 @@ A learner who owns the Volume 4 Student Book opens the site, finds the Volume 4 
 **Acceptance Scenarios**:
 
 1. **Given** the home page, **When** a learner looks at the available books, **Then** the Volume 4 Student Book appears as a normal, selectable book.
-2. **Given** the Volume 4 Student Book, **When** the learner opens it, **Then** they see 14 units (chapters 1–14), each listing its audio tracks.
+2. **Given** the Volume 4 Student Book, **When** the learner opens it, **Then** they see one unit per chapter that has audio (chapters 1–5 and 7–14, i.e. 13 units; chapter 6 is hidden until its audio exists, see Edge Cases), each listing its audio tracks.
 3. **Given** unit N, **When** the learner views it, **Then** it lists exactly the tracks from that chapter's first track up to the track before the next chapter's first track (the final chapter runs to the last available track), using the mapping below.
 4. **Given** the book's opening intro track (track 1), **When** the learner browses the book, **Then** that track is not shown in any unit.
 5. **Given** a learner scans a Volume 4 page with the existing track-number scanner, **When** a track number is recognized, **Then** it resolves to the correct Volume 4 unit and track, as it does for Volume 2.
@@ -71,6 +71,8 @@ The site owner gets track mappings for a placeholder book later and can turn it 
 
 ### Edge Cases
 
+- Chapter 6 (tracks 28–34) has no audio at the source, so Unit 6 is not shown until those files are added and the catalogue is rebuilt; a unit with no tracks is never shown. The owner can later choose to show it as an empty unit.
+- A scanned track number that falls in the missing range (28–34) resolves to nothing and must not crash or mis-resolve.
 - Volume 4 audio files have gaps in numbering (not every track number up to the maximum exists); units list only tracks that actually exist.
 - A learner opens a placeholder's address directly (bookmark/old link): they see a friendly unavailable state, not a broken page.
 - A placeholder book must never appear in "continue where you left off", progress, or scan-resolution results.
@@ -80,14 +82,14 @@ The site owner gets track mappings for a placeholder book later and can turn it 
 
 ### Functional Requirements
 
-- **FR-001**: The site MUST offer the Volume 4 Student Book as a live book with 14 units, built from the chapter-to-first-track mapping above.
+- **FR-001**: The site MUST offer the Volume 4 Student Book as a live book with one unit per chapter that has audio (currently 13: chapters 1–5 and 7–14), built from the chapter-to-first-track mapping above.
 - **FR-002**: Each Volume 4 unit MUST contain all existing tracks from its first track up to (but excluding) the next unit's first track; unit 14 MUST run through the last available track.
 - **FR-003**: Volume 4 track 1 (intro) MUST NOT be exposed in any unit.
 - **FR-004**: Volume 4 tracks MUST be playable, resumable, and scannable the same way as Volume 2 tracks.
 - **FR-005**: The site MUST show greyed-out "coming soon" placeholders for Vol 1 Student Book, Vol 1 Workbook, Vol 3 Student Book, Vol 3 Workbook, and Vol 4 Workbook.
-- **FR-006**: Placeholders MUST be non-interactive, visually distinct from live books, and exposed to assistive technology as unavailable.
+- **FR-006**: Placeholders MUST be non-interactive, visually distinct from live books, and exposed to assistive technology as unavailable. The visible "Coming soon" text on a non-focusable, non-link element satisfies this; no extra ARIA state is required.
 - **FR-007**: Placeholder text MUST be available in both supported languages (English, Spanish).
-- **FR-008**: Placeholders MUST NOT contribute to progress, resume, scan results, or analytics as if they were playable books.
+- **FR-008**: Placeholders MUST NOT contribute to progress, resume, scan results, or analytics as if they were playable books, including when their address is opened directly.
 - **FR-009**: Converting a placeholder to a live book MUST require only supplying that book's mapping data.
 - **FR-010**: Existing Volume 2 behavior MUST be unaffected.
 - **FR-011**: Volume 4 audio MUST be attributed/documented consistently with how Volume 2 audio sources are documented.
@@ -110,8 +112,8 @@ The site owner gets track mappings for a placeholder book later and can turn it 
 
 ## Assumptions
 
-- Each Volume 4 Student Book unit is titled by chapter number (e.g., "Unit N"); chapter titles were not supplied and can be added later. The Volume 2 "Welcome Unit" pattern does not apply.
-- Volume 4 Student Book audio files are already present locally under the Level 4 source folder and follow the same hosting/deploy process as Volume 2.
+- Each Volume 4 Student Book unit is shown as "Unit N: Title", using the chapter titles already listed in `docs/UNITS-DRAFT.md` (blank a title cell to show just "Unit N"). The Volume 2 "Welcome Unit" pattern does not apply.
+- Volume 4 Student Book audio files (tracks 1–27 and 35–84) are present locally under the Level 4 source folder and follow the same hosting/deploy process as Volume 2.
 - The five placeholders are shown on the home page alongside live books, ordered by volume.
 - "Coming soon" tiles show no cover image and no unit list.
 - Library-wide additions (e.g., filtering by volume) are out of scope.

@@ -43,10 +43,10 @@ Make the Level 4 (Volume 4) Student Book live by filling its track ranges into `
 
 No violations; Complexity Tracking is empty. One spec deviation is recorded under *Deviations* below.
 
-## Deviations from the spec (need owner awareness)
+## Decisions reconciled into the spec
 
-1. **Unit 6 is empty.** Local Vol 4 SB audio has tracks 1–27 and 35–84; tracks 28–34 (chapter 6) were never published (see `docs/AUDIO-GAPS-AND-DUPLICATES.txt`, `docs/TODO.md`). FR-001 says 14 units, but a unit with no tracks is a dead end. The generator omits empty units, so the book shows **13 units** (unit 6 missing) until the audio is found, then reappears on rebuild. If the owner prefers a visible but empty "Unit 6", that is a small change in the generator.
-2. **Unit titles.** The spec assumes "Unit N" with no titles, but `docs/UNITS-DRAFT.md` already lists Level 4 chapter titles (Education, Colonial Times, …). The generator already reads them for Vol 2, so Vol 4 will show "Unit N: Title" for consistency. Reversible by blanking the title cells.
+1. **Unit 6 is empty.** Local Vol 4 SB audio has tracks 1–27 and 35–84; tracks 28–34 (chapter 6) were never published (see `docs/AUDIO-GAPS-AND-DUPLICATES.txt`, `docs/TODO.md`). The mapping defines 14 chapters, but a unit with no tracks is a dead end. The generator omits empty units, so the book shows **13 units** (unit 6 missing) until the audio is found, then reappears on rebuild. If the owner prefers a visible but empty "Unit 6", that is a small change in the generator. Spec FR-001, the edge cases and the assumptions were updated to match (13 units).
+2. **Unit titles.** The spec now assumes "Unit N: Title" because `docs/UNITS-DRAFT.md` already lists Level 4 chapter titles (Education, Colonial Times, …). The generator already reads them for Vol 2, so Vol 4 will show "Unit N: Title" for consistency. Reversible by blanking the title cells.
 
 ## Project Structure
 
