@@ -6,7 +6,7 @@
 
 ## Summary
 
-Add French as a third interface language. The i18n layer already discovers locales by globbing `src/locales/*.json`, detects the browser's primary subtag (so `fr-CA`/`fr-BE`/`fr-CH` resolve to `fr`), persists the choice, sets `<html lang>`, and lists locales in the switcher. The feature is therefore a new `src/locales/fr.json` (formal "vous", 60 keys, placeholders intact) plus test updates: two existing assertions treat `fr` as unsupported and must change, and new tests cover French detection, a French parity/vous check, a French e2e journey, and a 360px overflow check in French. No runtime code or dependency changes.
+Add French as a third interface language. The i18n layer already discovers locales by globbing `src/locales/*.json`, detects the browser's primary subtag (so `fr-CA`/`fr-BE`/`fr-CH` resolve to `fr`), persists the choice, sets `<html lang>`, and lists locales in the switcher. The feature is therefore a new `src/locales/fr.json` (formal "vous", same key set as `en.json` (58 keys), placeholders intact) plus test updates: two existing assertions treat `fr` as unsupported and must change, and new tests cover French detection, a French parity/vous check, a French e2e journey, and a 360px overflow check in French. No runtime code or dependency changes.
 
 ## Technical Context
 
@@ -26,7 +26,7 @@ Add French as a third interface language. The i18n layer already discovers local
 
 **Constraints**: French strings run longer than English; no clipping or horizontal scroll at 360px; placeholders `{number}`, `{label}`, `{title}`, `{track}`, `{book}`, `{unit}` preserved
 
-**Scale/Scope**: 1 new JSON file (60 keys), ~4 test files touched/added, README note
+**Scale/Scope**: 1 new JSON file (58 keys, matching `en.json`), ~4 test files touched/added, README note
 
 ## Constitution Check
 
