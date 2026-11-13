@@ -1,9 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { act, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { AnalyticsProvider } from '../../src/analytics/AnalyticsProvider'
 import { LocaleProvider, useLocale } from '../../src/i18n/LocaleProvider'
-import { captureEvents, restoreEvents } from '../helpers/analytics'
+import { setConsent } from '../../src/analytics/consent'
+import { captureEvents, common, restoreEvents } from '../helpers/analytics'
 
 function Picker() {
   const { lang, setLang } = useLocale()
@@ -36,13 +37,13 @@ describe('visit and language events', () => {
   it('sends exactly one visit with the displayed language and device class', async () => {
     const cap = captureEvents()
     mount()
-    expect(await cap.events()).toEqual([{ type: 'visit', lang: 'en', device: 'mobile' }])
+    expect(await cap.events()).toEqual([{ type: 'visit', ...common() }])
   })
 
   it('classes a desktop user-agent as desktop', async () => {
     const cap = captureEvents('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Safari/605.1.15')
     mount()
-    expect(await cap.events()).toEqual([{ type: 'visit', lang: 'en', device: 'desktop' }])
+    expect(await cap.events()).toEqual([{ type: 'visit', ...common('en', 'desktop') }])
   })
 
   it('does not send another visit when remounted in the same tab session', async () => {
@@ -53,9 +54,20 @@ describe('visit and language events', () => {
     expect(await cap.events()).toHaveLength(1)
   })
 
-  it('sends nothing when the endpoint is unset', async () => {
+  it('sends nothing while consent is unset, then exactly one visit once it is granted', async () => {
     const cap = captureEvents()
-    vi.stubEnv('VITE_ANALYTICS_ENDPOINT', '')
+    localStorage.clear()
+    mount()
+    expect(await cap.events()).toEqual([])
+    act(() => setConsent('granted'))
+    expect(await cap.events()).toEqual([{ type: 'visit', ...common() }])
+    act(() => setConsent('granted'))
+    expect(await cap.events()).toHaveLength(1)
+  })
+
+  it('sends nothing when the measurement id is unset', async () => {
+    const cap = captureEvents()
+    vi.stubEnv('VITE_GA_MEASUREMENT_ID', '')
     mount()
     expect(await cap.events()).toEqual([])
   })
@@ -83,8 +95,8 @@ describe('visit and language events', () => {
     await user.click(screen.getByText('to-xx'))
     expect(screen.getByTestId('lang')).toHaveTextContent('es')
     expect(await cap.events()).toEqual([
-      { type: 'visit', lang: 'en', device: 'mobile' },
-      { type: 'language_changed', lang: 'es', device: 'mobile' },
+      { type: 'visit', ...common() },
+      { type: 'language_changed', ...common('es') },
     ])
   })
 
@@ -94,6 +106,6 @@ describe('visit and language events', () => {
     vi.spyOn(navigator, 'languages', 'get').mockReturnValue(['fr'])
     mount()
     expect(screen.getByTestId('lang')).toHaveTextContent('en')
-    expect(await cap.events()).toEqual([{ type: 'visit', lang: 'en', device: 'mobile' }])
+    expect(await cap.events()).toEqual([{ type: 'visit', ...common() }])
   })
 })

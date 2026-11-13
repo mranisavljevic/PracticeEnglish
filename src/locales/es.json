@@ -48,5 +48,11 @@
   "scan.error.unavailable": "El escáner no pudo iniciarse en este dispositivo.",
   "scan.chooseManually": "Elegir manualmente",
   "scan.loading": "Iniciando la cámara…",
-  "analytics.privacy": "Este sitio cuenta visitas y uso de funciones de forma anónima (idioma, teléfono u ordenador, qué pistas se reproducen). Sin datos personales, cookies ni seguimiento entre visitas."
+  "analytics.privacy": "Con tu permiso, este sitio usa Google Analytics para contar visitas y uso de funciones (idioma, teléfono u ordenador, qué pistas se reproducen). Google crea una cookie _ga para distinguir navegadores. No recopilamos datos personales de forma deliberada y no se envía nada si rechazas o tu navegador indica No rastrear o Global Privacy Control.",
+  "consent.title": "¿Quieres ayudar a mejorar PracticeEnglish?",
+  "consent.body": "¿Permites que Google Analytics cuente visitas y uso de funciones de forma anónima? No se carga nada de Google si no aceptas.",
+  "consent.more": "Aviso de privacidad",
+  "consent.accept": "Aceptar",
+  "consent.decline": "Rechazar",
+  "consent.settings": "Ajustes de privacidad"
 }

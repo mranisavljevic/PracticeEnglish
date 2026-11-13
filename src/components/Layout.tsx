@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { Outlet, Link, useLocation } from 'react-router-dom'
+import { ConsentBanner, PrivacySettingsButton } from '../analytics/ConsentBanner'
 import { Credit } from './Credit'
 import { OfflineNotice } from './OfflineNotice'
 import { LanguageSwitcher } from './LanguageSwitcher'
@@ -33,8 +34,10 @@ export function Layout() {
       </main>
       <footer className="layout__footer">
         <Credit />
-        <p>{t('analytics.privacy')}</p>
+        <p id="privacy-note">{t('analytics.privacy')}</p>
+        <PrivacySettingsButton />
       </footer>
+      <ConsentBanner />
     </div>
   )
 }

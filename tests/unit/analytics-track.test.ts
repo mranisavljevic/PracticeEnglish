@@ -1,94 +1,70 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { setConsent } from '../../src/analytics/consent'
 import { track, trackOncePerSession } from '../../src/analytics/track'
+import { restoreEvents } from '../helpers/analytics'
 
-let beacon: ReturnType<typeof vi.fn>
-let fetchMock: ReturnType<typeof vi.fn>
+const queue = () => (window.dataLayer ?? []).map((a) => Array.from(a as ArrayLike<unknown>))
+const events = () => queue().filter((c) => c[0] === 'event')
+const scripts = () => document.head.querySelectorAll('script[src*="googletagmanager.com/gtag/js"]')
 
 beforeEach(() => {
-  vi.stubEnv('VITE_ANALYTICS_ENDPOINT', '/api/e')
-  beacon = vi.fn(() => true)
-  fetchMock = vi.fn(() => Promise.resolve(new Response(null, { status: 204 })))
-  Object.defineProperty(navigator, 'sendBeacon', { value: beacon, configurable: true, writable: true })
-  vi.stubGlobal('fetch', fetchMock)
+  vi.stubEnv('VITE_GA_MEASUREMENT_ID', 'G-TEST123')
+  localStorage.setItem('pe.consent', 'granted')
   vi.spyOn(navigator, 'userAgent', 'get').mockReturnValue('Mozilla/5.0 (iPhone; CPU iPhone OS 17_0) Mobile/15E148')
 })
-afterEach(() => {
-  vi.unstubAllEnvs()
-  vi.unstubAllGlobals()
-  vi.restoreAllMocks()
-  sessionStorage.clear()
-  Reflect.deleteProperty(navigator, 'doNotTrack')
-  Reflect.deleteProperty(navigator, 'globalPrivacyControl')
-})
-
-async function bodyOf(call: unknown[]) {
-  const blob = call[1] as Blob
-  return { url: call[0], type: blob.type, json: JSON.parse(await blob.text()) }
-}
+afterEach(restoreEvents)
 
 describe('track', () => {
-  it('sends the event, language and device class as a text/plain beacon', async () => {
+  it('loads GA on the first allowed call, then sends the mapped event', () => {
+    expect(scripts()).toHaveLength(0)
     track({ type: 'visit' }, 'es')
-    expect(beacon).toHaveBeenCalledTimes(1)
-    const { url, type, json } = await bodyOf(beacon.mock.calls[0]!)
-    expect(url).toBe('/api/e')
-    expect(type).toBe('text/plain')
-    expect(json).toEqual({ type: 'visit', lang: 'es', device: 'mobile' })
+    track({ type: 'resume_used' }, 'es')
+    expect(scripts()).toHaveLength(1)
+    expect(events()).toEqual([
+      ['event', 'visit', { app: 'practice-english', ui_lang: 'es', device_class: 'mobile' }],
+      ['event', 'resume_used', { app: 'practice-english', ui_lang: 'es', device_class: 'mobile' }],
+    ])
   })
 
-  it('sends labels and content ids and nothing else (no UA, no timestamp)', async () => {
-    track(
-      { type: 'track_started', label: 'scan', level: 'level-1', bookType: 'textbook', unit: 'unit-1', track: 'track-2' },
-      'en',
-    )
-    const { json } = await bodyOf(beacon.mock.calls[0]!)
-    expect(Object.keys(json).sort()).toEqual(['bookType', 'device', 'label', 'lang', 'level', 'track', 'type', 'unit'])
+  it('sends labels and content ids under their GA names and nothing else', () => {
+    track({ type: 'track_started', label: 'scan', level: 'level-1', bookType: 'textbook', unit: 'unit-1', track: 'track-2' }, 'en')
+    expect(Object.keys(events()[0]![2] as object).sort()).toEqual([
+      'app', 'book_type', 'device_class', 'level', 'source', 'track', 'ui_lang', 'unit',
+    ])
   })
 
   it.each([
-    ['endpoint unset', () => vi.stubEnv('VITE_ANALYTICS_ENDPOINT', '')],
+    ['id unset', () => vi.stubEnv('VITE_GA_MEASUREMENT_ID', '')],
+    ['consent unset', () => localStorage.clear()],
+    ['consent declined', () => localStorage.setItem('pe.consent', 'declined')],
     ['Do Not Track', () => Object.defineProperty(navigator, 'doNotTrack', { value: '1', configurable: true })],
     ['Global Privacy Control', () => Object.defineProperty(navigator, 'globalPrivacyControl', { value: true, configurable: true })],
-  ])('is a no-op with %s', (_name, arrange) => {
+  ])('is a no-op with %s and loads nothing from Google', (_name, arrange) => {
     arrange()
     track({ type: 'visit' }, 'en')
-    expect(beacon).not.toHaveBeenCalled()
-    expect(fetchMock).not.toHaveBeenCalled()
+    expect(scripts()).toHaveLength(0)
+    expect(window.dataLayer).toBeUndefined()
   })
 
-  it('falls back to fetch keepalive when sendBeacon is missing', () => {
-    Object.defineProperty(navigator, 'sendBeacon', { value: undefined, configurable: true, writable: true })
+  it('re-checks the gate on every call, so a privacy signal appearing mid-session stops events', () => {
     track({ type: 'visit' }, 'en')
-    expect(fetchMock).toHaveBeenCalledTimes(1)
-    const [url, init] = fetchMock.mock.calls[0]!
-    expect(url).toBe('/api/e')
-    expect(init).toMatchObject({ method: 'POST', keepalive: true })
-    expect(JSON.parse(init.body)).toEqual({ type: 'visit', lang: 'en', device: 'mobile' })
+    Object.defineProperty(navigator, 'doNotTrack', { value: '1', configurable: true })
+    track({ type: 'resume_used' }, 'en')
+    expect(events().map((e) => e[1])).toEqual(['visit'])
   })
 
-  it('falls back to fetch keepalive when sendBeacon returns false', () => {
-    beacon.mockReturnValue(false)
+  it('stops after the learner declines', () => {
     track({ type: 'visit' }, 'en')
-    expect(fetchMock).toHaveBeenCalledTimes(1)
+    setConsent('declined')
+    track({ type: 'resume_used' }, 'en')
+    expect(events().map((e) => e[1])).toEqual(['visit'])
   })
 
-  it('never throws when sending throws', () => {
-    beacon.mockImplementation(() => {
+  it('never throws and never awaits', () => {
+    window.gtag = () => {
       throw new Error('boom')
-    })
-    fetchMock.mockImplementation(() => {
-      throw new Error('boom')
-    })
-    expect(() => track({ type: 'visit' }, 'en')).not.toThrow()
-    fetchMock.mockImplementation(() => Promise.reject(new Error('offline')))
-    expect(() => track({ type: 'visit' }, 'en')).not.toThrow()
-  })
-
-  it('returns synchronously and never awaits the send', () => {
-    fetchMock.mockImplementation(() => new Promise(() => {}))
-    Object.defineProperty(navigator, 'sendBeacon', { value: undefined, configurable: true, writable: true })
-    const result = track({ type: 'visit' }, 'en')
-    expect(result).toBeUndefined()
+    }
+    expect(track({ type: 'visit' }, 'en')).toBeUndefined()
   })
 })
 
@@ -96,7 +72,7 @@ describe('trackOncePerSession', () => {
   it('sends once per key and remembers it in sessionStorage', () => {
     trackOncePerSession('visit', { type: 'visit' }, 'en')
     trackOncePerSession('visit', { type: 'visit' }, 'en')
-    expect(beacon).toHaveBeenCalledTimes(1)
+    expect(events()).toHaveLength(1)
     expect(sessionStorage.getItem('pe.visit')).toBe('1')
   })
 
@@ -105,18 +81,23 @@ describe('trackOncePerSession', () => {
     trackOncePerSession('unexpected|', e, 'en')
     trackOncePerSession('unexpected|', e, 'en')
     trackOncePerSession('scan-failure|', { type: 'error', label: 'scan-failure' }, 'en')
-    expect(beacon).toHaveBeenCalledTimes(2)
+    expect(events()).toHaveLength(2)
     expect(JSON.parse(sessionStorage.getItem('pe.errs')!)).toEqual(['unexpected|', 'scan-failure|'])
   })
 
-  it('does not send or remember anything while tracking is not allowed', () => {
-    vi.stubEnv('VITE_ANALYTICS_ENDPOINT', '')
+  it('does not send or set its flag while blocked, so the visit goes out after opt-in', () => {
+    localStorage.clear()
     trackOncePerSession('visit', { type: 'visit' }, 'en')
-    expect(beacon).not.toHaveBeenCalled()
+    expect(events()).toEqual([])
     expect(sessionStorage.getItem('pe.visit')).toBeNull()
+    setConsent('granted')
+    trackOncePerSession('visit', { type: 'visit' }, 'en')
+    expect(events()).toHaveLength(1)
+    expect(sessionStorage.getItem('pe.visit')).toBe('1')
   })
 
   it('falls back to an in-memory set when sessionStorage throws', () => {
+    setConsent('granted')
     vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
       throw new Error('blocked')
     })
@@ -125,6 +106,6 @@ describe('trackOncePerSession', () => {
     })
     trackOncePerSession('memory-only', { type: 'visit' }, 'en')
     trackOncePerSession('memory-only', { type: 'visit' }, 'en')
-    expect(beacon).toHaveBeenCalledTimes(1)
+    expect(events()).toHaveLength(1)
   })
 })

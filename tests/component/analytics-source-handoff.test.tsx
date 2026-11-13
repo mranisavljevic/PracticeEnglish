@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { act, fireEvent, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { renderApp } from '../helpers/renderApp'
-import { captureEvents, restoreEvents } from '../helpers/analytics'
+import { captureEvents, common, restoreEvents } from '../helpers/analytics'
 import { findBadges, pickBadge } from '../../src/scan/badges'
 import { readNumber } from '../../src/scan/ocr'
 
@@ -38,7 +38,7 @@ beforeEach(() => {
 })
 afterEach(restoreEvents)
 
-const labels = async () => (await cap.events()).filter((e) => e.type === 'track_started').map((e) => e.label)
+const labels = async () => (await cap.events()).filter((e) => e.type === 'track_started').map((e) => e.source)
 
 async function playOnce(container: HTMLElement) {
   const user = userEvent.setup()
@@ -58,7 +58,7 @@ describe('source hand-off', () => {
     await user.click(await screen.findByRole('button', { name: 'Open' }, { timeout: 3000 }))
     await playOnce(container)
     expect(await cap.events()).toEqual([
-      { type: 'track_started', lang: 'en', device: 'mobile', label: 'scan', level: 'level-1', bookType: 'textbook', unit: 'unit-1', track: 't-2' },
+      { type: 'track_started', ...common(), source: 'scan', level: 'level-1', book_type: 'textbook', unit: 'unit-1', track: 't-2' },
     ])
   })
 
@@ -68,7 +68,7 @@ describe('source hand-off', () => {
     const user = userEvent.setup()
     await user.click(screen.getByRole('link', { name: /continue/i }))
     await playOnce(container)
-    expect((await cap.events()).map((e) => [e.type, e.label])).toEqual([
+    expect((await cap.events()).map((e) => [e.type, e.source])).toEqual([
       ['resume_used', undefined],
       ['track_started', 'resume'],
     ])

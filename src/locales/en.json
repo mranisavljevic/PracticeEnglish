@@ -48,5 +48,11 @@
   "scan.error.unavailable": "The scanner could not start on this device.",
   "scan.chooseManually": "Choose manually",
   "scan.loading": "Starting the camera…",
-  "analytics.privacy": "This site counts anonymous visits and feature use (language, phone or desktop, which tracks are played). No personal data, cookies or tracking across visits."
+  "analytics.privacy": "With your permission, this site uses Google Analytics to count visits and feature use (language, phone or desktop, which tracks are played). Google sets a _ga cookie to tell browsers apart. We do not deliberately collect personal data, and nothing is sent if you decline or your browser sends Do Not Track or Global Privacy Control.",
+  "consent.title": "Help improve PracticeEnglish?",
+  "consent.body": "Allow Google Analytics to count anonymous visits and feature use? Nothing is loaded from Google unless you accept.",
+  "consent.more": "Privacy note",
+  "consent.accept": "Accept",
+  "consent.decline": "Decline",
+  "consent.settings": "Privacy settings"
 }

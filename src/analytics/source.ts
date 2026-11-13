@@ -1,6 +1,5 @@
 import type { Location, NavigateFunction } from 'react-router-dom'
-import { TRACK_SOURCES } from '../../netlify/functions/lib/schema'
-import type { TrackSource } from './events'
+import { TRACK_SOURCES, type TrackSource } from './events'
 
 export type { TrackSource }
 

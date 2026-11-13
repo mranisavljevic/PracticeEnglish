@@ -6,10 +6,10 @@ import { AnalyticsProvider } from '../../src/analytics/AnalyticsProvider'
 import type { TrackIds, TrackSource } from '../../src/analytics/events'
 import { Player } from '../../src/components/Player'
 import { LocaleProvider } from '../../src/i18n/LocaleProvider'
-import { captureEvents, restoreEvents } from '../helpers/analytics'
+import { captureEvents, common, gaIds, restoreEvents } from '../helpers/analytics'
 
 const ids: TrackIds = { level: 'level-1', bookType: 'textbook', unit: 'unit-1', track: 't-2' }
-const started = (label: string) => ({ type: 'track_started', lang: 'en', device: 'mobile', label, ...ids })
+const started = (source: string) => ({ type: 'track_started', ...common(), source, ...gaIds(ids) })
 
 let cap: ReturnType<typeof captureEvents>
 
