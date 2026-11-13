@@ -8,6 +8,12 @@
 
 **Input**: User description: "Let's add French translation"
 
+## Clarifications
+
+### Session 2026-11-12
+
+- Q: Should the French interface address the learner formally ("vous") or informally ("tu")? → A: Formal "vous" throughout
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Use the whole app in French (Priority: P1)
@@ -80,6 +86,7 @@ The language selector lists "Français" by its native name alongside the existin
 - **FR-008**: French text MUST fit without clipping or horizontal scrolling at mobile viewport widths.
 - **FR-009**: Adding French MUST NOT change behavior for existing English and Spanish users.
 - **FR-010**: Automated checks MUST verify that French defines every string key present in English and no extra keys.
+- **FR-011**: All French second-person address MUST use the formal "vous" register consistently.
 
 ### Key Entities
 
@@ -98,7 +105,7 @@ The language selector lists "Français" by its native name alongside the existin
 
 ## Assumptions
 
-- The French interface is written as standard international French, using informal "tu" or formal "vous" consistently; "vous" is assumed as the safer default for a learning product, matching the tone of the existing Spanish "tú" being a choice to review.
+- The French interface is written as standard international French using the formal "vous" register consistently (no "tu" forms).
 - Translations are produced by the project team (machine-assisted draft acceptable) and reviewed by a French speaker before release.
 - Audio content and book titles remain in English; only the interface is translated.
 - The scope covers the interface only; no French audio or French book content is added.
