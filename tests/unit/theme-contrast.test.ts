@@ -26,3 +26,23 @@ describe('warm theme tokens', () => {
     }
   })
 })
+
+describe('coming-soon tile', () => {
+  const rule = (sel: string) => new RegExp(`${sel.replace('.', '\\.')}\\s*{([^}]*)}`).exec(css)?.[1] ?? ''
+  const color = (decl: string) => {
+    const m = /(?:^|[;\s])color:\s*var\(--([a-z]+)\)/.exec(decl)
+    return m ? token(m[1]!) : ''
+  }
+
+  it('defines .card--soon', () => {
+    expect(css).toMatch(/\.card--soon/)
+  })
+
+  it('title and badge text stay at 4.5:1 on the tile background', () => {
+    const bg = token('surface')
+    const tileText = color(rule('.card--soon')) || token('fg')
+    const badgeText = color(rule('.card--soon .badge')) || color(rule('.badge')) || token('fg')
+    expect(contrast(tileText, bg), 'title').toBeGreaterThanOrEqual(4.5)
+    expect(contrast(badgeText, bg), 'badge').toBeGreaterThanOrEqual(4.5)
+  })
+})

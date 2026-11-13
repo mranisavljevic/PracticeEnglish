@@ -24,6 +24,13 @@ export interface Book {
   titleTranslations?: Record<string, string>
   units: Unit[]
 }
+export interface ComingSoonBook {
+  id: string
+  levelId: string
+  type: TrackType
+  title: string
+  titleTranslations?: Record<string, string>
+}
 export interface Level {
   id: string
   title: string
@@ -32,6 +39,7 @@ export interface Catalog {
   version: 1
   levels: Level[]
   books: Book[]
+  comingSoon?: ComingSoonBook[]
 }
 
 export function createCatalogApi(catalog: Catalog) {
@@ -45,15 +53,20 @@ export function createCatalogApi(catalog: Catalog) {
     if (i < 0) return { prev: undefined, next: undefined }
     return { prev: tracks[i - 1], next: tracks[i + 1] }
   }
+  const getComingSoon = (id: string) => catalog.comingSoon?.find((b) => b.id === id)
   const booksByLevel = () =>
     catalog.levels
-      .map((level) => ({ level, books: catalog.books.filter((b) => b.levelId === level.id) }))
-      .filter((g) => g.books.length > 0)
-  return { catalog, getBook, getUnit, getTrack, getSiblings, booksByLevel }
+      .map((level) => ({
+        level,
+        books: catalog.books.filter((b) => b.levelId === level.id),
+        comingSoon: (catalog.comingSoon ?? []).filter((b) => b.levelId === level.id),
+      }))
+      .filter((g) => g.books.length > 0 || g.comingSoon.length > 0)
+  return { catalog, getBook, getComingSoon, getUnit, getTrack, getSiblings, booksByLevel }
 }
 
 export const catalog = catalogJson as Catalog
-export const { getBook, getUnit, getTrack, getSiblings, booksByLevel } = createCatalogApi(catalog)
+export const { getBook, getComingSoon, getUnit, getTrack, getSiblings, booksByLevel } = createCatalogApi(catalog)
 
 export const AUDIO_BASE_URL: string =
   (import.meta.env.VITE_AUDIO_BASE_URL as string | undefined) ?? 'https://audio.practiceenglish.net'

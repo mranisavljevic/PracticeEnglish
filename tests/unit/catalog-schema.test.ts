@@ -80,4 +80,42 @@ describe('catalog validation', () => {
     c.books[0]!.levelId = 'level-9'
     expect(validateCatalog(c).join('\n')).toMatch(/levelId/)
   })
+  describe('comingSoon', () => {
+    const soon = { id: 'level-1-student-book', levelId: 'level-1', type: 'textbook', title: 'S' }
+
+    it('accepts a catalogue without comingSoon (old catalogues)', () => {
+      expect(validateCatalog(valid)).toEqual([])
+    })
+
+    it('accepts an optional comingSoon array', () => {
+      const c = { ...clone(valid), comingSoon: [{ ...soon, titleTranslations: { es: 'E' } }] }
+      expect(validateCatalog(c)).toEqual([])
+    })
+
+    it.each(['id', 'levelId', 'type', 'title'])('requires %s', (key) => {
+      const item: Record<string, unknown> = { ...soon }
+      delete item[key]
+      expect(validateCatalog({ ...clone(valid), comingSoon: [item] }).length).toBeGreaterThan(0)
+    })
+
+    it('rejects extra properties such as units', () => {
+      const c = { ...clone(valid), comingSoon: [{ ...soon, units: [] }] }
+      expect(validateCatalog(c).length).toBeGreaterThan(0)
+    })
+
+    it('rejects a levelId that does not exist', () => {
+      const c = { ...clone(valid), comingSoon: [{ ...soon, levelId: 'level-9' }] }
+      expect(validateCatalog(c).join('\n')).toMatch(/levelId/)
+    })
+
+    it('rejects duplicate comingSoon ids', () => {
+      const c = { ...clone(valid), comingSoon: [soon, soon] }
+      expect(validateCatalog(c).join('\n')).toMatch(/duplicate id/i)
+    })
+
+    it('rejects a comingSoon id that collides with a book id', () => {
+      const c = { ...clone(valid), comingSoon: [{ ...soon, id: 'b1' }] }
+      expect(validateCatalog(c).join('\n')).toMatch(/b1/)
+    })
+  })
 })

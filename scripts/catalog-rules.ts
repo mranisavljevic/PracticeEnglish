@@ -25,6 +25,7 @@ export function validateCatalog(data: unknown): string[] {
   const errors: string[] = []
   const c = data as {
     levels: Identified[]
+    comingSoon?: { id: string; levelId: string }[]
     books: { id: string; levelId: string; units: { id: string; tracks: { id: string; label: string }[] }[] }[]
   }
   dupes(c.levels, 'levels', errors)
@@ -41,6 +42,13 @@ export function validateCatalog(data: unknown): string[] {
         labels.add(t.label)
       }
     }
+  }
+  const soon = c.comingSoon ?? []
+  dupes(soon, 'comingSoon', errors)
+  const bookIds = new Set(c.books.map((b) => b.id))
+  for (const s of soon) {
+    if (!levelIds.has(s.levelId)) errors.push(`comingSoon "${s.id}": levelId "${s.levelId}" does not exist`)
+    if (bookIds.has(s.id)) errors.push(`comingSoon "${s.id}" collides with a book id`)
   }
   return errors
 }

@@ -13,6 +13,8 @@
   "book.type.textbook": "Libro de texto",
   "book.type.workbook": "Cuaderno de ejercicios",
   "book.units": "Unidades",
+  "book.comingSoon": "Próximamente",
+  "book.unavailable": "Este libro aún no está disponible. Vuelve pronto.",
   "book.noUnits": "Aún no hay unidades disponibles.",
   "unit.heading": "Unidad {number}: {title}",
   "unit.headingNoTitle": "Unidad {number}",

@@ -8,9 +8,21 @@ import { NotFound } from './NotFound'
 export function Book() {
   const { bookId = '' } = useParams()
   const { t, lang } = useLocale()
-  const { getBook } = useCatalog()
+  const { getBook, getComingSoon } = useCatalog()
   const book = getBook(bookId)
-  if (!book) return <NotFound />
+  if (!book) {
+    const soon = getComingSoon(bookId)
+    if (!soon) return <NotFound />
+    const soonTranslated = lang !== 'en' ? soon.titleTranslations?.[lang] : undefined
+    return (
+      <>
+        <Breadcrumb backTo="/" trail={[]} />
+        <h1 tabIndex={-1}>{soon.title}</h1>
+        {soonTranslated && <p className="secondary">{soonTranslated}</p>}
+        <p>{t('book.unavailable')}</p>
+      </>
+    )
+  }
   const translated = lang !== 'en' ? book.titleTranslations?.[lang] : undefined
   return (
     <>

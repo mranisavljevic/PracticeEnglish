@@ -13,6 +13,8 @@
   "book.type.textbook": "Textbook",
   "book.type.workbook": "Workbook",
   "book.units": "Units",
+  "book.comingSoon": "Coming soon",
+  "book.unavailable": "This book isn't available yet. Check back soon.",
   "book.noUnits": "No units available yet.",
   "unit.heading": "Unit {number}: {title}",
   "unit.headingNoTitle": "Unit {number}",
