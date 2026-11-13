@@ -22,6 +22,18 @@ for (const vp of [
   })
 }
 
+test.describe('French at 360px', () => {
+  test.use({ locale: 'fr-FR' })
+  test('no horizontal scroll on every route', async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 740 })
+    for (const r of routes) {
+      await page.goto(r)
+      const fits = await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)
+      expect(fits, r).toBe(true)
+    }
+  })
+})
+
 async function tabTo(page: Page, name: RegExp) {
   // Safari only tabs to links with Option held.
   const key = page.context().browser()?.browserType().name() === 'webkit' ? 'Alt+Tab' : 'Tab'

@@ -103,7 +103,7 @@ describe('visit and language events', () => {
   it('carries the language actually displayed when the saved one is unsupported', async () => {
     const cap = captureEvents()
     localStorage.setItem('pe.lang', 'xx')
-    vi.spyOn(navigator, 'languages', 'get').mockReturnValue(['fr'])
+    vi.spyOn(navigator, 'languages', 'get').mockReturnValue(['de'])
     mount()
     expect(screen.getByTestId('lang')).toHaveTextContent('en')
     expect(await cap.events()).toEqual([{ type: 'visit', ...common() }])

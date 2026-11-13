@@ -22,6 +22,43 @@ describe('locale parity', () => {
     })
   }
 
+  describe('fr', () => {
+    const fr = locales.fr
+    const NBSP = '\u00a0'
+
+    it('exists with exactly the English key set', () => {
+      expect(fr).toBeDefined()
+      expect(Object.keys(fr ?? {}).sort()).toEqual(Object.keys(en).sort())
+    })
+
+    it('uses the formal register (no tu-forms)', () => {
+      const tu = /(?<![\p{L}'])(tu|ton|ta|tes|toi|te|t')(?![\p{L}])/iu
+      const allowlist = new Set<string>()
+      const offenders = Object.entries(fr ?? {}).filter(([k, v]) => !allowlist.has(k) && tu.test(v)).map(([k]) => k)
+      expect(offenders).toEqual([])
+    })
+
+    it('has native name Français', () => {
+      expect(fr?.['meta.nativeName']).toBe('Français')
+    })
+
+    it('keeps product and source names', () => {
+      expect(fr?.['app.name']).toBe('PracticeEnglish')
+      expect(fr?.['credit.source']).toContain('English in Action')
+      expect(fr?.['app.tagline']).toContain('English in Action')
+    })
+
+    it('preserves placeholder tokens per key', () => {
+      for (const [k, v] of Object.entries(en)) expect(placeholders(fr?.[k] ?? ''), k).toEqual(placeholders(v))
+    })
+
+    it('uses a non-breaking space before : ? ! ;', () => {
+      const offenders = Object.entries(fr ?? {}).filter(([, v]) => / [:?!;]/.test(v)).map(([k]) => k)
+      expect(offenders).toEqual([])
+      expect(NBSP).toHaveLength(1)
+    })
+  })
+
   it('components contain no literal user-facing JSX text', () => {
     const offenders: string[] = []
     for (const sub of ['src/pages', 'src/components']) {
