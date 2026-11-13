@@ -61,6 +61,21 @@
           }
         }
       }
+    },
+    "comingSoon": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "levelId", "type", "title"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "$ref": "#/$defs/id" },
+          "levelId": { "$ref": "#/$defs/id" },
+          "type": { "enum": ["textbook", "workbook"] },
+          "title": { "type": "string", "minLength": 1 },
+          "titleTranslations": { "$ref": "#/$defs/translations" }
+        }
+      }
     }
   },
   "$defs": {
@@ -70,6 +85,7 @@
   "x-additional-rules": [
     "ids unique within parent; track label unique within unit",
     "book.levelId must reference an existing level",
+    "comingSoon[].levelId must reference an existing level; comingSoon ids unique and disjoint from books ids",
     "track.file must exist in audio-source/ (checked by scripts/validate-catalog.ts)"
   ]
 }

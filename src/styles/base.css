@@ -80,6 +80,9 @@ button:disabled, .button[aria-disabled='true'] { opacity: 0.5; cursor: not-allow
 .card__body { display: flex; flex-direction: column; gap: 0.25rem; min-width: 0; }
 .card__title { font-weight: 600; }
 .card__secondary, .secondary { color: var(--muted); font-size: 0.9rem; }
+.card--soon { border-style: dashed; background: transparent; color: var(--muted); cursor: default; }
+.card--soon .card__title { color: var(--muted); }
+.card--soon .badge { background: transparent; color: var(--muted); border: 1px solid var(--border); }
 .card__cover { width: 3rem; height: 4rem; object-fit: cover; border-radius: 4px; }
 .badge { align-self: flex-start; padding: 0 0.5rem; border-radius: 999px; background: #dbeafe; color: #1e3a8a; font-size: 0.75rem; font-weight: 600; }
 .tracks { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(4rem, 1fr)); gap: 0.5rem; }

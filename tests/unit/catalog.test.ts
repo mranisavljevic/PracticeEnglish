@@ -4,6 +4,15 @@ import { testCatalog } from '../fixtures/testCatalog'
 
 const api = createCatalogApi(testCatalog)
 
+const withSoon = createCatalogApi({
+  ...testCatalog,
+  levels: [...testCatalog.levels, { id: 'level-3', title: 'Level 3' }, { id: 'level-4', title: 'Level 4' }],
+  comingSoon: [
+    { id: 'level-1-workbook', levelId: 'level-1', type: 'workbook', title: 'W1' },
+    { id: 'level-3-student-book', levelId: 'level-3', type: 'textbook', title: 'S3' },
+  ],
+})
+
 describe('catalog lookups', () => {
   it('getBook / getUnit / getTrack resolve known ids', () => {
     expect(api.getBook('book-a')?.title).toBe('Book A Textbook')
@@ -36,5 +45,20 @@ describe('catalog lookups', () => {
     const groups = api.booksByLevel()
     expect(groups.map((g) => g.level.id)).toEqual(['level-1', 'level-2'])
     expect(groups[0]?.books.map((b) => b.id)).toEqual(['book-a', 'book-b'])
+  })
+
+  it('getBook never returns a placeholder; getComingSoon does', () => {
+    expect(withSoon.getBook('level-3-student-book')).toBeUndefined()
+    expect(withSoon.getComingSoon('level-3-student-book')?.title).toBe('S3')
+    expect(withSoon.getComingSoon('book-a')).toBeUndefined()
+    expect(api.getComingSoon('anything')).toBeUndefined()
+  })
+
+  it('booksByLevel includes placeholders and keeps levels with either, in level order', () => {
+    const groups = withSoon.booksByLevel()
+    expect(groups.map((g) => g.level.id)).toEqual(['level-1', 'level-2', 'level-3'])
+    expect(groups[0]?.comingSoon.map((b) => b.id)).toEqual(['level-1-workbook'])
+    expect(groups[2]?.books).toEqual([])
+    expect(groups[2]?.comingSoon.map((b) => b.id)).toEqual(['level-3-student-book'])
   })
 })

@@ -2,12 +2,18 @@
 
 ## 1. Fill in the unit track ranges (T067b)
 
-MVP ships **Level 2 only** (ranges done, track 1 of each book omitted as a title read). Levels 1, 3 and 4 are hidden via `HIDDEN_LEVELS` in `scripts/build-catalog.ts`. For each level you finish below, remove it from that set and run `npm run build:catalog`.
+Live now: Level 2 (Student Book, Workbook) and **Level 4 Student Book** (13 units; track 1 omitted as a title read). The other five books (Level 1 SB/WB, Level 3 SB/WB, Level 4 WB) show as greyed "Coming soon" tiles. A book is live only when its range column in `docs/UNITS-DRAFT.md` is filled.
+
+**Releasing a book** (US3 of `specs/006-vol4-and-coming-soon`):
+1. Fill that book's "SB tracks" or "WB tracks" column in `docs/UNITS-DRAFT.md` (ranges like `1-8, 10`).
+2. Make sure its audio is in `audio-source/` and has rows in `docs/SOURCES.md`.
+3. If its first track is just a spoken title, add it to `OMITTED` in `scripts/build-catalog.ts`.
+4. Run `npm run build:catalog`, then `npm run check`.
 
 - [ ] For Levels 1, 3 and 4, open each book and fill the blank "SB tracks" and "WB tracks" columns in `docs/UNITS-DRAFT.md` (ranges like `1-8, 10`)
 - [ ] Check the gaps in `docs/AUDIO-GAPS-AND-DUPLICATES.txt` against the printed books:
   - [ ] Level 1 Student Book: tracks 18–19
-  - [ ] Level 4 Student Book: tracks 28–34
+  - [ ] Level 4 Student Book: tracks 28–34 (chapter 6). Unit 6 is hidden until these files exist; add them to `audio-source/level-4/sb/` and `docs/SOURCES.md`, then rebuild and it appears.
 - [ ] Check each book's last printed track number (a gap past the highest file can't be detected)
 - [ ] Confirm the filename numbers match the track numbers printed in the books
 - [ ] Confirm each Workbook uses the same unit numbering as its Student Book
